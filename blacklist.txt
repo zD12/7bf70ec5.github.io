@@ -27,6 +27,8 @@
 - 92.6.126.98
 - 92.24.21.78
 - 97.101.243.116
+- 99.235.51.32
+- 99.235.146.85
 - 107.191.96.142
 - 108.32.58.252
 - 108.168.22.90
@@ -35,6 +37,7 @@
 - 176.67.121.65
 - 194.187.250.205
 - 204.111.101.235
+- 207.238.140.66
 
 #
 # Blocked Name(s) (© SquareGS, LLC)
@@ -60,6 +63,7 @@
 - lulluer
 - MatthewSuper1
 - Mr_Stinger
+- Mushroomfusion
 - nathancruz80
 - Ninja_Killer96
 - PadiyatorPlus
@@ -70,23 +74,28 @@
 - Super__A
 - TeamCrafted
 - TheEpicBeast
+- Walruss
 - xraymossx
+- ZachyTheBest
 - Zoltan2003
 
 #
 # Blocked UUID(s) (© SquareGS, LLC)
 #
 
+- 0c3470c0-7088-4916-a9cd-cb349da47308
 - 0f5c338f-3be5-4834-9225-aa71c823f487
 - 03e81c0b-8aca-4a06-bfbb-f5747cb44785
 - 1aa4d6a5-fe6e-4271-a7d2-e512219e9795
 - 1c088a98-e02d-433a-8757-7d24332911f0
 - 2aefe899-49da-494b-944f-7b92077f5b7b
 - 2d754cba-4569-45bb-9488-304cfb0257a8
+- 4b786f13-5a52-48f6-9f2d-116ada4558ef
 - 7c89a275-66e2-4e34-9b1f-a6241a621390
 - 9afacc32-9928-4230-a8df-767eb8cfb628
 - 9b52d192-fe49-4008-a894-55b39d5073a4
 - 20eabc82-ae75-4880-b5d6-541a0f9890eb
+- 26ed5474-601d-4e4d-bded-d0c4db8005fa
 - 30bfeb78-078e-45d3-808e-1d358c7f708d
 - 39cec302-a7e8-4359-b8ea-bdd1b42f0770
 - 41f45cbc-f9ac-441d-8286-e3857073ad31
