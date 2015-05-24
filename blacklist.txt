@@ -3,6 +3,7 @@
 #
 
 - 5.12.202.174
+- 23.242.195.23
 - 24.107.254.219
 - 24.166.212.134
 - 24.214.127.77
@@ -79,6 +80,7 @@
 - BackToReality1
 - BoomBoom878
 - ButterHeroFTW
+- CarbonatedMilk
 - ChrisTheDragon
 - cool00000
 - cowgomooo12
