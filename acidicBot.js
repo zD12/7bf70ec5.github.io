@@ -176,7 +176,7 @@
     };
 
     var botCreator = "Ronit Sajeey (LaishaBear)";
-    var botCreatorIDs = ["4811741"];
+    var botCreatorIDs = [""];
 
     var acidicBot = {
         version: "2.4.6",
