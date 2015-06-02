@@ -175,9 +175,8 @@
         return str;
     };
 
-    var botCreator = "Matthew (Yemasthui)";
-    var botMaintainer = "Benzi (Quoona)"
-    var botCreatorIDs = ["3851534", "4105209"];
+    var botCreator = "Ronit Sajeey (LaishaBear)";
+    var botCreatorIDs = ["4811741"];
 
     var acidicBot = {
         version: "2.4.6",
@@ -2777,30 +2776,6 @@
                         var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
                         var permUser = acidicBot.userUtilities.getPermission(user.id);
                         if (permFrom > permUser) {
-                            /*
-                             acidicBot.room.mutedUsers.push(user.id);
-                             if (time === null) API.sendChat(subChat(acidicBot.chat.mutednotime, {name: chat.un, username: name}));
-                             else {
-                             API.sendChat(subChat(acidicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
-                             setTimeout(function (id) {
-                             var muted = acidicBot.room.mutedUsers;
-                             var wasMuted = false;
-                             var indexMuted = -1;
-                             for (var i = 0; i < muted.length; i++) {
-                             if (muted[i] === id) {
-                             indexMuted = i;
-                             wasMuted = true;
-                             }
-                             }
-                             if (indexMuted > -1) {
-                             acidicBot.room.mutedUsers.splice(indexMuted);
-                             var u = acidicBot.userUtilities.lookupUser(id);
-                             var name = u.username;
-                             API.sendChat(subChat(acidicBot.chat.unmuted, {name: chat.un, username: name}));
-                             }
-                             }, time * 60 * 1000, user.id);
-                             }
-                             */
                             if (time > 45) {
                                 API.sendChat(subChat(acidicBot.chat.mutedmaxtime, {
                                     name: chat.un,
@@ -3086,7 +3061,7 @@
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
-                        API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
+                        API.sendChat('/me This bot was created by ' + botCreator + '".");
                     }
                 }
             },
