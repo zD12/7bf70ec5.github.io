@@ -195,9 +195,9 @@
             botName: "acidicBot",
             language: "english",
             chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
-            startupCap: 1, // 1-200
-            startupVolume: 0, // 0-100
-            startupEmoji: false, // true or false
+            startupCap: 1,
+            startupVolume: 0,
+            startupEmoji: false,
             cmdDeletion: true,
             maximumAfk: 120,
             afkRemoval: true,
@@ -401,7 +401,7 @@
                 return votes;
 
             },
-            getPermission: function(obj) { //1 requests
+            getPermission: function(obj) {
                 var u;
                 if (typeof obj === "object") u = obj;
                 else u = API.getUser(obj);
@@ -852,7 +852,7 @@
             }
         },
         eventDjadvance: function(obj) {
-            $("#woot").click(); // autowoot
+            $("#woot").click();
 
             var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
             for (var i = 0; i < acidicBot.room.users.length; i++) {
@@ -939,7 +939,6 @@
                 var remaining = obj.media.duration * 1000;
                 acidicBot.room.autoskipTimer = setTimeout(function() {
                     console.log("Skipping track.");
-                    //API.sendChat('Song stuck, skipping...');
                     API.moderateForceSkip();
                 }, remaining + 3000);
             }
@@ -3244,22 +3243,7 @@
                             time: since
                         });
 
-                        /*
-                        // least efficient way to go about this, but it works :)
-                        if (msg.length > 256){
-                            firstpart = msg.substr(0, 256);
-                            secondpart = msg.substr(256);
-                            API.sendChat(firstpart);
-                            setTimeout(function () {
-                                API.sendChat(secondpart);
-                            }, 300);
-                        }
-                        else {
-                            API.sendChat(msg);
-                        }
-                        */
 
-                        // This is a more efficient solution
                         if (msg.length > 241) {
                             var split = msg.match(/.{1,241}/g);
                             for (var i = 0; i < split.length; i++) {
@@ -3503,15 +3487,6 @@
                     else {
                         var msg = chat.message;
                         var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
-                        /**
-                         if (msg.indexOf('@') === -1 && msg.indexOf('all') !== -1) {
-                            if (permFrom > 2) {
-                                acidicBot.room.mutedUsers = [];
-                                return API.sendChat(subChat(acidicBot.chat.unmutedeveryone, {name: chat.un}));
-                            }
-                            else return API.sendChat(subChat(acidicBot.chat.unmuteeveryonerank, {name: chat.un}));
-                        }
-                         **/
                         var from = chat.un;
                         var name = msg.substr(cmd.length + 2);
 
@@ -3523,21 +3498,6 @@
 
                         var permUser = acidicBot.userUtilities.getPermission(user.id);
                         if (permFrom > permUser) {
-                            /*
-                             var muted = acidicBot.room.mutedUsers;
-                             var wasMuted = false;
-                             var indexMuted = -1;
-                             for (var i = 0; i < muted.length; i++) {
-                             if (muted[i] === user.id) {
-                             indexMuted = i;
-                             wasMuted = true;
-                             }
-
-                             }
-                             if (!wasMuted) return API.sendChat(subChat(acidicBot.chat.notmuted, {name: chat.un}));
-                             acidicBot.room.mutedUsers.splice(indexMuted);
-                             API.sendChat(subChat(acidicBot.chat.unmuted, {name: chat.un, username: name}));
-                             */
                             try {
                                 API.moderateUnmuteUser(user.id);
                                 API.sendChat(subChat(acidicBot.chat.unmuted, {
