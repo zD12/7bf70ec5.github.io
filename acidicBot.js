@@ -176,7 +176,7 @@
     };
 
     var botCreator = "Matthew (Yemasthui)";
-//    var botMaintainer = "Benzi (Quoona)"
+    var botMaintainer = "Benzi (Quoona)"
     var botCreatorIDs = ["3851534", "4105209"];
 
     var acidicBot = {
