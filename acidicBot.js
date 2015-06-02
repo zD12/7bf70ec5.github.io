@@ -1044,16 +1044,6 @@
                 if (acidicBot.settings.cmdDeletion && msg.startsWith(acidicBot.settings.commandLiteral)) {
                     API.moderateDeleteChat(chat.cid);
                 }
-                /**
-                 var plugRoomLinkPatt = /(\bhttps?:\/\/(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-                 if (plugRoomLinkPatt.exec(msg)) {
-                    if (perm === 0) {
-                        API.sendChat(subChat(acidicBot.chat.roomadvertising, {name: chat.un}));
-                        API.moderateDeleteChat(chat.cid);
-                        return true;
-                    }
-                }
-                 **/
                 if (msg.indexOf('http://adf.ly/') > -1) {
                     API.moderateDeleteChat(chat.cid);
                     API.sendChat(subChat(acidicBot.chat.adfly, {
@@ -1094,7 +1084,6 @@
                     } else cmd = chat.message.substring(0, space);
                 } else return false;
                 var userPerm = acidicBot.userUtilities.getPermission(chat.uid);
-                //console.log("name: " + chat.un + ", perm: " + userPerm);
                 if (chat.message !== acidicBot.settings.commandLiteral + 'join' && chat.message !== acidicBot.settings.commandLiteral + "leave") {
                     if (userPerm === 0 && !acidicBot.room.usercommand) return void(0);
                     if (!acidicBot.room.allcommand) return void(0);
@@ -1131,14 +1120,8 @@
                     }, acidicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
-                    /*if (acidicBot.settings.cmdDeletion) {
-                        API.moderateDeleteChat(chat.cid);
-                    }*/
 
-                    //acidicBot.room.allcommand = false;
-                    //setTimeout(function () {
                     acidicBot.room.allcommand = true;
-                    //}, 5 * 1000);
                 }
                 return executed;
             },
@@ -1170,12 +1153,10 @@
                 eventUserskip: $.proxy(this.eventUserskip, this),
                 eventUserjoin: $.proxy(this.eventUserjoin, this),
                 eventUserleave: $.proxy(this.eventUserleave, this),
-                //eventFriendjoin: $.proxy(this.eventFriendjoin, this),
                 eventVoteupdate: $.proxy(this.eventVoteupdate, this),
                 eventCurateupdate: $.proxy(this.eventCurateupdate, this),
                 eventRoomscoreupdate: $.proxy(this.eventRoomscoreupdate, this),
                 eventDjadvance: $.proxy(this.eventDjadvance, this),
-                //eventDjupdate: $.proxy(this.eventDjupdate, this),
                 eventWaitlistupdate: $.proxy(this.eventWaitlistupdate, this),
                 eventVoteskip: $.proxy(this.eventVoteskip, this),
                 eventModskip: $.proxy(this.eventModskip, this),
@@ -1351,20 +1332,6 @@
                 return perm >= minPerm;
 
             },
-            /**
-             command: {
-                        command: 'cmd',
-                        rank: 'user/bouncer/mod/manager',
-                        type: 'startsWith/exact',
-                        functionality: function(chat, cmd){
-                                if(this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                                if( !acidicBot.commands.executable(this.rank, chat) ) return void (0);
-                                else{
-                                
-                                }
-                        }
-                },
-             **/
 
             activeCommand: {
                 command: 'active',
@@ -1990,50 +1957,6 @@
                 }
             },
 
-            /*deletechatCommand: {
-                command: 'deletechat',
-                rank: 'mod',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!acidicBot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified, {name: chat.un}));
-                        var name = msg.substring(cmd.length + 2);
-                        var user = acidicBot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified, {name: chat.un}));
-                        var chats = $('.from');
-                        var message = $('.message');
-                        var emote = $('.emote');
-                        var from = $('.un.clickable');
-                        for (var i = 0; i < chats.length; i++) {
-                            var n = from[i].textContent;
-                            if (name.trim() === n.trim()) {
-
-                                // var messagecid = $(message)[i].getAttribute('data-cid');
-                                // var emotecid = $(emote)[i].getAttribute('data-cid');
-                                // API.moderateDeleteChat(messagecid);
-
-                                // try {
-                                //     API.moderateDeleteChat(messagecid);
-                                // }
-                                // finally {
-                                //     API.moderateDeleteChat(emotecid);
-                                // }
-
-                                if (typeof $(message)[i].getAttribute('data-cid') == "undefined"){
-                                    API.moderateDeleteChat($(emote)[i].getAttribute('data-cid')); // works well with normal messages but not with emotes due to emotes and messages are seperate.
-                                } else {
-                                    API.moderateDeleteChat($(message)[i].getAttribute('data-cid'));
-                                }
-                            }
-                        }
-                        API.sendChat(subChat(acidicBot.chat.deletechat, {name: chat.un, username: name}));
-                    }
-                }
-            },*/
-
             emojiCommand: {
                 command: 'emoji',
                 rank: 'user',
@@ -2230,8 +2153,8 @@
                                     }
                                 )
                             }
-                            var api_key = "dc6zaTOxFJmzC"; // public beta key
-                            var rating = "pg-13"; // PG 13 gifs
+                            var api_key = "dc6zaTOxFJmzC";
+                            var rating = "pg-13";
                             var tag = msg.substr(cmd.length + 1);
                             var fixedtag = tag.replace(/ /g, "+");
                             var commatag = tag.replace(/ /g, ", ");
@@ -2262,8 +2185,8 @@
                                     }
                                 )
                             }
-                            var api_key = "dc6zaTOxFJmzC"; // public beta key
-                            var rating = "pg-13"; // PG 13 gifs
+                            var api_key = "dc6zaTOxFJmzC";
+                            var rating = "pg-13";
                             get_random_id(api_key, function(id) {
                                 if (typeof id !== 'undefined') {
                                     API.sendChat(subChat(acidicBot.chat.validgifrandom, {
