@@ -184,7 +184,7 @@
         status: false,
         name: "acidicBot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/Yemasthui/basicBot/master/acidicBot.js",
+        scriptLink: "https://rsajeey.info/acidicBot.js",
         cmdLink: "http://git.io/245Ppg",
         chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
         chat: null,
