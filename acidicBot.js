@@ -175,9 +175,9 @@
         return str;
     };
 
-    var botCreator = "Matthew (Yemasthui)";
+    var botCreator = "Ronit Sajeey (LaishaBear)";
     var botMaintainer = "Benzi (Quoona)"
-    var botCreatorIDs = ["3851534", "4105209"];
+    var botCreatorIDs = ["4811741"];
 
     var acidicBot = {
         version: "2.4.6",
