@@ -184,7 +184,7 @@
         status: false,
         name: "acidicBot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/Yemasthui/basicBot/master/acidicBot.js",
+        scriptLink: "",
         cmdLink: "http://git.io/245Ppg",
         chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
         chat: null,
@@ -246,8 +246,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleNSFWlist.json",
-                OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleOPlist.json"
+                NSFW: "",
+                OP: ""
             }
         },
         room: {
