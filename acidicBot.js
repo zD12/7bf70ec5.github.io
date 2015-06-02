@@ -46,7 +46,7 @@
 
     var loadChat = function(cb) {
         if (!cb) cb = function() {};
-        $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json) {
+        $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json) {
             var link = acidicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -246,8 +246,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
-                OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleOPlist.json"
+                NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleNSFWlist.json",
+                OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleOPlist.json"
             }
         },
         room: {
@@ -401,7 +401,7 @@
                 return votes;
 
             },
-            getPermission: function(obj) {
+            getPermission: function(obj) { //1 requests
                 var u;
                 if (typeof obj === "object") u = obj;
                 else u = API.getUser(obj);
@@ -852,7 +852,7 @@
             }
         },
         eventDjadvance: function(obj) {
-            $("#woot").click();
+            $("#woot").click(); // autowoot
 
             var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
             for (var i = 0; i < acidicBot.room.users.length; i++) {
@@ -898,6 +898,15 @@
                     }
                 }
             }
+            var newMedia = obj.media;
+            if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent) {
+                var name = obj.dj.username;
+                API.sendChat(subChat(acidicBot.chat.timelimit, {
+                    name: name,
+                    maxlength: acidicBot.settings.maximumSongLength
+                }));
+                return API.moderateForceSkip();
+            }
             clearTimeout(historySkip);
             if (acidicBot.settings.historySkip) {
                 var alreadyPlayed = false;
@@ -906,27 +915,18 @@
                 var historySkip = setTimeout(function() {
                     for (var i = 0; i < apihistory.length; i++) {
                         if (apihistory[i].media.cid === obj.media.cid) {
+                            acidicBot.room.historyList[i].push(+new Date());
+                            alreadyPlayed = true;
                             API.sendChat(subChat(acidicBot.chat.songknown, {
                                 name: name
                             }));
-                            API.moderateForceSkip();
-                            acidicBot.room.historyList[i].push(+new Date());
-                            alreadyPlayed = true;
+                            return API.moderateForceSkip();
                         }
                     }
                     if (!alreadyPlayed) {
                         acidicBot.room.historyList.push([obj.media.cid, +new Date()]);
                     }
                 }, 2000);
-            }
-            var newMedia = obj.media;
-            if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent) {
-                var name = obj.dj.username;
-                API.sendChat(subChat(acidicBot.chat.timelimit, {
-                    name: name,
-                    maxlength: acidicBot.settings.maximumSongLength
-                }));
-                API.moderateForceSkip();
             }
             if (user.ownSong) {
                 API.sendChat(subChat(acidicBot.chat.permissionownsong, {
@@ -939,6 +939,7 @@
                 var remaining = obj.media.duration * 1000;
                 acidicBot.room.autoskipTimer = setTimeout(function() {
                     console.log("Skipping track.");
+                    //API.sendChat('Song stuck, skipping...');
                     API.moderateForceSkip();
                 }, remaining + 3000);
             }
@@ -1044,6 +1045,16 @@
                 if (acidicBot.settings.cmdDeletion && msg.startsWith(acidicBot.settings.commandLiteral)) {
                     API.moderateDeleteChat(chat.cid);
                 }
+                /**
+                 var plugRoomLinkPatt = /(\bhttps?:\/\/(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+                 if (plugRoomLinkPatt.exec(msg)) {
+                    if (perm === 0) {
+                        API.sendChat(subChat(acidicBot.chat.roomadvertising, {name: chat.un}));
+                        API.moderateDeleteChat(chat.cid);
+                        return true;
+                    }
+                }
+                 **/
                 if (msg.indexOf('http://adf.ly/') > -1) {
                     API.moderateDeleteChat(chat.cid);
                     API.sendChat(subChat(acidicBot.chat.adfly, {
@@ -1084,6 +1095,7 @@
                     } else cmd = chat.message.substring(0, space);
                 } else return false;
                 var userPerm = acidicBot.userUtilities.getPermission(chat.uid);
+                //console.log("name: " + chat.un + ", perm: " + userPerm);
                 if (chat.message !== acidicBot.settings.commandLiteral + 'join' && chat.message !== acidicBot.settings.commandLiteral + "leave") {
                     if (userPerm === 0 && !acidicBot.room.usercommand) return void(0);
                     if (!acidicBot.room.allcommand) return void(0);
@@ -1120,8 +1132,14 @@
                     }, acidicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
+                    /*if (acidicBot.settings.cmdDeletion) {
+                        API.moderateDeleteChat(chat.cid);
+                    }*/
 
+                    //acidicBot.room.allcommand = false;
+                    //setTimeout(function () {
                     acidicBot.room.allcommand = true;
+                    //}, 5 * 1000);
                 }
                 return executed;
             },
@@ -1153,10 +1171,12 @@
                 eventUserskip: $.proxy(this.eventUserskip, this),
                 eventUserjoin: $.proxy(this.eventUserjoin, this),
                 eventUserleave: $.proxy(this.eventUserleave, this),
+                //eventFriendjoin: $.proxy(this.eventFriendjoin, this),
                 eventVoteupdate: $.proxy(this.eventVoteupdate, this),
                 eventCurateupdate: $.proxy(this.eventCurateupdate, this),
                 eventRoomscoreupdate: $.proxy(this.eventRoomscoreupdate, this),
                 eventDjadvance: $.proxy(this.eventDjadvance, this),
+                //eventDjupdate: $.proxy(this.eventDjupdate, this),
                 eventWaitlistupdate: $.proxy(this.eventWaitlistupdate, this),
                 eventVoteskip: $.proxy(this.eventVoteskip, this),
                 eventModskip: $.proxy(this.eventModskip, this),
@@ -1332,6 +1352,20 @@
                 return perm >= minPerm;
 
             },
+            /**
+             command: {
+                        command: 'cmd',
+                        rank: 'user/bouncer/mod/manager',
+                        type: 'startsWith/exact',
+                        functionality: function(chat, cmd){
+                                if(this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                                if( !acidicBot.commands.executable(this.rank, chat) ) return void (0);
+                                else{
+                                
+                                }
+                        }
+                },
+             **/
 
             activeCommand: {
                 command: 'active',
@@ -1605,7 +1639,7 @@
                     else {
                         var crowd = API.getUsers();
                         var msg = chat.message;
-                        var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
+                        var argument = msg.substring(cmd.length + 1);
                         var randomUser = Math.floor(Math.random() * crowd.length);
                         var randomBall = Math.floor(Math.random() * acidicBot.chat.balls.length);
                         var randomSentence = Math.floor(Math.random() * 1);
@@ -1957,6 +1991,50 @@
                 }
             },
 
+            /*deletechatCommand: {
+                command: 'deletechat',
+                rank: 'mod',
+                type: 'startsWith',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!acidicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+                        if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified, {name: chat.un}));
+                        var name = msg.substring(cmd.length + 2);
+                        var user = acidicBot.userUtilities.lookupUserName(name);
+                        if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified, {name: chat.un}));
+                        var chats = $('.from');
+                        var message = $('.message');
+                        var emote = $('.emote');
+                        var from = $('.un.clickable');
+                        for (var i = 0; i < chats.length; i++) {
+                            var n = from[i].textContent;
+                            if (name.trim() === n.trim()) {
+
+                                // var messagecid = $(message)[i].getAttribute('data-cid');
+                                // var emotecid = $(emote)[i].getAttribute('data-cid');
+                                // API.moderateDeleteChat(messagecid);
+
+                                // try {
+                                //     API.moderateDeleteChat(messagecid);
+                                // }
+                                // finally {
+                                //     API.moderateDeleteChat(emotecid);
+                                // }
+
+                                if (typeof $(message)[i].getAttribute('data-cid') == "undefined"){
+                                    API.moderateDeleteChat($(emote)[i].getAttribute('data-cid')); // works well with normal messages but not with emotes due to emotes and messages are seperate.
+                                } else {
+                                    API.moderateDeleteChat($(message)[i].getAttribute('data-cid'));
+                                }
+                            }
+                        }
+                        API.sendChat(subChat(acidicBot.chat.deletechat, {name: chat.un, username: name}));
+                    }
+                }
+            },*/
+
             emojiCommand: {
                 command: 'emoji',
                 rank: 'user',
@@ -2153,8 +2231,8 @@
                                     }
                                 )
                             }
-                            var api_key = "dc6zaTOxFJmzC";
-                            var rating = "pg-13";
+                            var api_key = "dc6zaTOxFJmzC"; // public beta key
+                            var rating = "pg-13"; // PG 13 gifs
                             var tag = msg.substr(cmd.length + 1);
                             var fixedtag = tag.replace(/ /g, "+");
                             var commatag = tag.replace(/ /g, ", ");
@@ -2185,8 +2263,8 @@
                                     }
                                 )
                             }
-                            var api_key = "dc6zaTOxFJmzC";
-                            var rating = "pg-13";
+                            var api_key = "dc6zaTOxFJmzC"; // public beta key
+                            var rating = "pg-13"; // PG 13 gifs
                             get_random_id(api_key, function(id) {
                                 if (typeof id !== 'undefined') {
                                     API.sendChat(subChat(acidicBot.chat.validgifrandom, {
@@ -2777,6 +2855,30 @@
                         var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
                         var permUser = acidicBot.userUtilities.getPermission(user.id);
                         if (permFrom > permUser) {
+                            /*
+                             acidicBot.room.mutedUsers.push(user.id);
+                             if (time === null) API.sendChat(subChat(acidicBot.chat.mutednotime, {name: chat.un, username: name}));
+                             else {
+                             API.sendChat(subChat(acidicBot.chat.mutedtime, {name: chat.un, username: name, time: time}));
+                             setTimeout(function (id) {
+                             var muted = acidicBot.room.mutedUsers;
+                             var wasMuted = false;
+                             var indexMuted = -1;
+                             for (var i = 0; i < muted.length; i++) {
+                             if (muted[i] === id) {
+                             indexMuted = i;
+                             wasMuted = true;
+                             }
+                             }
+                             if (indexMuted > -1) {
+                             acidicBot.room.mutedUsers.splice(indexMuted);
+                             var u = acidicBot.userUtilities.lookupUser(id);
+                             var name = u.username;
+                             API.sendChat(subChat(acidicBot.chat.unmuted, {name: chat.un, username: name}));
+                             }
+                             }, time * 60 * 1000, user.id);
+                             }
+                             */
                             if (time > 45) {
                                 API.sendChat(subChat(acidicBot.chat.mutedmaxtime, {
                                     name: chat.un,
@@ -3142,7 +3244,22 @@
                             time: since
                         });
 
+                        /*
+                        // least efficient way to go about this, but it works :)
+                        if (msg.length > 256){
+                            firstpart = msg.substr(0, 256);
+                            secondpart = msg.substr(256);
+                            API.sendChat(firstpart);
+                            setTimeout(function () {
+                                API.sendChat(secondpart);
+                            }, 300);
+                        }
+                        else {
+                            API.sendChat(msg);
+                        }
+                        */
 
+                        // This is a more efficient solution
                         if (msg.length > 241) {
                             var split = msg.match(/.{1,241}/g);
                             for (var i = 0; i < split.length; i++) {
@@ -3386,6 +3503,15 @@
                     else {
                         var msg = chat.message;
                         var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
+                        /**
+                         if (msg.indexOf('@') === -1 && msg.indexOf('all') !== -1) {
+                            if (permFrom > 2) {
+                                acidicBot.room.mutedUsers = [];
+                                return API.sendChat(subChat(acidicBot.chat.unmutedeveryone, {name: chat.un}));
+                            }
+                            else return API.sendChat(subChat(acidicBot.chat.unmuteeveryonerank, {name: chat.un}));
+                        }
+                         **/
                         var from = chat.un;
                         var name = msg.substr(cmd.length + 2);
 
