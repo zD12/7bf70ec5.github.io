@@ -175,8 +175,8 @@
         return str;
     };
 
-    var botCreator = "Ronit Sajeey (LaishaBear)";
-//    var botMaintainer = "Benzi (Quoona)"
+    var botCreator = "Benzi (Quoona)";
+    var botMaintainer = "Ronit Sajeey (LaishaBear)"
     var botCreatorIDs = ["4811741"];
 
     var acidicBot = {
@@ -3062,8 +3062,7 @@
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
-//                        API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
-                        API.sendChat('/me This bot was created by ' + botCreator + '".");
+                        API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
                     }
                 }
             },
