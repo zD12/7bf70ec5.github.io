@@ -46,7 +46,7 @@
 
     var loadChat = function(cb) {
         if (!cb) cb = function() {};
-        $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json) {
+        $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json) {
             var link = acidicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -246,8 +246,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
-                OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleOPlist.json"
+                NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleNSFWlist.json",
+                OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/ExampleOPlist.json"
             }
         },
         room: {
@@ -898,6 +898,15 @@
                     }
                 }
             }
+            var newMedia = obj.media;
+            if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent) {
+                var name = obj.dj.username;
+                API.sendChat(subChat(acidicBot.chat.timelimit, {
+                    name: name,
+                    maxlength: acidicBot.settings.maximumSongLength
+                }));
+                return API.moderateForceSkip();
+            }
             clearTimeout(historySkip);
             if (acidicBot.settings.historySkip) {
                 var alreadyPlayed = false;
@@ -906,27 +915,18 @@
                 var historySkip = setTimeout(function() {
                     for (var i = 0; i < apihistory.length; i++) {
                         if (apihistory[i].media.cid === obj.media.cid) {
+                            acidicBot.room.historyList[i].push(+new Date());
+                            alreadyPlayed = true;
                             API.sendChat(subChat(acidicBot.chat.songknown, {
                                 name: name
                             }));
-                            API.moderateForceSkip();
-                            acidicBot.room.historyList[i].push(+new Date());
-                            alreadyPlayed = true;
+                            return API.moderateForceSkip();
                         }
                     }
                     if (!alreadyPlayed) {
                         acidicBot.room.historyList.push([obj.media.cid, +new Date()]);
                     }
                 }, 2000);
-            }
-            var newMedia = obj.media;
-            if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent) {
-                var name = obj.dj.username;
-                API.sendChat(subChat(acidicBot.chat.timelimit, {
-                    name: name,
-                    maxlength: acidicBot.settings.maximumSongLength
-                }));
-                API.moderateForceSkip();
             }
             if (user.ownSong) {
                 API.sendChat(subChat(acidicBot.chat.permissionownsong, {
@@ -2377,7 +2377,7 @@
                         }));
                         var argument = msg.substring(cmd.length + 1);
 
-                        $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json) {
+                        $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json) {
                             var langIndex = json;
                             var link = langIndex[argument.toLowerCase()];
                             if (typeof link === "undefined") {
@@ -3141,7 +3141,6 @@
                         msg += subChat(acidicBot.chat.activefor, {
                             time: since
                         });
-
 
                         if (msg.length > 241) {
                             var split = msg.match(/.{1,241}/g);
