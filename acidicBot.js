@@ -18,10 +18,12 @@
         clearInterval(acidicBot.room.afkInterval);
         acidicBot.status = false;
     };
-    
-    var socket = function () {
+
+    var socket = function() {
         function loadSocket() {
-            SockJS.prototype.msg = function(a){this.send(JSON.stringify(a))};
+            SockJS.prototype.msg = function(a) {
+                this.send(JSON.stringify(a))
+            };
             sock = new SockJS('https://fungustime.pw:4957/socket');
             sock.onopen = function() {
                 console.log('[acidicBot v2.5.6] Connected to socket!');
@@ -42,14 +44,21 @@
         } else loadSocket();
     }
 
-    var sendToSocket = function () {
-        var basicBotSettings = acidicBot.settings;
-        var basicBotRoom = acidicBot.room;
-        var basicBotInfo = {
+    var sendToSocket = function() {
+        var acidicBotSettings = acidicBot.settings;
+        var acidicBotRoom = acidicBot.room;
+        var acidicBotInfo = {
             time: Date.now(),
             version: acidicBot.version
         };
-        var data = {users:API.getUsers(),userinfo:API.getUser(),room:location.pathname,acidicBotSettings:acidicBotSettings,acidicBotRoom:acidicBotRoom,acidicBotInfo:acidicBotInfo};
+        var data = {
+            users: API.getUsers(),
+            userinfo: API.getUser(),
+            room: location.pathname,
+            acidicBotSettings: acidicBotSettings,
+            acidicBotRoom: acidicBotRoom,
+            acidicBotInfo: acidicBotInfo
+        };
         return sock.msg(data);
     };
 
