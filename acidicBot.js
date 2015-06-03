@@ -227,8 +227,8 @@
         status: false,
         name: "acidicBot",
         loggedInID: null,
-        scriptLink: "",
-        cmdLink: "",
+        scriptLink: null,
+        cmdLink: null,
         chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
         chat: null,
         loadChat: loadChat,
@@ -274,7 +274,7 @@
             afkRankCheck: "ambassador",
             motdEnabled: false,
             motdInterval: 5,
-            motd: "",
+            motd: null,
             filterChat: true,
             etaRestriction: false,
             welcome: true,
@@ -2399,6 +2399,7 @@
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
                         storeToStorage();
+                        sendToSocket();
                         API.sendChat(acidicBot.chat.kill);
                         acidicBot.disconnectAPI();
                         setTimeout(function() {
@@ -2911,6 +2912,7 @@
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
+                        sendToSocket();
                         storeToStorage();
                         acidicBot.disconnectAPI();
                         setTimeout(function() {
@@ -2930,6 +2932,7 @@
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
                         API.sendChat(acidicBot.chat.reload);
+                        sendToSocket();
                         storeToStorage();
                         acidicBot.disconnectAPI();
                         kill();
