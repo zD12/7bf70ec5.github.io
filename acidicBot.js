@@ -180,7 +180,7 @@
     var botCreatorIDs = ["4811741"];
 
     var acidicBot = {
-        version: "2.4.6",
+        version: "2.5.6",
         status: false,
         name: "acidicBot",
         loggedInID: null,
