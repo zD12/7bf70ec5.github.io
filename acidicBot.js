@@ -31,7 +31,6 @@
             };
             sock.onclose = function() {
                 console.log('[acidicBot v2.5.6] Disconnected from socket!');
-                var reconnect = setTimeout(function(){ loadSocket() }, 60 * 1000);
             };
             sock.onmessage = function(broadcast) {
                 var rawBroadcast = broadcast.data;
