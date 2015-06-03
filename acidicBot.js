@@ -22,7 +22,7 @@
     var socket = function () {
         function loadSocket() {
             SockJS.prototype.msg = function(a){this.send(JSON.stringify(a))};
-            sock = new SockJS('https://socket-bnzi.c9.io/acidicBot');
+            sock = new SockJS('https://socket-bnzi.c9.io/basic');
             sock.onopen = function() {
                 console.log('Connected to socket!');
                 sendToSocket();
