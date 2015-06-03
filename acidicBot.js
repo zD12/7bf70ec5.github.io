@@ -40,7 +40,7 @@
             };
         }
         if (typeof SockJS == 'undefined') {
-            $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
+            $.getScript('https://cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js', loadSocket);
         } else loadSocket();
     }
 
