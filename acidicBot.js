@@ -24,7 +24,7 @@
             SockJS.prototype.msg = function(a) {
                 this.send(JSON.stringify(a))
             };
-            sock = new SockJS('https://fungustime.pw:4957/socket');
+            sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
             sock.onopen = function() {
                 console.log('[acidicBot v2.5.6] Connected to socket!');
                 sendToSocket();
