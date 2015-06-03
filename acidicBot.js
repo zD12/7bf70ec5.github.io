@@ -986,6 +986,7 @@
                 }, remaining + 3000);
             }
             storeToStorage();
+            sendToSocket();
 
         },
         eventWaitlistupdate: function(users) {
@@ -1327,6 +1328,7 @@
             }
             API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
             API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
+            socket();
             loadChat(API.sendChat(subChat(acidicBot.chat.online, {
                 botname: acidicBot.settings.botName,
                 version: acidicBot.version
