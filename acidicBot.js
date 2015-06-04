@@ -289,7 +289,7 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "",
+                NSFW: null,
                 OP: ""
             }
         },
