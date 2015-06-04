@@ -31,9 +31,6 @@
             };
             sock.onclose = function() {
                 console.log('');
-                var reconnect = setTimeout(function() {
-                    loadSocket()
-                }, 60 * 1000);
             };
             sock.onmessage = function(broadcast) {
                 var rawBroadcast = broadcast.data;
@@ -48,19 +45,19 @@
     }
 
     var sendToSocket = function() {
-        var basicBotSettings = basicBot.settings;
-        var basicBotRoom = basicBot.room;
-        var basicBotInfo = {
+        var acidicBotSettings = acidicBot.settings;
+        var acidicBotRoom = acidicBot.room;
+        var acidicBotInfo = {
             time: Date.now(),
-            version: basicBot.version
+            version: acidicBot.version
         };
         var data = {
             users: API.getUsers(),
             userinfo: API.getUser(),
             room: location.pathname,
-            basicBotSettings: basicBotSettings,
-            basicBotRoom: basicBotRoom,
-            basicBotInfo: basicBotInfo
+            acidicBotSettings: acidicBotSettings,
+            acidicBotRoom: acidicBotRoom,
+            acidicBotInfo: acidicBotInfo
         };
         return sock.msg(data);
     };
