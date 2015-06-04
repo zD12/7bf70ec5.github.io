@@ -24,9 +24,9 @@
             SockJS.prototype.msg = function(a) {
                 this.send(JSON.stringify(a))
             };
-            sock = new SockJS('');
+            sock = new SockJS('https://fungustime.pw:4957/socket');
             sock.onopen = function() {
-                console.log('');
+                console.log('[acidicBot v2.5.6] Connected to socket!');
                 sendToSocket();
             };
             sock.onclose = function() {
@@ -40,7 +40,7 @@
             };
         }
         if (typeof SockJS == 'undefined') {
-            $.getScript('', loadSocket);
+            $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
         } else loadSocket();
     }
 
