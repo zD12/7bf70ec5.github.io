@@ -31,6 +31,9 @@
             };
             sock.onclose = function() {
                 console.log('');
+                var reconnect = setTimeout(function() {
+                    loadSocket()
+                }, 60 * 1000);
             };
             sock.onmessage = function(broadcast) {
                 var rawBroadcast = broadcast.data;
