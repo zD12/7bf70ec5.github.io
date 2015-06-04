@@ -19,6 +19,52 @@
         acidicBot.status = false;
     };
 
+    var socket = function() {
+        function loadSocket() {
+            SockJS.prototype.msg = function(a) {
+                this.send(JSON.stringify(a))
+            };
+            sock = new SockJS('https://fungustime.pw:4957/socket');
+            sock.onopen = function() {
+                console.log('[acidicBot v2.5.6] Connected to socket!');
+                sendToSocket();
+            };
+            sock.onclose = function() {
+                console.log('[acidicBot v2.5.6] Disconnected from socket!');
+                var reconnect = setTimeout(function() {
+                    loadSocket()
+                }, 60 * 1000);
+            };
+            sock.onmessage = function(broadcast) {
+                var rawBroadcast = broadcast.data;
+                var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
+                API.chatLog(broadcastMessage);
+                console.log(broadcastMessage);
+            };
+        }
+        if (typeof SockJS == 'undefined') {
+            $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
+        } else loadSocket();
+    }
+
+    var sendToSocket = function() {
+        var acidicBotSettings = acidicBot.settings;
+        var acidicBotRoom = acidicBot.room;
+        var acidicBotInfo = {
+            time: Date.now(),
+            version: acidicBot.version
+        };
+        var data = {
+            users: API.getUsers(),
+            userinfo: API.getUser(),
+            room: location.pathname,
+            acidicBotSettings: acidicBotSettings,
+            acidicBotRoom: acidicBotRoom,
+            acidicBotInfo: acidicBotInfo
+        };
+        return sock.msg(data);
+    };
+
     var storeToStorage = function() {
         localStorage.setItem("acidicBotsettings", JSON.stringify(acidicBot.settings));
         localStorage.setItem("acidicBotRoom", JSON.stringify(acidicBot.room));
@@ -943,6 +989,7 @@
                 }, remaining + 3000);
             }
             storeToStorage();
+            sendToSocket();
 
         },
         eventWaitlistupdate: function(users) {
@@ -1284,6 +1331,7 @@
             }
             API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
             API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
+            socket();
             loadChat(API.sendChat(subChat(acidicBot.chat.online, {
                 botname: acidicBot.settings.botName,
                 version: acidicBot.version
@@ -2354,6 +2402,7 @@
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
                         storeToStorage();
+                        sendToSocket();
                         API.sendChat(acidicBot.chat.kill);
                         acidicBot.disconnectAPI();
                         setTimeout(function() {
@@ -2866,6 +2915,7 @@
                     if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
+                        sendToSocket();
                         storeToStorage();
                         acidicBot.disconnectAPI();
                         setTimeout(function() {
@@ -2885,6 +2935,7 @@
                     if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
                     else {
                         API.sendChat(acidicBot.chat.reload);
+                        sendToSocket();
                         storeToStorage();
                         acidicBot.disconnectAPI();
                         kill();
