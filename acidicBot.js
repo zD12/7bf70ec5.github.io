@@ -268,8 +268,8 @@
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: null,
-    cmdLink: null,
+    scriptLink: "",
+    cmdLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -316,7 +316,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: null,
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -332,8 +332,8 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: null,
-        OP: null
+        NSFW: "",
+        OP: ""
       }
     },
     room:
