@@ -54,7 +54,7 @@
     }
     if (typeof SockJS == 'undefined')
     {
-      $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
+      $.getScript('https://square.gs/sockjs/0.3.4/sockjs.min.js', loadSocket);
     }
     else loadSocket();
   }
@@ -268,9 +268,9 @@
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "",
+    scriptLink: "https://square.gs/acidicBot.js",
     cmdLink: "",
-    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+    chatLink: "https://square.gs/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -279,7 +279,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      chatLink: "https://square.gs/lang/en.json",
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -2916,7 +2916,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json)
+            $.get("https://square.gs/lang/langIndex.json", function(json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
