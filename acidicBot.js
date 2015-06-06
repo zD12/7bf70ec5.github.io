@@ -268,7 +268,7 @@
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "",
+    scriptLink: "https://acidicbot-socket.c9.io/acidicBot.js",
     cmdLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
