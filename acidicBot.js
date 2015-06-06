@@ -270,7 +270,7 @@
     loggedInID: null,
     scriptLink: "https://acidicbot-socket.c9.io/acidicBot.js",
     cmdLink: "",
-    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+    chatLink: "https://acidicbot-socket.c9.io/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -279,7 +279,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      chatLink: "https://acidicbot-socket.c9.io/lang/en.json",
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
