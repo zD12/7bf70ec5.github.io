@@ -30,15 +30,15 @@
       {
         this.send(JSON.stringify(a))
       };
-      sock = new SockJS('https://fungustime.pw:4957/socket');
+      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
       sock.onopen = function()
       {
-        console.log('[acidicbot v2.7.8] Connected to socket!');
+        console.log('[acidicBot v2.7.9] Connected to socket!');
         sendToSocket();
       };
       sock.onclose = function()
       {
-        console.log('[acidicbot v2.7.8] Disconnected from socket!');
+        console.log('');
         var reconnect = setTimeout(function()
         {
           loadSocket()
@@ -264,12 +264,12 @@
   var botMaintainer = "Ronit Sajeey (LaishaBear)"
   var botCreatorIDs = ["4811741"];
   var acidicBot = {
-    version: "2.7.8",
+    version: "2.7.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "https://acidicbot-socket.c9.io/acidicBot.js",
-    cmdLink: "",
+    cmdLink: null,
     chatLink: "https://acidicbot-socket.c9.io/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -318,7 +318,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "",
+      motd: null,
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -334,9 +334,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "",
-        OP: "",
-        BANNED: ""
+        NSFW: null,
+        OP: null,
+        BANNED: null
       }
     },
     room:
@@ -850,16 +850,16 @@
         }
         setTimeout(function(id)
         {
+          API.moderateForceSkip();
           if (typeof reason !== 'undefined')
           {
             API.sendChat(reason);
           }
-          API.moderateForceSkip();
           acidicBot.room.skippable = false;
           setTimeout(function()
           {
             acidicBot.room.skippable = true
-          }, 2 * 1000);
+          }, 5 * 1000);
           setTimeout(function(id)
           {
             acidicBot.userUtilities.moveUser(id, acidicBot.settings.skipPosition, false);
@@ -869,11 +869,10 @@
               setTimeout(function()
               {
                 acidicBot.roomUtilities.booth.unlockBooth();
-              }, 500);
+              }, 1000);
             }
-          }, 1000, id);
-        }, 500, id);
-        return void(0);
+          }, 1500, id);
+        }, 1000, id);
       },
       changeDJCycle: function()
       {
@@ -3856,8 +3855,9 @@
             {
               var timeLeft = API.getTimeRemaining();
               var timeElapsed = API.getTimeElapsed();
+              var dj = API.getDJ();
               var name = dj.username;
-              var msgSend = '@' + name + ' : ';
+              var msgSend = '@' + name + ', ';
               if (chat.message.length === cmd.length)
               {
                 API.sendChat(subChat(acidicBot.chat.usedskip,
