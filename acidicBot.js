@@ -1797,9 +1797,9 @@
             var chatters = 0;
             var time;
             var launchT = basicBot.room.roomstats.launchTime;
-			var durationOnline = Date.now() - launchT;
-			var since = durationOnline / 1000;
-			if (msg.length === cmd.length) time = since;
+            var durationOnline = Date.now() - launchT;
+            var since = durationOnline / 1000;
+            if (msg.length === cmd.length) time = since;
             else
             {
               time = msg.substring(cmd.length + 1);
