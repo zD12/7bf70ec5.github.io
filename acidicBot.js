@@ -1805,7 +1805,7 @@
             if (msg.length === cmd.length) time = since;
             else
             {
-              time = msg.substring(cmd.length + 1);
+              time = msg.substring(cmd.length + 1).replace(/@/g, '');
               if (isNaN(time)) return API.sendChat(subChat(acidicBot.chat.invalidtime,
               {
                 name: chat.un
@@ -1880,7 +1880,7 @@
             {
               name: chat.un
             }));
-            var limit = msg.substring(cmd.length + 1);
+            var limit = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(limit))
             {
               acidicBot.settings.maximumAfk = parseInt(limit, 10);
@@ -2177,7 +2177,7 @@
             {
               name: chat.un
             }));
-            var list = msg.substr(cmd.length + 1);
+            var list = msg.substr(cmd.length + 1).replace(/@/g, '');
             if (typeof acidicBot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(acidicBot.chat.invalidlistspecified,
             {
               name: chat.un
@@ -2307,7 +2307,7 @@
             {
               botname: acidicBot.settings.botName
             }));
-            var argument = msg.substring(cmd.length + 1);
+            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (argument)
             {
               acidicBot.settings.botName = argument;
@@ -2506,7 +2506,7 @@
           else
           {
             var msg = chat.message;
-            var cycleTime = msg.substring(cmd.length + 1);
+            var cycleTime = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(cycleTime) && cycleTime !== "")
             {
               acidicBot.settings.maximumCycletime = cycleTime;
@@ -2822,7 +2822,7 @@
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
-              var tag = msg.substr(cmd.length + 1);
+              var tag = msg.substr(cmd.length + 1).replace(/@/g, '');
               var fixedtag = tag.replace(/ /g, "+");
               var commatag = tag.replace(/ /g, ", ");
               get_id(api_key, tag, function(id)
@@ -3089,7 +3089,7 @@
             {
               language: acidicBot.settings.language
             }));
-            var argument = msg.substring(cmd.length + 1);
+            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             $.get("https://acidicbot-socket.c9.io/lang/langIndex.json", function(json)
             {
               var langIndex = json;
@@ -3304,7 +3304,7 @@
               }
               var validReason = false;
               var msg = chat.message;
-              var reason = msg.substring(cmd.length + 1);
+              var reason = msg.substring(cmd.length + 1).replace(/@/g, '');
               for (var i = 0; i < acidicBot.settings.lockskipReasons.length; i++)
               {
                 var r = acidicBot.settings.lockskipReasons[i][0];
@@ -3358,7 +3358,7 @@
           else
           {
             var msg = chat.message;
-            var lockTime = msg.substring(cmd.length + 1);
+            var lockTime = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(lockTime) && lockTime !== "")
             {
               acidicBot.settings.maximumLocktime = lockTime;
@@ -3410,7 +3410,7 @@
           else
           {
             var msg = chat.message;
-            var maxTime = msg.substring(cmd.length + 1);
+            var maxTime = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(maxTime))
             {
               acidicBot.settings.maximumSongLength = maxTime;
@@ -3440,7 +3440,7 @@
           {
             var msg = chat.message;
             if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + acidicBot.settings.motd);
-            var argument = msg.substring(cmd.length + 1);
+            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!acidicBot.settings.motdEnabled) acidicBot.settings.motdEnabled = !acidicBot.settings.motdEnabled;
             if (isNaN(argument))
             {
@@ -3881,7 +3881,7 @@
               }
               var validReason = false;
               var msg = chat.message;
-              var reason = msg.substring(cmd.length + 1);
+              var reason = msg.substring(cmd.length + 1).replace(/@/g, '');
               for (var i = 0; i < acidicBot.settings.skipReasons.length; i++)
               {
                 var r = acidicBot.settings.skipReasons[i][0];
@@ -3926,7 +3926,7 @@
           else
           {
             var msg = chat.message;
-            var pos = msg.substring(cmd.length + 1);
+            var pos = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(pos))
             {
               acidicBot.settings.skipPosition = pos;
@@ -4403,7 +4403,7 @@
           else
           {
             var msg = chat.message;
-            var cd = msg.substring(cmd.length + 1);
+            var cd = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!isNaN(cd))
             {
               acidicBot.settings.commandCooldown = cd;
@@ -4504,7 +4504,7 @@
               name: chat.un,
               limit: acidicBot.settings.voteSkipLimit
             }));
-            var argument = msg.substring(cmd.length + 1);
+            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!acidicBot.settings.voteSkip) acidicBot.settings.voteSkip = !acidicBot.settings.voteSkip;
             if (isNaN(argument))
             {
