@@ -105,7 +105,7 @@
   var loadChat = function(cb)
   {
     if (!cb) cb = function() {};
-    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -2116,7 +2116,7 @@
           {
             var crowd = API.getUsers();
             var msg = chat.message;
-            var argument = msg.substring(cmd.length + 1);
+            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             var randomUser = Math.floor(Math.random() * crowd.length);
             var randomBall = Math.floor(Math.random() * acidicBot.chat.balls.length);
             var randomSentence = Math.floor(Math.random() * 1);
@@ -3085,7 +3085,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json)
+            $.get("https://acidicbot-socket.c9.io/lang/langIndex.json", function(json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
