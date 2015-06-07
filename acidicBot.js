@@ -859,7 +859,7 @@
           setTimeout(function()
           {
             acidicBot.room.skippable = true
-          }, 2 * 1000);
+          }, 5 * 1000);
           setTimeout(function(id)
           {
             acidicBot.userUtilities.moveUser(id, acidicBot.settings.skipPosition, false);
@@ -869,10 +869,10 @@
               setTimeout(function()
               {
                 acidicBot.roomUtilities.booth.unlockBooth();
-              }, 500);
+              }, 1000);
             }
-          }, 500, id);
-        }, 500, id);
+          }, 1500, id);
+        }, 1000, id);
       },
       changeDJCycle: function()
       {
