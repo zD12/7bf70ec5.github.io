@@ -30,7 +30,7 @@
       {
         this.send(JSON.stringify(a))
       };
-      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
+      sock = new SockJS('https://fungustime.pw:4957/socket');
       sock.onopen = function()
       {
         console.log('[acidicBot v2.7.9] Connected to socket!');
@@ -269,7 +269,7 @@
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "https://acidicbot-socket.c9.io/acidicBot.js",
-    cmdLink: null,
+    cmdLink: "",
     chatLink: "https://acidicbot-socket.c9.io/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -318,7 +318,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: null,
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -334,9 +334,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: null,
-        OP: null,
-        BANNED: null
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -851,10 +851,13 @@
         setTimeout(function(id)
         {
           API.moderateForceSkip();
-          if (typeof reason !== 'undefined')
+          setTimeout(function()
           {
-            API.sendChat(reason);
-          }
+            if (typeof reason !== 'undefined')
+            {
+              API.sendChat(reason);
+            }
+          }, 500);
           acidicBot.room.skippable = false;
           setTimeout(function()
           {
@@ -3095,7 +3098,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
@@ -3901,7 +3904,10 @@
                 else
                 {
                   API.moderateForceSkip();
-                  API.sendChat(msgSend);
+                  setTimeout(function()
+                  {
+                    API.sendChat(msgSend);
+                  }, 500);
                 }
               }
             }
