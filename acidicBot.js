@@ -30,15 +30,15 @@
       {
         this.send(JSON.stringify(a))
       };
-      sock = new SockJS('https://fungustime.pw:4957/socket');
+      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
       sock.onopen = function()
       {
-        console.log('[acidicbot v2.7.8] Connected to socket!');
+        console.log('[acidicbot v2.7.9] Connected to socket!');
         sendToSocket();
       };
       sock.onclose = function()
       {
-        console.log('[acidicbot v2.7.8] Disconnected from socket!');
+        console.log('');
         var reconnect = setTimeout(function()
         {
           loadSocket()
@@ -3856,6 +3856,7 @@
             {
               var timeLeft = API.getTimeRemaining();
               var timeElapsed = API.getTimeElapsed();
+              var dj = API.getDJ();
               var name = dj.username;
               var msgSend = '@' + name + ' : ';
               if (chat.message.length === cmd.length)
