@@ -260,9 +260,9 @@
     temp = null;
     return str;
   };
-  var botCreator = "Benzi (Quoona)";
-  var botMaintainer = "Ronit Sajeey (LaishaBear)"
-  var botCreatorIDs = ["4811741"];
+  var botCreator = "Matthew (Yemasthui)";
+  var botMaintainer = "Benzi (Quoona)"
+  var botCreatorIDs = ["3851534", "4105209"];
   var acidicBot = {
     version: "2.7.9",
     status: false,
@@ -850,11 +850,11 @@
         }
         setTimeout(function(id)
         {
+          API.moderateForceSkip();
           if (typeof reason !== 'undefined')
           {
             API.sendChat(reason);
           }
-          API.moderateForceSkip();
           acidicBot.room.skippable = false;
           setTimeout(function()
           {
@@ -871,9 +871,8 @@
                 acidicBot.roomUtilities.booth.unlockBooth();
               }, 500);
             }
-          }, 1000, id);
+          }, 500, id);
         }, 500, id);
-        return void(0);
       },
       changeDJCycle: function()
       {
@@ -3858,7 +3857,7 @@
               var timeElapsed = API.getTimeElapsed();
               var dj = API.getDJ();
               var name = dj.username;
-              var msgSend = '@' + name + ' : ';
+              var msgSend = '@' + name + ', ';
               if (chat.message.length === cmd.length)
               {
                 API.sendChat(subChat(acidicBot.chat.usedskip,
