@@ -264,7 +264,7 @@
   var botMaintainer = "Ronit Sajeey (LaishaBear)"
   var botCreatorIDs = ["4811741"];
   var acidicBot = {
-    version: "2.7.8",
+    version: "2.7.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
