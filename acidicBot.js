@@ -33,12 +33,12 @@
       sock = new SockJS('https://fungustime.pw:4957/socket');
       sock.onopen = function()
       {
-        console.log('[acidicBot v2.5.6] Connected to socket!');
+        console.log('[acidicbot v2.7.8] Connected to socket!');
         sendToSocket();
       };
       sock.onclose = function()
       {
-        console.log('[acidicBot v2.5.6] Disconnected from socket!');
+        console.log('[acidicbot v2.7.8] Disconnected from socket!');
         var reconnect = setTimeout(function()
         {
           loadSocket()
@@ -105,7 +105,7 @@
   var loadChat = function(cb)
   {
     if (!cb) cb = function() {};
-    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json)
+    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -264,7 +264,7 @@
   var botMaintainer = "Ronit Sajeey (LaishaBear)"
   var botCreatorIDs = ["4811741"];
   var acidicBot = {
-    version: "2.5.6",
+    version: "2.7.8",
     status: false,
     name: "acidicBot",
     loggedInID: null,
@@ -283,6 +283,8 @@
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
+      autowoot: true,
+      smartSkip: true,
       cmdDeletion: true,
       maximumAfk: 120,
       afkRemoval: true,
@@ -302,8 +304,8 @@
       autodisable: true,
       commandCooldown: 30,
       usercommandsEnabled: true,
-      lockskipPosition: 3,
-      lockskipReasons: [
+      skipPosition: 3,
+      skipReasons: [
         ["theme", "This song does not fit the room theme. "],
         ["op", "This song is on the OP list. "],
         ["history", "This song is in the history. "],
@@ -333,7 +335,8 @@
       blacklists:
       {
         NSFW: "",
-        OP: ""
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -833,6 +836,45 @@
           }
         }
       },
+      smartSkip: function(reason)
+      {
+        var dj = API.getDJ();
+        var id = dj.id;
+        var waitlistlength = API.getWaitList().length;
+        var locked = false;
+        acidicBot.room.queueable = false;
+        if (waitlistlength == 50)
+        {
+          acidicBot.roomUtilities.booth.lockBooth();
+          locked = true;
+        }
+        setTimeout(function(id)
+        {
+          if (typeof reason !== 'undefined')
+          {
+            API.sendChat(reason);
+          }
+          API.moderateForceSkip();
+          acidicBot.room.skippable = false;
+          setTimeout(function()
+          {
+            acidicBot.room.skippable = true
+          }, 2 * 1000);
+          setTimeout(function(id)
+          {
+            acidicBot.userUtilities.moveUser(id, acidicBot.settings.skipPosition, false);
+            acidicBot.room.queueable = true;
+            if (locked)
+            {
+              setTimeout(function()
+              {
+                acidicBot.roomUtilities.booth.unlockBooth();
+              }, 500);
+            }
+          }, 1000, id);
+        }, 500, id);
+        return void(0);
+      },
       changeDJCycle: function()
       {
         var toggle = $(".cycle-toggle");
@@ -1022,7 +1064,6 @@
     },
     eventUserleave: function(user)
     {
-      var previousDJ = API.getHistory()[1].user.id;
       var lastDJ = API.getHistory()[0].user.id;
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
@@ -1030,7 +1071,7 @@
         {
           acidicBot.userUtilities.updateDC(acidicBot.room.users[i]);
           acidicBot.room.users[i].inRoom = false;
-          if (lastDJ == user.id || previousDJ == user.id)
+          if (lastDJ == user.id)
           {
             var user = acidicBot.userUtilities.lookupUser(acidicBot.room.users[i].id);
             acidicBot.userUtilities.updatePosition(user, 0);
@@ -1059,6 +1100,8 @@
       var mehs = API.getScore().negative;
       var woots = API.getScore().positive;
       var dj = API.getDJ();
+      var timeLeft = API.getTimeRemaining();
+      var timeElapsed = API.getTimeElapsed();
       if (acidicBot.settings.voteSkip)
       {
         if ((mehs - woots) >= (acidicBot.settings.voteSkipLimit))
@@ -1068,7 +1111,14 @@
             name: dj.username,
             limit: acidicBot.settings.voteSkipLimit
           }));
-          API.moderateForceSkip();
+          if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
+          {
+            acidicBot.roomUtilities.smartSkip();
+          }
+          else
+          {
+            API.moderateForceSkip();
+          }
         }
       }
     },
@@ -1084,7 +1134,10 @@
     },
     eventDjadvance: function(obj)
     {
-      $("#woot").click();
+      if (acidicBot.settings.autowoot)
+      {
+        $("#woot").click();
+      }
       var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
@@ -1123,32 +1176,101 @@
       acidicBot.room.roomstats.songCount++;
       acidicBot.roomUtilities.intervalMessage();
       acidicBot.room.currentDJID = obj.dj.id;
-      var mid = obj.media.format + ':' + obj.media.cid;
-      for (var bl in acidicBot.room.blacklists)
+      var blacklistSkip = setTimeout(function()
       {
-        if (acidicBot.settings.blacklistEnabled)
+        var mid = obj.media.format + ':' + obj.media.cid;
+        for (var bl in acidicBot.room.blacklists)
         {
-          if (acidicBot.room.blacklists[bl].indexOf(mid) > -1)
+          if (acidicBot.settings.blacklistEnabled)
           {
-            API.sendChat(subChat(acidicBot.chat.isblacklisted,
+            if (acidicBot.room.blacklists[bl].indexOf(mid) > -1)
             {
-              blacklist: bl
-            }));
+              API.sendChat(subChat(acidicBot.chat.isblacklisted,
+              {
+                blacklist: bl
+              }));
+              if (acidicBot.settings.smartSkip)
+              {
+                return acidicBot.roomUtilities.smartSkip();
+              }
+              else
+              {
+                return API.moderateForceSkip();
+              }
+            }
+          }
+        }
+      }, 2000);
+      var newMedia = obj.media;
+      var timeLimitSkip = setTimeout(function()
+      {
+        if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent)
+        {
+          var name = obj.dj.username;
+          API.sendChat(subChat(acidicBot.chat.timelimit,
+          {
+            name: name,
+            maxlength: acidicBot.settings.maximumSongLength
+          }));
+          if (acidicBot.settings.smartSkip)
+          {
+            return acidicBot.roomUtilities.smartSkip();
+          }
+          else
+          {
             return API.moderateForceSkip();
           }
         }
-      }
-      var newMedia = obj.media;
-      if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent)
+      }, 2000);
+      var format = obj.media.format;
+      var cid = obj.media.cid;
+      var naSkip = setTimeout(function()
       {
-        var name = obj.dj.username;
-        API.sendChat(subChat(acidicBot.chat.timelimit,
+        if (format == 1)
         {
-          name: name,
-          maxlength: acidicBot.settings.maximumSongLength
-        }));
-        return API.moderateForceSkip();
-      }
+          $.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + cid + '&key=AIzaSyDcfWu9cGaDnTjPKhg_dy9mUh6H7i4ePZ0&part=snippet&callback=?', function(track)
+          {
+            if (typeof(track.items[0]) === 'undefined')
+            {
+              var name = obj.dj.username;
+              API.sendChat(subChat(acidicBot.chat.notavailable,
+              {
+                name: name
+              }));
+              if (acidicBot.settings.smartSkip)
+              {
+                return acidicBot.roomUtilities.smartSkip();
+              }
+              else
+              {
+                return API.moderateForceSkip();
+              }
+            }
+          });
+        }
+        else
+        {
+          var checkSong = SC.get('/tracks/' + cid, function(track)
+          {
+            if (typeof track.title === 'undefined')
+            {
+              var name = obj.dj.username;
+              API.sendChat(subChat(acidicBot.chat.notavailable,
+              {
+                name: name
+              }));
+              if (acidicBot.settings.smartSkip)
+              {
+                return acidicBot.roomUtilities.smartSkip();
+              }
+              else
+              {
+                return API.moderateForceSkip();
+              }
+            }
+          });
+        }
+      }, 2000);
       clearTimeout(historySkip);
       if (acidicBot.settings.historySkip)
       {
@@ -1167,7 +1289,14 @@
               {
                 name: name
               }));
-              return API.moderateForceSkip();
+              if (acidicBot.settings.smartSkip)
+              {
+                return acidicBot.roomUtilities.smartSkip();
+              }
+              else
+              {
+                return API.moderateForceSkip();
+              }
             }
           }
           if (!alreadyPlayed)
@@ -1188,11 +1317,15 @@
       if (acidicBot.room.autoskip)
       {
         var remaining = obj.media.duration * 1000;
+        var startcid = API.getMedia().cid;
         acidicBot.room.autoskipTimer = setTimeout(function()
         {
-          console.log("Skipping track.");
-          API.moderateForceSkip();
-        }, remaining + 3000);
+          var endcid = API.getMedia().cid;
+          if (startcid === endcid)
+          {
+            API.moderateForceSkip();
+          }
+        }, remaining + 5000);
       }
       storeToStorage();
       sendToSocket();
@@ -1570,7 +1703,10 @@
       acidicBot.status = true;
       API.sendChat('/cap ' + acidicBot.settings.startupCap);
       API.setVolume(acidicBot.settings.startupVolume);
-      $("#woot").click();
+      if (acidicBot.settings.autowoot)
+      {
+        $("#woot").click();
+      }
       if (acidicBot.settings.startupEmoji)
       {
         var emojibuttonoff = $(".icon-emoji-off");
@@ -1980,7 +2116,7 @@
           {
             var crowd = API.getUsers();
             var msg = chat.message;
-            var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
+            var argument = msg.substring(cmd.length + 1);
             var randomUser = Math.floor(Math.random() * crowd.length);
             var randomBall = Math.floor(Math.random() * acidicBot.chat.balls.length);
             var randomSentence = Math.floor(Math.random() * 1);
@@ -2044,6 +2180,8 @@
             else
             {
               var media = API.getMedia();
+              var timeLeft = API.getTimeRemaining();
+              var timeElapsed = API.getTimeElapsed();
               var track = {
                 list: list,
                 author: media.author,
@@ -2060,7 +2198,14 @@
                 title: media.title,
                 mid: media.format + ':' + media.cid
               }));
-              API.moderateForceSkip();
+              if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
+              {
+                acidicBot.roomUtilities.smartSkip();
+              }
+              else
+              {
+                API.moderateForceSkip();
+              }
               if (typeof acidicBot.room.newBlacklistedSongFunction === 'function')
               {
                 acidicBot.room.newBlacklistedSongFunction(track);
@@ -2584,6 +2729,30 @@
           }
         }
       },
+      forceskipCommand:
+      {
+        command: ['forceskip', 'fs'],
+        rank: 'bouncer',
+        type: 'exact',
+        functionality: function(chat, cmd)
+        {
+          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
+          else
+          {
+            API.sendChat(subChat(acidicBot.chat.forceskip,
+            {
+              name: chat.un
+            }));
+            API.moderateForceSkip();
+            acidicBot.room.skippable = false;
+            setTimeout(function()
+            {
+              acidicBot.room.skippable = true
+            }, 5 * 1000);
+          }
+        }
+      },
       ghostbusterCommand:
       {
         command: 'ghostbuster',
@@ -2916,7 +3085,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://acidicbot-socket.c9.io/lang/langIndex.json", function(json)
+            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function(json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3169,35 +3338,6 @@
                 return void(0);
               }
             }
-          }
-        }
-      },
-      lockskipposCommand:
-      {
-        command: 'lockskippos',
-        rank: 'manager',
-        type: 'startsWith',
-        functionality: function(chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var msg = chat.message;
-            var pos = msg.substring(cmd.length + 1);
-            if (!isNaN(pos))
-            {
-              acidicBot.settings.lockskipPosition = pos;
-              return API.sendChat(subChat(acidicBot.chat.lockskippos,
-              {
-                name: chat.un,
-                position: acidicBot.settings.lockskipPosition
-              }));
-            }
-            else return API.sendChat(subChat(acidicBot.chat.invalidpositionspecified,
-            {
-              name: chat.un
-            }));
           }
         }
       },
@@ -3703,25 +3843,94 @@
       },
       skipCommand:
       {
-        command: 'skip',
+        command: ['skip', 'smartskip'],
         rank: 'bouncer',
-        type: 'exact',
+        type: 'startsWith',
         functionality: function(chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(subChat(acidicBot.chat.skip,
+            if (acidicBot.room.skippable)
+            {
+              var timeLeft = API.getTimeRemaining();
+              var timeElapsed = API.getTimeElapsed();
+              var name = dj.username;
+              var msgSend = '@' + name + ' : ';
+              if (chat.message.length === cmd.length)
+              {
+                API.sendChat(subChat(acidicBot.chat.usedskip,
+                {
+                  name: chat.un
+                }));
+                if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
+                {
+                  acidicBot.roomUtilities.smartSkip();
+                }
+                else
+                {
+                  API.moderateForceSkip();
+                }
+              }
+              var validReason = false;
+              var msg = chat.message;
+              var reason = msg.substring(cmd.length + 1);
+              for (var i = 0; i < acidicBot.settings.skipReasons.length; i++)
+              {
+                var r = acidicBot.settings.skipReasons[i][0];
+                if (reason.indexOf(r) !== -1)
+                {
+                  validReason = true;
+                  msgSend += acidicBot.settings.skipReasons[i][1];
+                }
+              }
+              if (validReason)
+              {
+                API.sendChat(subChat(acidicBot.chat.usedskip,
+                {
+                  name: chat.un
+                }));
+                if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
+                {
+                  acidicBot.roomUtilities.smartSkip(msgSend);
+                }
+                else
+                {
+                  API.moderateForceSkip();
+                  API.sendChat(msgSend);
+                }
+              }
+            }
+          }
+        }
+      },
+      skipposCommand:
+      {
+        command: 'skippos',
+        rank: 'manager',
+        type: 'startsWith',
+        functionality: function(chat, cmd)
+        {
+          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
+          else
+          {
+            var msg = chat.message;
+            var pos = msg.substring(cmd.length + 1);
+            if (!isNaN(pos))
+            {
+              acidicBot.settings.skipPosition = pos;
+              return API.sendChat(subChat(acidicBot.chat.skippos,
+              {
+                name: chat.un,
+                position: acidicBot.settings.skipPosition
+              }));
+            }
+            else return API.sendChat(subChat(acidicBot.chat.invalidpositionspecified,
             {
               name: chat.un
             }));
-            API.moderateForceSkip();
-            acidicBot.room.skippable = false;
-            setTimeout(function()
-            {
-              acidicBot.room.skippable = true
-            }, 5 * 1000);
           }
         }
       },
@@ -4427,23 +4636,6 @@
                 {
                   var language = "Malay"
                 }
-                var rawstatus = API.getUser(id).status;
-                if (rawstatus == "0")
-                {
-                  var status = "Available";
-                }
-                else if (rawstatus == "1")
-                {
-                  var status = "Away";
-                }
-                else if (rawstatus == "2")
-                {
-                  var status = "Working";
-                }
-                else if (rawstatus == "3")
-                {
-                  var status = "Gaming"
-                }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
                 {
@@ -4480,11 +4672,11 @@
                 var slug = API.getUser(id).slug;
                 if (typeof slug !== 'undefined')
                 {
-                  var profile = ", Profile: http://plug.dj/@/" + slug;
+                  var profile = "https://plug.dj/@/" + slug;
                 }
                 else
                 {
-                  var profile = "";
+                  var profile = "~";
                 }
                 API.sendChat(subChat(acidicBot.chat.whois,
                 {
@@ -4495,7 +4687,6 @@
                   profile: profile,
                   language: language,
                   level: level,
-                  status: status,
                   joined: joined,
                   rank: rank
                 }));
