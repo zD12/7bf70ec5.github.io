@@ -30,10 +30,10 @@
       {
         this.send(JSON.stringify(a))
       };
-      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
+      sock = new SockJS('https://socket-bnzi.c9.io/basicBot');
       sock.onopen = function()
       {
-        console.log('[acidicbot v2.7.9] Connected to socket!');
+        console.log('[acidicBot v2.7.9] Connected to socket!');
         sendToSocket();
       };
       sock.onclose = function()
