@@ -269,7 +269,7 @@
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "https://acidicbot-socket.c9.io/acidicBot.js",
-    cmdLink: "",
+    cmdLink: null,
     chatLink: "https://acidicbot-socket.c9.io/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -318,7 +318,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "",
+      motd: null,
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -334,9 +334,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "",
-        OP: "",
-        BANNED: ""
+        NSFW: null,
+        OP: null,
+        BANNED: null
       }
     },
     room:
