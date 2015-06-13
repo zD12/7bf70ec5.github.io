@@ -51,7 +51,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("", function (json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -213,7 +213,7 @@
     loggedInID: null,
     scriptLink: "",
     cmdLink: "",
-    chatLink: "",
+    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -222,7 +222,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "",
+      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -3026,7 +3026,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
