@@ -530,7 +530,8 @@
       dclookup: function (id)
       {
         var user = acidicBot.userUtilities.lookupUser(id);
-        if (typeof user === 'boolean') return acidicBot.chat.usernotfound;
+        if (typeof user === 'boolean') return
+        acidicBot.chat.usernotfound;
         var name = user.username;
         if (user.lastDC.time === null) return subChat(acidicBot.chat.notdisconnected,
         {
@@ -538,7 +539,8 @@
         });
         var dc = user.lastDC.time;
         var pos = user.lastDC.position;
-        if (pos === null) return acidicBot.chat.noposition;
+        if (pos === null) return
+        acidicBot.chat.noposition;
         var timeDc = Date.now() - dc;
         var validDC = false;
         if (acidicBot.settings.maximumDc * 60 * 1000 > timeDc)
@@ -556,8 +558,10 @@
         var afkList = acidicBot.room.afkList;
         for (var i = 0; i < afkList.length; i++)
         {
-          var timeAfk = afkList[i][1];
-          var posAfk = afkList[i][2];
+          var timeAfk = afkList[i]
+            [1];
+          var posAfk = afkList[i]
+            [2];
           if (dc < timeAfk && posAfk < pos)
           {
             afksRemoved++;
@@ -747,7 +751,11 @@
                     if (pos !== -1)
                     {
                       pos++;
-                      acidicBot.room.afkList.push([id, Date.now(), pos]);
+                      acidicBot.room.afkList.push(
+                        [id,
+                          Date.now(),
+                          pos
+                        ]);
                       user.lastDC = {
                         time: null,
                         position: null,
@@ -938,7 +946,8 @@
           }
         }
       }
-      if (acidicBot.chatUtilities.chatFilter(chat)) return void(0);
+      if (acidicBot.chatUtilities.chatFilter(chat)) return
+      void(0);
       if (!acidicBot.chatUtilities.commandCheck(chat)) acidicBot.chatUtilities.action(chat);
     },
     eventUserjoin: function (user)
@@ -1123,7 +1132,8 @@
               }));
               if (acidicBot.settings.smartSkip)
               {
-                return acidicBot.roomUtilities.smartSkip();
+                return
+                acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1171,7 +1181,8 @@
               }));
               if (acidicBot.settings.smartSkip)
               {
-                return acidicBot.roomUtilities.smartSkip();
+                return
+                acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1193,7 +1204,8 @@
               }));
               if (acidicBot.settings.smartSkip)
               {
-                return acidicBot.roomUtilities.smartSkip();
+                return
+                acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1223,7 +1235,8 @@
               }));
               if (acidicBot.settings.smartSkip)
               {
-                return acidicBot.roomUtilities.smartSkip();
+                return
+                acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1312,7 +1325,8 @@
       {
         return true;
       }
-      if (!containsLetters && (msg.length === 1 || msg.length > 3)) return true;
+      if (!containsLetters && (msg.length === 1 || msg.length > 3)) return
+      true;
       msg = msg.replace(/[ ,;.:\/=~+%^*\-\\"'&@#]/g, '');
       var capitals = 0;
       var ch;
@@ -1762,7 +1776,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -1798,7 +1813,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nolimitspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nolimitspecified,
             {
               name: chat.un
             }));
@@ -1868,13 +1884,15 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -1899,13 +1917,15 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -2069,13 +2089,15 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substr(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -2095,12 +2117,14 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nolistspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nolistspecified,
             {
               name: chat.un
             }));
             var list = msg.substr(cmd.length + 1).replace(/@/g, '');
-            if (typeof acidicBot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(acidicBot.chat.invalidlistspecified,
+            if (typeof acidicBot.room.blacklists[list] === 'undefined') return
+            API.sendChat(subChat(acidicBot.chat.invalidlistspecified,
             {
               name: chat.un
             }));
@@ -2225,7 +2249,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.currentbotname,
+            if (msg.length <= cmd.length + 1) return
+            API.sendChat(subChat(acidicBot.chat.currentbotname,
             {
               botname: acidicBot.settings.botName
             }));
@@ -2444,13 +2469,15 @@
             {
               name = msg.substring(cmd.length + 2);
               var perm = acidicBot.userUtilities.getPermission(chat.uid);
-              if (perm < 2) return API.sendChat(subChat(acidicBot.chat.dclookuprank,
+              if (perm < 2) return
+              API.sendChat(subChat(acidicBot.chat.dclookuprank,
               {
                 name: chat.un
               }));
             }
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -2489,10 +2516,12 @@
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (chat.message.length === cmd.length) return API.sendChat('/me No user specified.');
+            if (chat.message.length === cmd.length) return
+            API.sendChat('/me No user specified.');
             var name = chat.message.substring(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat('/me Invalid user specified.');
+            if (typeof user === 'boolean') return
+            API.sendChat('/me Invalid user specified.');
             var lang = acidicBot.userUtilities.getUser(user).language;
             var ch = '/me @' + name + ' ';
             switch (lang)
@@ -2552,26 +2581,31 @@
             var name;
             if (msg.length > cmd.length)
             {
-              if (perm < 2) return void(0);
+              if (perm < 2) return
+              void(0);
               name = msg.substring(cmd.length + 2);
             }
             else name = chat.un;
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
             var pos = API.getWaitListPosition(user.id);
             var realpos = pos + 1;
-            if (name == dj) return API.sendChat(subChat(acidicBot.chat.youaredj,
+            if (name == dj) return
+            API.sendChat(subChat(acidicBot.chat.youaredj,
             {
               name: name
             }));
-            if (pos < 0) return API.sendChat(subChat(acidicBot.chat.notinwaitlist,
+            if (pos < 0) return
+            API.sendChat(subChat(acidicBot.chat.notinwaitlist,
             {
               name: name
             }));
-            if (pos == 0) return API.sendChat(subChat(acidicBot.chat.youarenext,
+            if (pos == 0) return
+            API.sendChat(subChat(acidicBot.chat.youarenext,
             {
               name: name
             }));
@@ -2872,13 +2906,15 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -2921,13 +2957,15 @@
             }
             var user = acidicBot.userUtilities.lookupUserName(name);
             var from = chat.un;
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
             var permTokick = acidicBot.userUtilities.getPermission(user.id);
-            if (permFrom <= permTokick) return API.sendChat(subChat(acidicBot.chat.kickrank,
+            if (permFrom <= permTokick) return
+            API.sendChat(subChat(acidicBot.chat.kickrank,
             {
               name: chat.un
             }));
@@ -2986,7 +3024,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.currentlang,
+            if (msg.length <= cmd.length + 1) return
+            API.sendChat(subChat(acidicBot.chat.currentlang,
             {
               language: acidicBot.settings.language
             }));
@@ -3340,7 +3379,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + acidicBot.settings.motd);
+            if (msg.length <= cmd.length + 1) return
+            API.sendChat('/me MotD: ' + acidicBot.settings.motd);
             var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
             if (!acidicBot.settings.motdEnabled) acidicBot.settings.motdEnabled = !acidicBot.settings.motdEnabled;
             if (isNaN(argument))
@@ -3374,7 +3414,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3393,7 +3434,8 @@
               name = msg.substring(cmd.length + 2, lastSpace);
             }
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -3428,7 +3470,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3454,7 +3497,8 @@
             }
             var from = chat.un;
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -3974,7 +4018,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3984,7 +4029,8 @@
             var name2 = msg.substring(lastSpace + 2);
             var user1 = acidicBot.userUtilities.lookupUserName(name1);
             var user2 = acidicBot.userUtilities.lookupUserName(name2);
-            if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return API.sendChat(subChat(acidicBot.chat.swapinvalid,
+            if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.swapinvalid,
             {
               name: chat.un
             }));
@@ -4243,7 +4289,8 @@
             var from = chat.un;
             var name = msg.substr(cmd.length + 2);
             var user = acidicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
+            if (typeof user === 'boolean') return
+            API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -4347,7 +4394,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return
+            API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -4382,7 +4430,8 @@
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.voteskiplimit,
+            if (msg.length <= cmd.length + 1) return
+            API.sendChat(subChat(acidicBot.chat.voteskiplimit,
             {
               name: chat.un,
               limit: acidicBot.settings.voteSkipLimit
