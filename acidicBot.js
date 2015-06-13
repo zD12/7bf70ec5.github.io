@@ -105,7 +105,7 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("acidicBotStorageInfo");
-    if (info === null);
+    if (info === null) API.chatLog(acidicBot.chat.nodatafound);
     else
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
@@ -113,6 +113,7 @@
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
+        API.chatLog(acidicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           acidicBot.settings[prop] = settings[prop];
@@ -126,6 +127,7 @@
         acidicBot.room.messages = room.messages;
         acidicBot.room.queue = room.queue;
         acidicBot.room.newBlacklisted = room.newBlacklisted;
+        API.chatLog(acidicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -890,7 +892,11 @@
               })(bl);
             }
             catch (e)
-            {}
+            {
+              API.chatLog('Error setting' + bl + 'blacklist.');
+              console.log('Error setting' + bl + 'blacklist.');
+              console.log(e);
+            }
           }
         }
       },
@@ -899,10 +905,6 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(acidicBot.room.newBlacklisted);
-        }
-        else
-        {
-          console.log(acidicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1551,8 +1553,8 @@
         return 'Function.'
       };
       var u = API.getUser();
-      if (acidicBot.userUtilities.getPermission(u) < 2);
-      if (acidicBot.userUtilities.getPermission(u) === 2);
+      if (acidicBot.userUtilities.getPermission(u) < 2) return API.chatLog(acidicBot.chat.greyuser);
+      if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
       acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
       {
@@ -1644,6 +1646,7 @@
         {
           emojibuttonoff[0].click();
         }
+        API.chatLog(':smile: Emojis enabled.');
       }
       else
       {
@@ -1652,7 +1655,10 @@
         {
           emojibuttonon[0].click();
         }
+        API.chatLog('Emojis disabled.');
       }
+      API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
+      API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
       loadChat(API.sendChat(subChat(acidicBot.chat.online,
       {
         botname: acidicBot.settings.botName,
