@@ -206,9 +206,6 @@
     temp = null;
     return str;
   };
-  var botCreator = "";
-  var botMaintainer = ""
-  var botCreatorIDs = [""];
   var acidicBot = {
     version: "2.7.9",
     status: false,
@@ -468,10 +465,6 @@
         var u;
         if (typeof obj === "object") u = obj;
         else u = API.getUser(obj);
-        for (var i = 0; i < botCreatorIDs.length; i++)
-        {
-          if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
-        }
         if (u.gRole < 2) return u.role;
         else
         {
@@ -3913,21 +3906,6 @@
                 'function': acidicBot.chat.songstats
               }));
             }
-          }
-        }
-      },
-      sourceCommand:
-      {
-        command: 'source',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
           }
         }
       },
