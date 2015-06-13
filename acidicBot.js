@@ -33,12 +33,10 @@
       sock = new SockJS('https://socket-bnzi.c9.io/acidicBot');
       sock.onopen = function ()
       {
-        console.log('Connected to socket!');
         sendToSocket();
       };
       sock.onclose = function ()
       {
-        console.log('Disconnected from socket, reconnecting every minute ..');
         var reconnect = setTimeout(function ()
         {
           loadSocket()
@@ -49,7 +47,6 @@
         var rawBroadcast = broadcast.data;
         var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
         API.chatLog(broadcastMessage);
-        console.log(broadcastMessage);
       };
     }
     if (typeof SockJS == 'undefined')
