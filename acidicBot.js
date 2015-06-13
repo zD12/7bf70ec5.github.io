@@ -3034,7 +3034,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
