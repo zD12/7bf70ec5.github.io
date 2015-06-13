@@ -51,7 +51,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+    $.get("", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -206,17 +206,17 @@
     temp = null;
     return str;
   };
-  var botCreator = "Matthew (Yemasthui)";
-  var botMaintainer = "Benzi (Quoona)"
-  var botCreatorIDs = ["3851534", "4105209"];
+  var botCreator = "";
+  var botMaintainer = ""
+  var botCreatorIDs = [""];
   var acidicBot = {
     version: "2.7.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "https://rawgit.com/Yemasthui/acidicBot/master/acidicBot.js",
-    cmdLink: "http://git.io/245Ppg",
-    chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+    scriptLink: "",
+    cmdLink: "",
+    chatLink: "",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -225,7 +225,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+      chatLink: "",
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -236,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -264,7 +264,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -280,9 +280,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
