@@ -1578,6 +1578,7 @@
         if (roomURL != window.location.pathname)
         {
           clearInterval(Check)
+          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
@@ -2831,7 +2832,7 @@
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            var link = "(Updated link coming soon)";
+            var link = "";
             API.sendChat(subChat(acidicBot.chat.starterhelp,
             {
               link: link
@@ -2977,6 +2978,7 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
+                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -4237,6 +4239,7 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
+              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
