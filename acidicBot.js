@@ -903,10 +903,6 @@
         {
           console.table(acidicBot.room.newBlacklisted);
         }
-        else
-        {
-          console.log(acidicBot.room.newBlacklisted);
-        }
       },
       exportNewBlacklistedSongs: function ()
       {
