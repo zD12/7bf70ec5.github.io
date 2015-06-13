@@ -37,9 +37,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
