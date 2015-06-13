@@ -903,6 +903,10 @@
         {
           console.table(acidicBot.room.newBlacklisted);
         }
+        else
+        {
+          console.log(acidicBot.room.newBlacklisted);
+        }
       },
       exportNewBlacklistedSongs: function ()
       {
@@ -1643,6 +1647,7 @@
         {
           emojibuttonoff[0].click();
         }
+        API.chatLog(':smile: Emojis enabled.');
       }
       else
       {
@@ -1651,7 +1656,10 @@
         {
           emojibuttonon[0].click();
         }
+        API.chatLog('Emojis disabled.');
       }
+      API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
+      API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
       loadChat(API.sendChat(subChat(acidicBot.chat.online,
       {
         botname: acidicBot.settings.botName,
