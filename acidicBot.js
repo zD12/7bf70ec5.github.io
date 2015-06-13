@@ -3026,7 +3026,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+            $.get("", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
