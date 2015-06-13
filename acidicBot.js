@@ -37,9 +37,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -1578,7 +1576,6 @@
         if (roomURL != window.location.pathname)
         {
           clearInterval(Check)
-          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
@@ -2978,7 +2975,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -4239,7 +4235,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
