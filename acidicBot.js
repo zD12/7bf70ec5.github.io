@@ -22,57 +22,6 @@
     clearInterval(acidicBot.room.afkInterval);
     acidicBot.status = false;
   };
-  var socket = function ()
-  {
-    function loadSocket()
-    {
-      SockJS.prototype.msg = function (a)
-      {
-        this.send(JSON.stringify(a))
-      };
-      sock = new SockJS('https://socket-bnzi.c9.io/acidicBot');
-      sock.onopen = function ()
-      {
-        sendToSocket();
-      };
-      sock.onclose = function ()
-      {
-        var reconnect = setTimeout(function ()
-        {
-          loadSocket()
-        }, 60 * 1000);
-      };
-      sock.onmessage = function (broadcast)
-      {
-        var rawBroadcast = broadcast.data;
-        var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
-        API.chatLog(broadcastMessage);
-      };
-    }
-    if (typeof SockJS == 'undefined')
-    {
-      $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
-    }
-    else loadSocket();
-  }
-  var sendToSocket = function ()
-  {
-    var acidicBotSettings = acidicBot.settings;
-    var acidicBotRoom = acidicBot.room;
-    var acidicBotInfo = {
-      time: Date.now(),
-      version: acidicBot.version
-    };
-    var data = {
-      users: API.getUsers(),
-      userinfo: API.getUser(),
-      room: location.pathname,
-      acidicBotSettings: acidicBotSettings,
-      acidicBotRoom: acidicBotRoom,
-      acidicBotInfo: acidicBotInfo
-    };
-    return sock.msg(data);
-  };
   var storeToStorage = function ()
   {
     localStorage.setItem("acidicBotsettings", JSON.stringify(acidicBot.settings));
