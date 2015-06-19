@@ -1,5 +1,10 @@
 (function ()
 {
+  window.onerror = function ()
+  {
+    var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
+    window.location = 'https://plug.dj' + room.name;
+  };
   API.getWaitListPosition = function (id)
   {
     if (typeof id === 'undefined' || id === null)
@@ -37,9 +42,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -51,7 +54,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -206,17 +209,13 @@
     temp = null;
     return str;
   };
-  var botCreator = "Matthew (Yemasthui)";
-  var botMaintainer = "Benzi (Quoona)"
-  var botCreatorIDs = ["3851534", "4105209"];
   var acidicBot = {
-    version: "2.7.9",
+    version: "2.8.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "https://rawgit.com/Yemasthui/acidicBot/master/acidicBot.js",
-    cmdLink: "http://git.io/245Ppg",
-    chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+    scriptLink: "",
+    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -225,7 +224,8 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      roomLock: true,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -236,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -264,7 +264,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -280,13 +280,14 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
     {
+      name: null,
       users: [],
       afkList: [],
       mutedUsers: [],
@@ -468,10 +469,6 @@
         var u;
         if (typeof obj === "object") u = obj;
         else u = API.getUser(obj);
-        for (var i = 0; i < botCreatorIDs.length; i++)
-        {
-          if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
-        }
         if (u.gRole < 2) return u.role;
         else
         {
@@ -902,11 +899,7 @@
               })(bl);
             }
             catch (e)
-            {
-              API.chatLog('Error setting' + bl + 'blacklist.');
-              console.log('Error setting' + bl + 'blacklist.');
-              console.log(e);
-            }
+            {}
           }
         }
       },
@@ -915,10 +908,6 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(acidicBot.room.newBlacklisted);
-        }
-        else
-        {
-          console.log(acidicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1276,7 +1265,6 @@
         }, remaining + 5000);
       }
       storeToStorage();
-      sendToSocket();
     },
     eventWaitlistupdate: function (users)
     {
@@ -1579,26 +1567,32 @@
           type: "DELETE"
         })
       };
-      var roomURL = window.location.pathname;
+      acidicBot.room.name = window.location.pathname;
       var Check;
       var detect = function ()
       {
-        if (roomURL != window.location.pathname)
+        if (acidicBot.room.name != window.location.pathname)
         {
-          clearInterval(Check)
-          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
           {
             kill();
           }, 1000);
+          if (acidicBot.settings.roomLock)
+          {
+            window.location = 'https://plug.dj' + acidicBot.room.name;
+          }
+          else
+          {
+            clearInterval(Check);
+          }
         }
       };
       Check = setInterval(function ()
       {
         detect()
-      }, 100);
+      }, 2000);
       retrieveSettings();
       retrieveFromStorage();
       window.bot = acidicBot;
@@ -1675,7 +1669,6 @@
       }
       API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
       API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
-      socket();
       loadChat(API.sendChat(subChat(acidicBot.chat.online,
       {
         botname: acidicBot.settings.botName,
@@ -2288,25 +2281,6 @@
           }
         }
       },
-      commandsCommand:
-      {
-        command: 'commands',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(subChat(acidicBot.chat.commandslink,
-            {
-              botname: acidicBot.settings.botName,
-              link: acidicBot.cmdLink
-            }));
-          }
-        }
-      },
       cmddeletionCommand:
       {
         command: ['commanddeletion', 'cmddeletion', 'cmddel'],
@@ -2830,25 +2804,6 @@
           }
         }
       },
-      helpCommand:
-      {
-        command: 'help',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = "(Updated link coming soon)";
-            API.sendChat(subChat(acidicBot.chat.starterhelp,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       historyskipCommand:
       {
         command: 'historyskip',
@@ -2987,7 +2942,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -3009,7 +2963,6 @@
           else
           {
             storeToStorage();
-            sendToSocket();
             API.sendChat(acidicBot.chat.kill);
             acidicBot.disconnectAPI();
             setTimeout(function ()
@@ -3036,7 +2989,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3044,7 +2997,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
@@ -3620,7 +3573,6 @@
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            sendToSocket();
             storeToStorage();
             acidicBot.disconnectAPI();
             setTimeout(function ()
@@ -3642,7 +3594,6 @@
           else
           {
             API.sendChat(acidicBot.chat.reload);
-            sendToSocket();
             storeToStorage();
             acidicBot.disconnectAPI();
             kill();
@@ -3918,21 +3869,6 @@
                 'function': acidicBot.chat.songstats
               }));
             }
-          }
-        }
-      },
-      sourceCommand:
-      {
-        command: 'source',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
           }
         }
       },
@@ -4266,7 +4202,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
