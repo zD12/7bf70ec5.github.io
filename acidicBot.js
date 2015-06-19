@@ -54,7 +54,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -215,7 +215,7 @@
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "",
-    chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -224,7 +224,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
       roomLock: false,
       startupCap: 1,
       startupVolume: 0,
@@ -236,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -264,7 +264,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -280,9 +280,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
