@@ -1,5 +1,10 @@
 (function ()
 {
+  window.onerror = function ()
+  {
+    var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
+    window.location = 'https://plug.dj' + room.name;
+  };
   API.getWaitListPosition = function (id)
   {
     if (typeof id === 'undefined' || id === null)
@@ -37,9 +42,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -51,7 +54,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
+    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -207,13 +210,12 @@
     return str;
   };
   var acidicBot = {
-    version: "2.7.9",
+    version: "2.8.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "",
-    cmdLink: "",
-    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+    chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -222,7 +224,8 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+      roomLock: false,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -233,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: false,
+      blacklistEnabled: true,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -261,7 +264,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "",
+      motd: "Temporary Message of the Day",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -277,13 +280,14 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "",
-        OP: "",
-        BANNED: ""
+        NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/NSFWlist.json",
+        OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/OPlist.json",
+        BANNED: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/BANNEDlist.json"
       }
     },
     room:
     {
+      name: null,
       users: [],
       afkList: [],
       mutedUsers: [],
@@ -1571,13 +1575,13 @@
           type: "DELETE"
         })
       };
-      var roomURL = window.location.pathname;
+      acidicBot.room.name = window.location.pathname;
       var Check;
+      console.log(acidicBot.room.name);
       var detect = function ()
       {
-        if (roomURL != window.location.pathname)
+        if (acidicBot.room.name != window.location.pathname)
         {
-          clearInterval(Check)
           console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
@@ -1585,12 +1589,20 @@
           {
             kill();
           }, 1000);
+          if (acidicBot.settings.roomLock)
+          {
+            window.location = 'https://plug.dj' + acidicBot.room.name;
+          }
+          else
+          {
+            clearInterval(Check);
+          }
         }
       };
       Check = setInterval(function ()
       {
         detect()
-      }, 100);
+      }, 2000);
       retrieveSettings();
       retrieveFromStorage();
       window.bot = acidicBot;
@@ -2279,25 +2291,6 @@
           }
         }
       },
-      commandsCommand:
-      {
-        command: 'commands',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(subChat(acidicBot.chat.commandslink,
-            {
-              botname: acidicBot.settings.botName,
-              link: acidicBot.cmdLink
-            }));
-          }
-        }
-      },
       cmddeletionCommand:
       {
         command: ['commanddeletion', 'cmddeletion', 'cmddel'],
@@ -2821,25 +2814,6 @@
           }
         }
       },
-      helpCommand:
-      {
-        command: 'help',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = "(Updated link coming soon)";
-            API.sendChat(subChat(acidicBot.chat.starterhelp,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       historyskipCommand:
       {
         command: 'historyskip',
@@ -3026,7 +3000,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3034,7 +3008,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: ""
+                  link: "http://git.io/vJ9nI"
                 }));
               }
               else
