@@ -3000,7 +3000,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3008,7 +3008,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
