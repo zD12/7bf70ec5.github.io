@@ -899,11 +899,7 @@
               })(bl);
             }
             catch (e)
-            {
-              API.chatLog('Error setting' + bl + 'blacklist.');
-              console.log('Error setting' + bl + 'blacklist.');
-              console.log(e);
-            }
+            {}
           }
         }
       },
@@ -912,10 +908,6 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(acidicBot.room.newBlacklisted);
-        }
-        else
-        {
-          console.log(acidicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1577,12 +1569,10 @@
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
-      console.log(acidicBot.room.name);
       var detect = function ()
       {
         if (acidicBot.room.name != window.location.pathname)
         {
-          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
@@ -2952,7 +2942,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -4213,7 +4202,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
