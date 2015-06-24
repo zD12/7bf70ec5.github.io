@@ -1569,7 +1569,6 @@
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
-      console.log(acidicBot.room.name);
       var detect = function ()
       {
         if (acidicBot.room.name != window.location.pathname)
@@ -2938,7 +2937,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -4199,7 +4197,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
