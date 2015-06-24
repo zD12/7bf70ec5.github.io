@@ -1,11 +1,11 @@
-(function()
+(function ()
 {
-  window.onerror = function()
+  window.onerror = function ()
   {
     var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
     window.location = 'https://plug.dj' + room.name;
   };
-  API.getWaitListPosition = function(id)
+  API.getWaitListPosition = function (id)
   {
     if (typeof id === 'undefined' || id === null)
     {
@@ -21,13 +21,13 @@
     }
     return -1;
   };
-  var kill = function()
+  var kill = function ()
   {
     clearInterval(acidicBot.room.autodisableInterval);
     clearInterval(acidicBot.room.afkInterval);
     acidicBot.status = false;
   };
-  var storeToStorage = function()
+  var storeToStorage = function ()
   {
     localStorage.setItem("acidicBotsettings", JSON.stringify(acidicBot.settings));
     localStorage.setItem("acidicBotRoom", JSON.stringify(acidicBot.room));
@@ -38,7 +38,7 @@
     };
     localStorage.setItem("acidicBotStorageInfo", JSON.stringify(acidicBotStorageInfo));
   };
-  var subChat = function(chat, obj)
+  var subChat = function (chat, obj)
   {
     if (typeof chat === "undefined")
     {
@@ -51,10 +51,10 @@
     }
     return chat;
   };
-  var loadChat = function(cb)
+  var loadChat = function (cb)
   {
-    if (!cb) cb = function() {};
-    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json)
+    if (!cb) cb = function () {};
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -72,7 +72,7 @@
             link = acidicBot.chatLink;
           }
         }
-        $.get(link, function(json)
+        $.get(link, function (json)
         {
           if (json !== null && typeof json !== "undefined")
           {
@@ -84,7 +84,7 @@
       }
       else
       {
-        $.get(acidicBot.chatLink, function(json)
+        $.get(acidicBot.chatLink, function (json)
         {
           if (json !== null && typeof json !== "undefined")
           {
@@ -96,7 +96,7 @@
       }
     });
   };
-  var retrieveSettings = function()
+  var retrieveSettings = function ()
   {
     var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
     if (settings !== null)
@@ -107,7 +107,7 @@
       }
     }
   };
-  var retrieveFromStorage = function()
+  var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("acidicBotStorageInfo");
     if (info === null)
@@ -144,7 +144,7 @@
       if (link.indexOf(" ") < link.indexOf("\n")) ind_space = link.indexOf(" ");
       else ind_space = link.indexOf("\n");
       link = link.substring(0, ind_space);
-      $.get(link, function(json)
+      $.get(link, function (json)
       {
         if (json !== null && typeof json !== "undefined")
         {
@@ -157,7 +157,7 @@
       });
     }
   };
-  String.prototype.splitBetween = function(a, b)
+  String.prototype.splitBetween = function (a, b)
   {
     var self = this;
     self = this.split(a);
@@ -179,11 +179,11 @@
     }
     return arr;
   };
-  String.prototype.startsWith = function(str)
+  String.prototype.startsWith = function (str)
   {
     return this.substring(0, str.length) === str;
   };
-  var linkFixer = function(msg)
+  var linkFixer = function (msg)
   {
     var parts = msg.splitBetween('<a href="', '<\/a>');
     for (var i = 1; i < parts.length; i = i + 2)
@@ -198,7 +198,7 @@
     }
     return m;
   };
-  var decodeEntities = function(s)
+  var decodeEntities = function (s)
   {
     var str, temp = document.createElement('p');
     temp.innerHTML = s;
@@ -296,7 +296,7 @@
       autoskip: false,
       autoskipTimer: null,
       autodisableInterval: null,
-      autodisableFunc: function()
+      autodisableFunc: function ()
       {
         if (acidicBot.status && acidicBot.settings.autodisable)
         {
@@ -308,7 +308,7 @@
       queueable: true,
       currentDJID: null,
       historyList: [],
-      cycleTimer: setTimeout(function() {}, 1),
+      cycleTimer: setTimeout(function () {}, 1),
       roomstats:
       {
         accountName: null,
@@ -339,16 +339,16 @@
         rouletteStatus: false,
         participants: [],
         countdown: null,
-        startRoulette: function()
+        startRoulette: function ()
         {
           acidicBot.room.roulette.rouletteStatus = true;
-          acidicBot.room.roulette.countdown = setTimeout(function()
+          acidicBot.room.roulette.countdown = setTimeout(function ()
           {
             acidicBot.room.roulette.endRoulette();
           }, 60 * 1000);
           API.sendChat(acidicBot.chat.isopen);
         },
-        endRoulette: function()
+        endRoulette: function ()
         {
           acidicBot.room.roulette.rouletteStatus = false;
           var ind = Math.floor(Math.random() * acidicBot.room.roulette.participants.length);
@@ -362,14 +362,14 @@
             name: name,
             position: pos
           }));
-          setTimeout(function(winner, pos)
+          setTimeout(function (winner, pos)
           {
             acidicBot.userUtilities.moveUser(winner, pos, false);
           }, 1 * 1000, winner, pos);
         }
       }
     },
-    User: function(id, name)
+    User: function (id, name)
     {
       this.id = id;
       this.username = name;
@@ -394,43 +394,43 @@
     },
     userUtilities:
     {
-      getJointime: function(user)
+      getJointime: function (user)
       {
         return user.jointime;
       },
-      getUser: function(user)
+      getUser: function (user)
       {
         return API.getUser(user.id);
       },
-      updatePosition: function(user, newPos)
+      updatePosition: function (user, newPos)
       {
         user.lastKnownPosition = newPos;
       },
-      updateDC: function(user)
+      updateDC: function (user)
       {
         user.lastDC.time = Date.now();
         user.lastDC.position = user.lastKnownPosition;
         user.lastDC.songCount = acidicBot.room.roomstats.songCount;
       },
-      setLastActivity: function(user)
+      setLastActivity: function (user)
       {
         user.lastActivity = Date.now();
         user.afkWarningCount = 0;
         clearTimeout(user.afkCountdown);
       },
-      getLastActivity: function(user)
+      getLastActivity: function (user)
       {
         return user.lastActivity;
       },
-      getWarningCount: function(user)
+      getWarningCount: function (user)
       {
         return user.afkWarningCount;
       },
-      setWarningCount: function(user, value)
+      setWarningCount: function (user, value)
       {
         user.afkWarningCount = value;
       },
-      lookupUser: function(id)
+      lookupUser: function (id)
       {
         for (var i = 0; i < acidicBot.room.users.length; i++)
         {
@@ -441,7 +441,7 @@
         }
         return false;
       },
-      lookupUserName: function(name)
+      lookupUserName: function (name)
       {
         for (var i = 0; i < acidicBot.room.users.length; i++)
         {
@@ -453,7 +453,7 @@
         }
         return false;
       },
-      voteRatio: function(id)
+      voteRatio: function (id)
       {
         var user = acidicBot.userUtilities.lookupUser(id);
         var votes = user.votes;
@@ -461,7 +461,7 @@
         else votes.ratio = (votes.woot / votes.meh).toFixed(2);
         return votes;
       },
-      getPermission: function(obj)
+      getPermission: function (obj)
       {
         var u;
         if (typeof obj === "object") u = obj;
@@ -471,19 +471,19 @@
         {
           switch (u.gRole)
           {
-            case 2:
-              return 7;
-            case 3:
-              return 8;
-            case 4:
-              return 9;
-            case 5:
-              return 10;
+          case 2:
+            return 7;
+          case 3:
+            return 8;
+          case 4:
+            return 9;
+          case 5:
+            return 10;
           }
         }
         return 0;
       },
-      moveUser: function(id, pos, priority)
+      moveUser: function (id, pos, priority)
       {
         var user = acidicBot.userUtilities.lookupUser(id);
         var wlist = API.getWaitList();
@@ -492,7 +492,7 @@
           if (wlist.length < 50)
           {
             API.moderateAddDJ(id);
-            if (pos !== 0) setTimeout(function(id, pos)
+            if (pos !== 0) setTimeout(function (id, pos)
             {
               API.moderateMoveDJ(id, pos);
             }, 1250, id, pos);
@@ -533,7 +533,7 @@
         }
         else API.moderateMoveDJ(id, pos);
       },
-      dclookup: function(id)
+      dclookup: function (id)
       {
         var user = acidicBot.userUtilities.lookupUser(id);
         if (typeof user === 'boolean') return acidicBot.chat.usernotfound;
@@ -583,39 +583,39 @@
     },
     roomUtilities:
     {
-      rankToNumber: function(rankString)
+      rankToNumber: function (rankString)
       {
         var rankInt = null;
         switch (rankString)
         {
-          case "admin":
-            rankInt = 10;
-            break;
-          case "ambassador":
-            rankInt = 7;
-            break;
-          case "host":
-            rankInt = 5;
-            break;
-          case "cohost":
-            rankInt = 4;
-            break;
-          case "manager":
-            rankInt = 3;
-            break;
-          case "bouncer":
-            rankInt = 2;
-            break;
-          case "residentdj":
-            rankInt = 1;
-            break;
-          case "user":
-            rankInt = 0;
-            break;
+        case "admin":
+          rankInt = 10;
+          break;
+        case "ambassador":
+          rankInt = 7;
+          break;
+        case "host":
+          rankInt = 5;
+          break;
+        case "cohost":
+          rankInt = 4;
+          break;
+        case "manager":
+          rankInt = 3;
+          break;
+        case "bouncer":
+          rankInt = 2;
+          break;
+        case "residentdj":
+          rankInt = 1;
+          break;
+        case "user":
+          rankInt = 0;
+          break;
         }
         return rankInt;
       },
-      msToStr: function(msTime)
+      msToStr: function (msTime)
       {
         var ms, msg, timeAway;
         msg = '';
@@ -677,27 +677,27 @@
       },
       booth:
       {
-        lockTimer: setTimeout(function() {}, 1000),
+        lockTimer: setTimeout(function () {}, 1000),
         locked: false,
-        lockBooth: function()
+        lockBooth: function ()
         {
           API.moderateLockWaitList(!acidicBot.roomUtilities.booth.locked);
           acidicBot.roomUtilities.booth.locked = false;
           if (acidicBot.settings.lockGuard)
           {
-            acidicBot.roomUtilities.booth.lockTimer = setTimeout(function()
+            acidicBot.roomUtilities.booth.lockTimer = setTimeout(function ()
             {
               API.moderateLockWaitList(acidicBot.roomUtilities.booth.locked);
             }, acidicBot.settings.maximumLocktime * 60 * 1000);
           }
         },
-        unlockBooth: function()
+        unlockBooth: function ()
         {
           API.moderateLockWaitList(acidicBot.roomUtilities.booth.locked);
           clearTimeout(acidicBot.roomUtilities.booth.lockTimer);
         }
       },
-      afkCheck: function()
+      afkCheck: function ()
       {
         if (!acidicBot.status || !acidicBot.settings.afkRemoval) return void(0);
         var rank = acidicBot.roomUtilities.rankToNumber(acidicBot.settings.afkRankCheck);
@@ -730,7 +730,7 @@
                       time: time
                     }));
                     user.afkWarningCount = 3;
-                    user.afkCountdown = setTimeout(function(userToChange)
+                    user.afkCountdown = setTimeout(function (userToChange)
                     {
                       userToChange.afkWarningCount = 1;
                     }, 90 * 1000, user);
@@ -742,7 +742,7 @@
                       name: name
                     }));
                     user.afkWarningCount = 3;
-                    user.afkCountdown = setTimeout(function(userToChange)
+                    user.afkCountdown = setTimeout(function (userToChange)
                     {
                       userToChange.afkWarningCount = 2;
                     }, 30 * 1000, user);
@@ -776,7 +776,7 @@
           }
         }
       },
-      smartSkip: function(reason)
+      smartSkip: function (reason)
       {
         var dj = API.getDJ();
         var id = dj.id;
@@ -788,10 +788,10 @@
           acidicBot.roomUtilities.booth.lockBooth();
           locked = true;
         }
-        setTimeout(function(id)
+        setTimeout(function (id)
         {
           API.moderateForceSkip();
-          setTimeout(function()
+          setTimeout(function ()
           {
             if (typeof reason !== 'undefined')
             {
@@ -799,17 +799,17 @@
             }
           }, 500);
           acidicBot.room.skippable = false;
-          setTimeout(function()
+          setTimeout(function ()
           {
             acidicBot.room.skippable = true;
           }, 5 * 1000);
-          setTimeout(function(id)
+          setTimeout(function (id)
           {
             acidicBot.userUtilities.moveUser(id, acidicBot.settings.skipPosition, false);
             acidicBot.room.queueable = true;
             if (locked)
             {
-              setTimeout(function()
+              setTimeout(function ()
               {
                 acidicBot.roomUtilities.booth.unlockBooth();
               }, 1000);
@@ -817,7 +817,7 @@
           }, 1500, id);
         }, 1000, id);
       },
-      changeDJCycle: function()
+      changeDJCycle: function ()
       {
         var toggle = $(".cycle-toggle");
         if (toggle.hasClass("disabled"))
@@ -825,7 +825,7 @@
           toggle.click();
           if (acidicBot.settings.cycleGuard)
           {
-            acidicBot.room.cycleTimer = setTimeout(function()
+            acidicBot.room.cycleTimer = setTimeout(function ()
             {
               if (toggle.hasClass("enabled")) toggle.click();
             }, acidicBot.settings.cycleMaxTime * 60 * 1000);
@@ -837,7 +837,7 @@
           clearTimeout(acidicBot.room.cycleTimer);
         }
       },
-      intervalMessage: function()
+      intervalMessage: function ()
       {
         var interval;
         if (acidicBot.settings.motdEnabled) interval = acidicBot.settings.motdInterval;
@@ -858,7 +858,7 @@
           API.sendChat('/me ' + msg);
         }
       },
-      updateBlacklists: function()
+      updateBlacklists: function ()
       {
         for (var bl in acidicBot.settings.blacklists)
         {
@@ -875,9 +875,9 @@
             }
             try
             {
-              (function(l)
+              (function (l)
               {
-                $.get(acidicBot.settings.blacklists[l], function(data)
+                $.get(acidicBot.settings.blacklists[l], function (data)
                 {
                   if (typeof data === 'string')
                   {
@@ -900,14 +900,14 @@
           }
         }
       },
-      logNewBlacklistedSongs: function()
+      logNewBlacklistedSongs: function ()
       {
         if (typeof console.table !== 'undefined')
         {
           console.table(acidicBot.room.newBlacklisted);
         }
       },
-      exportNewBlacklistedSongs: function()
+      exportNewBlacklistedSongs: function ()
       {
         var list = {};
         for (var i = 0; i < acidicBot.room.newBlacklisted.length; i++)
@@ -924,7 +924,7 @@
         return list;
       }
     },
-    eventChat: function(chat)
+    eventChat: function (chat)
     {
       chat.message = linkFixer(chat.message);
       chat.message = decodeEntities(chat.message);
@@ -943,7 +943,7 @@
       if (acidicBot.chatUtilities.chatFilter(chat)) return void(0);
       if (!acidicBot.chatUtilities.commandCheck(chat)) acidicBot.chatUtilities.action(chat);
     },
-    eventUserjoin: function(user)
+    eventUserjoin: function (user)
     {
       var known = false;
       var index = null;
@@ -981,13 +981,13 @@
       }
       if (acidicBot.settings.welcome && greet)
       {
-        welcomeback ? setTimeout(function(user)
+        welcomeback ? setTimeout(function (user)
         {
           API.sendChat(subChat(acidicBot.chat.welcomeback,
           {
             name: user.username
           }));
-        }, 1 * 1000, user) : setTimeout(function(user)
+        }, 1 * 1000, user) : setTimeout(function (user)
         {
           API.sendChat(subChat(acidicBot.chat.welcome,
           {
@@ -996,7 +996,7 @@
         }, 1 * 1000, user);
       }
     },
-    eventUserleave: function(user)
+    eventUserleave: function (user)
     {
       var lastDJ = API.getHistory()[0].user.id;
       for (var i = 0; i < acidicBot.room.users.length; i++)
@@ -1015,7 +1015,7 @@
         }
       }
     },
-    eventVoteupdate: function(obj)
+    eventVoteupdate: function (obj)
     {
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
@@ -1056,7 +1056,7 @@
         }
       }
     },
-    eventCurateupdate: function(obj)
+    eventCurateupdate: function (obj)
     {
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
@@ -1066,7 +1066,7 @@
         }
       }
     },
-    eventDjadvance: function(obj)
+    eventDjadvance: function (obj)
     {
       if (acidicBot.settings.autowoot)
       {
@@ -1110,7 +1110,7 @@
       acidicBot.room.roomstats.songCount++;
       acidicBot.roomUtilities.intervalMessage();
       acidicBot.room.currentDJID = obj.dj.id;
-      var blacklistSkip = setTimeout(function()
+      var blacklistSkip = setTimeout(function ()
       {
         var mid = obj.media.format + ':' + obj.media.cid;
         for (var bl in acidicBot.room.blacklists)
@@ -1136,7 +1136,7 @@
         }
       }, 2000);
       var newMedia = obj.media;
-      var timeLimitSkip = setTimeout(function()
+      var timeLimitSkip = setTimeout(function ()
       {
         if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent)
         {
@@ -1158,13 +1158,13 @@
       }, 2000);
       var format = obj.media.format;
       var cid = obj.media.cid;
-      var naSkip = setTimeout(function()
+      var naSkip = setTimeout(function ()
       {
         if (format == 1)
         {
-          $.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + cid + '&key=AIzaSyDcfWu9cGaDnTjPKhg_dy9mUh6H7i4ePZ0&part=snippet&callback=?', function(track)
+          $.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + cid + '&key=AIzaSyDcfWu9cGaDnTjPKhg_dy9mUh6H7i4ePZ0&part=snippet&callback=?', function (track)
           {
-            if (typeof(track.items[0]) === 'undefined')
+            if (typeof (track.items[0]) === 'undefined')
             {
               var name = obj.dj.username;
               API.sendChat(subChat(acidicBot.chat.notavailable,
@@ -1184,7 +1184,7 @@
         }
         else
         {
-          var checkSong = SC.get('/tracks/' + cid, function(track)
+          var checkSong = SC.get('/tracks/' + cid, function (track)
           {
             if (typeof track.title === 'undefined')
             {
@@ -1211,7 +1211,7 @@
         var alreadyPlayed = false;
         var apihistory = API.getHistory();
         var name = obj.dj.username;
-        var historySkip = setTimeout(function()
+        var historySkip = setTimeout(function ()
         {
           for (var i = 0; i < apihistory.length; i++)
           {
@@ -1252,7 +1252,7 @@
       {
         var remaining = obj.media.duration * 1000;
         var startcid = API.getMedia().cid;
-        acidicBot.room.autoskipTimer = setTimeout(function()
+        acidicBot.room.autoskipTimer = setTimeout(function ()
         {
           var endcid = API.getMedia().cid;
           if (startcid === endcid)
@@ -1263,29 +1263,29 @@
       }
       storeToStorage();
     },
-    eventWaitlistupdate: function(users)
+    eventWaitlistupdate: function (users)
     {
       if (users.length < 50)
       {
         if (acidicBot.room.queue.id.length > 0 && acidicBot.room.queueable)
         {
           acidicBot.room.queueable = false;
-          setTimeout(function()
+          setTimeout(function ()
           {
             acidicBot.room.queueable = true;
           }, 500);
           acidicBot.room.queueing++;
           var id, pos;
-          setTimeout(function()
+          setTimeout(function ()
           {
             id = acidicBot.room.queue.id.splice(0, 1)[0];
             pos = acidicBot.room.queue.position.splice(0, 1)[0];
             API.moderateAddDJ(id, pos);
-            setTimeout(function(id, pos)
+            setTimeout(function (id, pos)
             {
               API.moderateMoveDJ(id, pos);
               acidicBot.room.queueing--;
-              if (acidicBot.room.queue.id.length === 0) setTimeout(function()
+              if (acidicBot.room.queue.id.length === 0) setTimeout(function ()
               {
                 acidicBot.roomUtilities.booth.unlockBooth();
               }, 1000);
@@ -1299,7 +1299,7 @@
         acidicBot.userUtilities.updatePosition(user, API.getWaitListPosition(users[i].id) + 1);
       }
     },
-    chatcleaner: function(chat)
+    chatcleaner: function (chat)
     {
       if (!acidicBot.settings.filterChat) return false;
       if (acidicBot.userUtilities.getPermission(chat.uid) > 1) return false;
@@ -1355,7 +1355,7 @@
     },
     chatUtilities:
     {
-      chatFilter: function(chat)
+      chatFilter: function (chat)
       {
         var msg = chat.message;
         var perm = acidicBot.userUtilities.getPermission(chat.uid);
@@ -1411,7 +1411,7 @@
         else leftroulette = leftroulette[0];
         if ((msg.indexOf(joinedroulette) > -1 || msg.indexOf(leftroulette) > -1) && chat.uid === acidicBot.loggedInID)
         {
-          setTimeout(function(id)
+          setTimeout(function (id)
           {
             API.moderateDeleteChat(id);
           }, 5 * 1000, chat.cid);
@@ -1419,7 +1419,7 @@
         }
         return false;
       },
-      commandCheck: function(chat)
+      commandCheck: function (chat)
       {
         var cmd;
         if (chat.message.charAt(0) === acidicBot.settings.commandLiteral)
@@ -1472,7 +1472,7 @@
         if (executed && userPerm === 0)
         {
           acidicBot.room.usercommand = false;
-          setTimeout(function()
+          setTimeout(function ()
           {
             acidicBot.room.usercommand = true;
           }, acidicBot.settings.commandCooldown * 1000);
@@ -1483,7 +1483,7 @@
         }
         return executed;
       },
-      action: function(chat)
+      action: function (chat)
       {
         var user = acidicBot.userUtilities.lookupUser(chat.uid);
         if (chat.type === 'message')
@@ -1501,7 +1501,7 @@
       spam: ['hueh', 'hu3', 'brbr', 'heu', 'brbr', 'kkkk', 'spoder', 'mafia', 'zuera', 'zueira', 'zueria', 'aehoo', 'aheu', 'alguem', 'algum', 'brazil', 'zoeira', 'fuckadmins', 'affff', 'vaisefoder', 'huenaarea', 'hitler', 'ashua', 'ahsu', 'ashau', 'lulz', 'huehue', 'hue', 'huehuehue', 'merda', 'pqp', 'puta', 'mulher', 'pula', 'retarda', 'caralho', 'filha', 'ppk', 'gringo', 'fuder', 'foder', 'hua', 'ahue', 'modafuka', 'modafoka', 'mudafuka', 'mudafoka', 'ooooooooooooooo', 'foda'],
       curses: ['nigger', 'faggot', 'nigga', 'niqqa', 'motherfucker', 'modafocka']
     },
-    connectAPI: function()
+    connectAPI: function ()
     {
       this.proxy = {
         eventChat: $.proxy(this.eventChat, this),
@@ -1531,7 +1531,7 @@
       API.on(API.CHAT_COMMAND, this.proxy.eventChatcommand);
       API.on(API.HISTORY_UPDATE, this.proxy.eventHistoryupdate);
     },
-    disconnectAPI: function()
+    disconnectAPI: function ()
     {
       API.off(API.CHAT, this.proxy.eventChat);
       API.off(API.USER_SKIP, this.proxy.eventUserskip);
@@ -1546,16 +1546,16 @@
       API.off(API.CHAT_COMMAND, this.proxy.eventChatcommand);
       API.off(API.HISTORY_UPDATE, this.proxy.eventHistoryupdate);
     },
-    startup: function()
+    startup: function ()
     {
-      Function.prototype.toString = function()
+      Function.prototype.toString = function ()
       {
         return '';
       };
       var u = API.getUser();
       if (acidicBot.userUtilities.getPermission(u) < 2) return;
       if (acidicBot.userUtilities.getPermission(u) === 2) acidicBot.connectAPI();
-      API.moderateDeleteChat = function(cid)
+      API.moderateDeleteChat = function (cid)
       {
         $.ajax(
         {
@@ -1565,13 +1565,13 @@
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
-      var detect = function()
+      var detect = function ()
       {
         if (acidicBot.room.name != window.location.pathname)
         {
           storeToStorage();
           acidicBot.disconnectAPI();
-          setTimeout(function()
+          setTimeout(function ()
           {
             kill();
           }, 1000);
@@ -1585,7 +1585,7 @@
           }
         }
       };
-      Check = setInterval(function()
+      Check = setInterval(function ()
       {
         detect();
       }, 2000);
@@ -1629,11 +1629,11 @@
         var wlIndex = API.getWaitListPosition(acidicBot.room.users[ind].id) + 1;
         acidicBot.userUtilities.updatePosition(acidicBot.room.users[ind], wlIndex);
       }
-      acidicBot.room.afkInterval = setInterval(function()
+      acidicBot.room.afkInterval = setInterval(function ()
       {
         acidicBot.roomUtilities.afkCheck();
       }, 10 * 1000);
-      acidicBot.room.autodisableInterval = setInterval(function()
+      acidicBot.room.autodisableInterval = setInterval(function ()
       {
         acidicBot.room.autodisableFunc();
       }, 60 * 60 * 1000);
@@ -1669,48 +1669,48 @@
     },
     commands:
     {
-      executable: function(minRank, chat)
+      executable: function (minRank, chat)
       {
         var id = chat.uid;
         var perm = acidicBot.userUtilities.getPermission(id);
         var minPerm;
         switch (minRank)
         {
-          case 'admin':
-            minPerm = 10;
-            break;
-          case 'ambassador':
-            minPerm = 7;
-            break;
-          case 'host':
-            minPerm = 5;
-            break;
-          case 'cohost':
-            minPerm = 4;
-            break;
-          case 'manager':
-            minPerm = 3;
-            break;
-          case 'mod':
-            if (acidicBot.settings.bouncerPlus)
-            {
-              minPerm = 2;
-            }
-            else
-            {
-              minPerm = 3;
-            }
-            break;
-          case 'bouncer':
+        case 'admin':
+          minPerm = 10;
+          break;
+        case 'ambassador':
+          minPerm = 7;
+          break;
+        case 'host':
+          minPerm = 5;
+          break;
+        case 'cohost':
+          minPerm = 4;
+          break;
+        case 'manager':
+          minPerm = 3;
+          break;
+        case 'mod':
+          if (acidicBot.settings.bouncerPlus)
+          {
             minPerm = 2;
-            break;
-          case 'residentdj':
-            minPerm = 1;
-            break;
-          case 'user':
-            minPerm = 0;
-            break;
-          default:
+          }
+          else
+          {
+            minPerm = 3;
+          }
+          break;
+        case 'bouncer':
+          minPerm = 2;
+          break;
+        case 'residentdj':
+          minPerm = 1;
+          break;
+        case 'user':
+          minPerm = 0;
+          break;
+        default:
         }
         return perm >= minPerm;
       },
@@ -1719,7 +1719,7 @@
         command: 'active',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1763,7 +1763,7 @@
         command: 'add',
         rank: 'mod',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1799,7 +1799,7 @@
         command: 'afklimit',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1832,7 +1832,7 @@
         command: 'afkremoval',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1851,7 +1851,7 @@
             else
             {
               acidicBot.settings.afkRemoval = !acidicBot.settings.afkRemoval;
-              acidicBot.room.afkInterval = setInterval(function()
+              acidicBot.room.afkInterval = setInterval(function ()
               {
                 acidicBot.roomUtilities.afkCheck();
               }, 2 * 1000);
@@ -1869,7 +1869,7 @@
         command: 'afkreset',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1900,7 +1900,7 @@
         command: 'afktime',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1948,7 +1948,7 @@
         command: 'autodisable',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -1980,7 +1980,7 @@
         command: 'autoskip',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2013,7 +2013,7 @@
         command: 'autowoot',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2028,7 +2028,7 @@
         command: 'ba',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2043,7 +2043,7 @@
         command: ['8ball', 'ask'],
         rank: 'user',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2070,7 +2070,7 @@
         command: 'ban',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2096,7 +2096,7 @@
         command: ['blacklist', 'bl'],
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2154,7 +2154,7 @@
         command: 'blinfo',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2181,7 +2181,7 @@
         command: 'bouncer+',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2226,7 +2226,7 @@
         command: 'botname',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2254,7 +2254,7 @@
         command: 'clearchat',
         rank: 'manager',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2277,7 +2277,7 @@
         command: ['commanddeletion', 'cmddeletion', 'cmddel'],
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2309,12 +2309,12 @@
         command: 'cookie',
         rank: 'user',
         type: 'startsWith',
-        getCookie: function(chat)
+        getCookie: function (chat)
         {
           var c = Math.floor(Math.random() * acidicBot.chat.cookies.length);
           return acidicBot.chat.cookies[c];
         },
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2363,7 +2363,7 @@
         command: 'cycle',
         rank: 'manager',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2378,7 +2378,7 @@
         command: 'cycleguard',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2410,7 +2410,7 @@
         command: 'cycletimer',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2439,7 +2439,7 @@
         command: ['dclookup', 'dc'],
         rank: 'user',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2472,7 +2472,7 @@
         command: 'emoji',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2491,7 +2491,7 @@
         command: 'english',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2505,38 +2505,38 @@
             var ch = '/me @' + name + ' ';
             switch (lang)
             {
-              case 'en':
-                break;
-              case 'da':
-                ch += 'Vær venlig at tale engelsk.';
-                break;
-              case 'de':
-                ch += 'Bitte sprechen Sie Englisch.';
-                break;
-              case 'es':
-                ch += 'Por favor, hable Inglés.';
-                break;
-              case 'fr':
-                ch += 'Parlez anglais, s\'il vous plaît.';
-                break;
-              case 'nl':
-                ch += 'Spreek Engels, alstublieft.';
-                break;
-              case 'pl':
-                ch += 'Proszę mówić po angielsku.';
-                break;
-              case 'pt':
-                ch += 'Por favor, fale Inglês.';
-                break;
-              case 'sk':
-                ch += 'Hovorte po anglicky, prosím.';
-                break;
-              case 'cs':
-                ch += 'Mluvte prosím anglicky.';
-                break;
-              case 'sr':
-                ch += 'Молим Вас, говорите енглески.';
-                break;
+            case 'en':
+              break;
+            case 'da':
+              ch += 'Vær venlig at tale engelsk.';
+              break;
+            case 'de':
+              ch += 'Bitte sprechen Sie Englisch.';
+              break;
+            case 'es':
+              ch += 'Por favor, hable Inglés.';
+              break;
+            case 'fr':
+              ch += 'Parlez anglais, s\'il vous plaît.';
+              break;
+            case 'nl':
+              ch += 'Spreek Engels, alstublieft.';
+              break;
+            case 'pl':
+              ch += 'Proszę mówić po angielsku.';
+              break;
+            case 'pt':
+              ch += 'Por favor, fale Inglês.';
+              break;
+            case 'sk':
+              ch += 'Hovorte po anglicky, prosím.';
+              break;
+            case 'cs':
+              ch += 'Mluvte prosím anglicky.';
+              break;
+            case 'sr':
+              ch += 'Молим Вас, говорите енглески.';
+              break;
             }
             ch += ' English please.';
             API.sendChat(ch);
@@ -2548,7 +2548,7 @@
         command: 'eta',
         rank: 'user',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2600,7 +2600,7 @@
         command: 'fb',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2618,7 +2618,7 @@
         command: 'filter',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2650,7 +2650,7 @@
         command: ['forceskip', 'fs'],
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2662,7 +2662,7 @@
             }));
             API.moderateForceSkip();
             acidicBot.room.skippable = false;
-            setTimeout(function()
+            setTimeout(function ()
             {
               acidicBot.room.skippable = true;
             }, 5 * 1000);
@@ -2674,7 +2674,7 @@
         command: 'ghostbuster',
         rank: 'user',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2709,7 +2709,7 @@
         command: ['gif', 'giphy'],
         rank: 'user',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2726,7 +2726,7 @@
                   "api_key": api_key,
                   "rating": rating,
                   "tag": fixedtag
-                }, function(response)
+                }, function (response)
                 {
                   func(response.data.id);
                 });
@@ -2736,7 +2736,7 @@
               var tag = msg.substr(cmd.length + 1).replace(/@/g, '');
               var fixedtag = tag.replace(/ /g, "+");
               var commatag = tag.replace(/ /g, ", ");
-              get_id(api_key, tag, function(id)
+              get_id(api_key, tag, function (id)
               {
                 if (typeof id !== 'undefined')
                 {
@@ -2766,14 +2766,14 @@
                   "format": "json",
                   "api_key": api_key,
                   "rating": rating
-                }, function(response)
+                }, function (response)
                 {
                   func(response.data.id);
                 });
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
-              get_random_id(api_key, function(id)
+              get_random_id(api_key, function (id)
               {
                 if (typeof id !== 'undefined')
                 {
@@ -2800,7 +2800,7 @@
         command: 'historyskip',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2832,7 +2832,7 @@
         command: 'join',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2854,7 +2854,7 @@
         command: 'jointime',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2888,7 +2888,7 @@
         command: 'kick',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2930,7 +2930,7 @@
               }));
               if (time > 24 * 60 * 60) API.moderateBanUser(user.id, 1, API.BAN.PERMA);
               else API.moderateBanUser(user.id, 1, API.BAN.DAY);
-              setTimeout(function(id, name)
+              setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
               }, time * 60 * 1000, user.id, name);
@@ -2947,7 +2947,7 @@
         command: 'kill',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2956,7 +2956,7 @@
             storeToStorage();
             API.sendChat(acidicBot.chat.kill);
             acidicBot.disconnectAPI();
-            setTimeout(function()
+            setTimeout(function ()
             {
               kill();
             }, 1000);
@@ -2968,7 +2968,7 @@
         command: 'language',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -2980,7 +2980,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1).replace(/@/g, '');
-            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function(json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3009,7 +3009,7 @@
         command: 'leave',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3032,7 +3032,7 @@
         command: 'link',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3058,7 +3058,7 @@
               }
               if (media.format === 2)
               {
-                SC.get('/tracks/' + media.cid, function(sound)
+                SC.get('/tracks/' + media.cid, function (sound)
                 {
                   API.sendChat(subChat(acidicBot.chat.songlink,
                   {
@@ -3076,7 +3076,7 @@
         command: 'lock',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3091,7 +3091,7 @@
         command: 'lockdown',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3120,7 +3120,7 @@
         command: 'lockguard',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3152,7 +3152,7 @@
         command: 'lockskip',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3172,19 +3172,19 @@
                   name: chat.un
                 }));
                 acidicBot.roomUtilities.booth.lockBooth();
-                setTimeout(function(id)
+                setTimeout(function (id)
                 {
                   API.moderateForceSkip();
                   acidicBot.room.skippable = false;
-                  setTimeout(function()
+                  setTimeout(function ()
                   {
                     acidicBot.room.skippable = true;
                   }, 5 * 1000);
-                  setTimeout(function(id)
+                  setTimeout(function (id)
                   {
                     acidicBot.userUtilities.moveUser(id, acidicBot.settings.lockskipPosition, false);
                     acidicBot.room.queueable = true;
-                    setTimeout(function()
+                    setTimeout(function ()
                     {
                       acidicBot.roomUtilities.booth.unlockBooth();
                     }, 1000);
@@ -3211,20 +3211,20 @@
                   name: chat.un
                 }));
                 acidicBot.roomUtilities.booth.lockBooth();
-                setTimeout(function(id)
+                setTimeout(function (id)
                 {
                   API.moderateForceSkip();
                   acidicBot.room.skippable = false;
                   API.sendChat(msgSend);
-                  setTimeout(function()
+                  setTimeout(function ()
                   {
                     acidicBot.room.skippable = true;
                   }, 5 * 1000);
-                  setTimeout(function(id)
+                  setTimeout(function (id)
                   {
                     acidicBot.userUtilities.moveUser(id, acidicBot.settings.lockskipPosition, false);
                     acidicBot.room.queueable = true;
-                    setTimeout(function()
+                    setTimeout(function ()
                     {
                       acidicBot.roomUtilities.booth.unlockBooth();
                     }, 1000);
@@ -3241,7 +3241,7 @@
         command: 'locktimer',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3270,7 +3270,7 @@
         command: 'logout',
         rank: 'manager',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3281,7 +3281,7 @@
               name: chat.un,
               botname: acidicBot.settings.botName
             }));
-            setTimeout(function()
+            setTimeout(function ()
             {
               $(".logout").mousedown();
             }, 1000);
@@ -3293,7 +3293,7 @@
         command: 'maxlength',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3322,7 +3322,7 @@
         command: 'motd',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3356,7 +3356,7 @@
         command: 'move',
         rank: 'mod',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3410,7 +3410,7 @@
         command: 'mute',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3479,7 +3479,7 @@
                   username: name,
                   time: time
                 }));
-                setTimeout(function(id)
+                setTimeout(function (id)
                 {
                   API.moderateUnmuteUser(id);
                 }, time * 60 * 1000, user.id);
@@ -3493,7 +3493,7 @@
                   username: name,
                   time: time
                 }));
-                setTimeout(function(id)
+                setTimeout(function (id)
                 {
                   API.moderateUnmuteUser(id);
                 }, time * 60 * 1000, user.id);
@@ -3507,7 +3507,7 @@
                   username: name,
                   time: time
                 }));
-                setTimeout(function(id)
+                setTimeout(function (id)
                 {
                   API.moderateUnmuteUser(id);
                 }, time * 60 * 1000, user.id);
@@ -3525,7 +3525,7 @@
         command: 'op',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3543,7 +3543,7 @@
         command: 'ping',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3558,7 +3558,7 @@
         command: 'refresh',
         rank: 'manager',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3566,7 +3566,7 @@
           {
             storeToStorage();
             acidicBot.disconnectAPI();
-            setTimeout(function()
+            setTimeout(function ()
             {
               window.location.reload(false);
             }, 1000);
@@ -3578,7 +3578,7 @@
         command: 'reload',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3588,7 +3588,7 @@
             storeToStorage();
             acidicBot.disconnectAPI();
             kill();
-            setTimeout(function()
+            setTimeout(function ()
             {
               $.getScript(acidicBot.scriptLink);
             }, 2000);
@@ -3600,7 +3600,7 @@
         command: 'remove',
         rank: 'mod',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3621,7 +3621,7 @@
                 if (API.getDJ().id === user.id)
                 {
                   API.moderateForceSkip();
-                  setTimeout(function()
+                  setTimeout(function ()
                   {
                     API.moderateRemoveDJ(user.id);
                   }, 1 * 1000, user);
@@ -3646,7 +3646,7 @@
         command: 'restricteta',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3678,7 +3678,7 @@
         command: 'roulette',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3696,7 +3696,7 @@
         command: 'rules',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3714,7 +3714,7 @@
         command: 'sessionstats',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3739,7 +3739,7 @@
         command: ['skip', 'smartskip'],
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3792,7 +3792,7 @@
                 else
                 {
                   API.moderateForceSkip();
-                  setTimeout(function()
+                  setTimeout(function ()
                   {
                     API.sendChat(msgSend);
                   }, 500);
@@ -3807,7 +3807,7 @@
         command: 'skippos',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3836,7 +3836,7 @@
         command: 'songstats',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3868,7 +3868,7 @@
         command: 'status',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3934,9 +3934,9 @@
               var split = msg.match(/.{1,241}/g);
               for (var i = 0; i < split.length; i++)
               {
-                var func = function(index)
+                var func = function (index)
                 {
-                  setTimeout(function()
+                  setTimeout(function ()
                   {
                     API.sendChat("/me " + split[index]);
                   }, 500 * index);
@@ -3956,7 +3956,7 @@
         command: 'swap',
         rank: 'mod',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -3995,7 +3995,7 @@
             if (p1 < p2)
             {
               acidicBot.userUtilities.moveUser(user2.id, p1, false);
-              setTimeout(function(user1, p2)
+              setTimeout(function (user1, p2)
               {
                 acidicBot.userUtilities.moveUser(user1.id, p2, false);
               }, 2000, user1, p2);
@@ -4003,7 +4003,7 @@
             else
             {
               acidicBot.userUtilities.moveUser(user1.id, p2, false);
-              setTimeout(function(user2, p1)
+              setTimeout(function (user2, p1)
               {
                 acidicBot.userUtilities.moveUser(user2.id, p1, false);
               }, 2000, user2, p1);
@@ -4016,7 +4016,7 @@
         command: 'theme',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4034,7 +4034,7 @@
         command: 'timeguard',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4066,7 +4066,7 @@
         command: 'togglebl',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4095,7 +4095,7 @@
         command: 'togglemotd',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4127,7 +4127,7 @@
         command: 'togglevoteskip',
         rank: 'bouncer',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4159,7 +4159,7 @@
         command: 'unban',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4167,7 +4167,7 @@
           {
             $(".icon-population").click();
             $(".icon-ban").click();
-            setTimeout(function(chat)
+            setTimeout(function (chat)
             {
               var msg = chat.message;
               if (msg.length === cmd.length) return API.sendChat();
@@ -4193,7 +4193,7 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              setTimeout(function()
+              setTimeout(function ()
               {
                 $(".icon-chat").click();
               }, 1000);
@@ -4206,7 +4206,7 @@
         command: 'unlock',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4221,7 +4221,7 @@
         command: 'unmute',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4268,7 +4268,7 @@
         command: 'usercmdcd',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4297,7 +4297,7 @@
         command: 'usercommands',
         rank: 'manager',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4329,7 +4329,7 @@
         command: 'voteratio',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4364,7 +4364,7 @@
         command: 'voteskip',
         rank: 'manager',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4402,7 +4402,7 @@
         command: 'welcome',
         rank: 'mod',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4434,7 +4434,7 @@
         command: 'website',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4452,7 +4452,7 @@
         command: 'whois',
         rank: 'bouncer',
         type: 'startsWith',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
@@ -4581,7 +4581,7 @@
         command: 'youtube',
         rank: 'user',
         type: 'exact',
-        functionality: function(chat, cmd)
+        functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
