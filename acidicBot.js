@@ -466,10 +466,6 @@
         var u;
         if (typeof obj === "object") u = obj;
         else u = API.getUser(obj);
-        for (var i = 0; i < botCreatorIDs.length; i++)
-        {
-          if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
-        }
         if (u.gRole < 2) return u.role;
         else
         {
