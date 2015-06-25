@@ -3,7 +3,7 @@
   window.onerror = function ()
   {
     var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
-    window.location = 'https://plug.dj' + acidicBot.room.name;
+    window.location = 'https://plug.dj' + room.name;
   };
   API.getWaitListPosition = function (id)
   {
@@ -222,7 +222,7 @@
       botName: "acidicBot",
       language: "english",
       chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
-      roomLock: true,
+      roomLock: false,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
