@@ -267,6 +267,7 @@
       welcome: true,
       opLink: null,
       themeLink: null,
+      youtubeLink: null,
       intervalMessages: [],
       messageInterval: 5,
       songstats: true,
@@ -4517,6 +4518,25 @@
                 }));
               }
             }
+          }
+        }
+      },
+      youtubeCommand:
+      {
+        command: 'youtube',
+        rank: 'user',
+        type: 'exact',
+        functionality: function (chat, cmd)
+        {
+          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
+          else
+          {
+            if (typeof acidicBot.settings.youtubeLink === "string") API.sendChat(subChat(acidicBot.chat.youtube,
+            {
+              name: chat.un,
+              link: acidicBot.settings.youtubeLink
+            }));
           }
         }
       }
