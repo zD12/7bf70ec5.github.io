@@ -798,7 +798,7 @@
           acidicBot.room.skippable = false;
           setTimeout(function ()
           {
-            acidicBot.room.skippable = true
+            acidicBot.room.skippable = true;
           }, 5 * 1000);
           setTimeout(function (id)
           {
@@ -893,11 +893,7 @@
               })(bl);
             }
             catch (e)
-            {
-              API.chatLog('Error setting' + bl + 'blacklist.');
-              console.log('Error setting' + bl + 'blacklist.');
-              console.log(e);
-            }
+            {}
           }
         }
       },
