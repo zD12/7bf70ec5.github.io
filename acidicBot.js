@@ -1551,10 +1551,14 @@
     {
       Function.prototype.toString = function ()
       {
-        return 'Function.'
+        return ''
       };
       var u = API.getUser();
-      if (acidicBot.userUtilities.getPermission(u) < 2) return API.chatLog(acidicBot.chat.greyuser);
+      if (acidicBot.userUtilities.getPermission(u) < 2)
+      {
+        API.chatLog("You're not allowed to use acidicBot!");
+        return;
+      };
       if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
       acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
@@ -1567,12 +1571,10 @@
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
-      console.log(acidicBot.room.name);
       var detect = function ()
       {
         if (acidicBot.room.name != window.location.pathname)
         {
-          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
@@ -1715,7 +1717,6 @@
           minPerm = 0;
           break;
         default:
-          API.chatLog('error assigning minimum permission');
         }
         return perm >= minPerm;
       },
