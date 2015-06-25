@@ -889,7 +889,7 @@
                     }
                   }
                   acidicBot.room.blacklists[l] = list;
-                })
+                });
               })(bl);
             }
             catch (e)
@@ -1073,7 +1073,7 @@
       {
         $("#woot").click();
       }
-      var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
+      var user = acidicBot.userUtilities.lookupUser(obj.dj.id);
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
         if (acidicBot.room.users[i].id === user.id)
@@ -1102,7 +1102,7 @@
             woots: lastplay.score.positive,
             grabs: lastplay.score.grabs,
             mehs: lastplay.score.negative
-          }))
+          }));
         }
       }
       acidicBot.room.roomstats.totalWoots += lastplay.score.positive;
@@ -1458,7 +1458,7 @@
           var cmdCall = acidicBot.commands[comm].command;
           if (!Array.isArray(cmdCall))
           {
-            cmdCall = [cmdCall]
+            cmdCall = [cmdCall];
           }
           for (var i = 0; i < cmdCall.length; i++)
           {
@@ -1551,14 +1551,14 @@
     {
       Function.prototype.toString = function ()
       {
-        return ''
+        return '';
       };
       var u = API.getUser();
       if (acidicBot.userUtilities.getPermission(u) < 2)
       {
         API.chatLog("You're not allowed to use acidicBot!");
         return;
-      };
+      }
       if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
       acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
@@ -1567,7 +1567,7 @@
         {
           url: "https://plug.dj/_/chat/" + cid,
           type: "DELETE"
-        })
+        });
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
@@ -1593,7 +1593,7 @@
       };
       Check = setInterval(function ()
       {
-        detect()
+        detect();
       }, 2000);
       retrieveSettings();
       retrieveFromStorage();
@@ -1637,7 +1637,7 @@
       }
       acidicBot.room.afkInterval = setInterval(function ()
       {
-        acidicBot.roomUtilities.afkCheck()
+        acidicBot.roomUtilities.afkCheck();
       }, 10 * 1000);
       acidicBot.room.autodisableInterval = setInterval(function ()
       {
@@ -1859,7 +1859,7 @@
               acidicBot.settings.afkRemoval = !acidicBot.settings.afkRemoval;
               acidicBot.room.afkInterval = setInterval(function ()
               {
-                acidicBot.roomUtilities.afkCheck()
+                acidicBot.roomUtilities.afkCheck();
               }, 2 * 1000);
               API.sendChat(subChat(acidicBot.chat.toggleon,
               {
@@ -2652,7 +2652,7 @@
             acidicBot.room.skippable = false;
             setTimeout(function ()
             {
-              acidicBot.room.skippable = true
+              acidicBot.room.skippable = true;
             }, 5 * 1000);
           }
         }
@@ -2717,7 +2717,7 @@
                 }, function (response)
                 {
                   func(response.data.id);
-                })
+                });
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
@@ -2757,7 +2757,7 @@
                 }, function (response)
                 {
                   func(response.data.id);
-                })
+                });
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
@@ -2988,7 +2988,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -2996,7 +2996,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
@@ -3186,7 +3186,7 @@
                   acidicBot.room.skippable = false;
                   setTimeout(function ()
                   {
-                    acidicBot.room.skippable = true
+                    acidicBot.room.skippable = true;
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
@@ -3226,7 +3226,7 @@
                   API.sendChat(msgSend);
                   setTimeout(function ()
                   {
-                    acidicBot.room.skippable = true
+                    acidicBot.room.skippable = true;
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
@@ -3291,7 +3291,7 @@
             }));
             setTimeout(function ()
             {
-              $(".logout").mousedown()
+              $(".logout").mousedown();
             }, 1000);
           }
         }
@@ -3948,7 +3948,7 @@
                   {
                     API.sendChat("/me " + split[index]);
                   }, 500 * index);
-                }
+                };
                 func(i);
               }
             }
@@ -4500,31 +4500,31 @@
                 }
                 else if (rawlang == "fi")
                 {
-                  var language = "Finnish"
+                  var language = "Finnish";
                 }
                 else if (rawlang == "fr")
                 {
-                  var language = "French"
+                  var language = "French";
                 }
                 else if (rawlang == "pt")
                 {
-                  var language = "Portuguese"
+                  var language = "Portuguese";
                 }
                 else if (rawlang == "zh")
                 {
-                  var language = "Chinese"
+                  var language = "Chinese";
                 }
                 else if (rawlang == "sk")
                 {
-                  var language = "Slovak"
+                  var language = "Slovak";
                 }
                 else if (rawlang == "nl")
                 {
-                  var language = "Dutch"
+                  var language = "Dutch";
                 }
                 else if (rawlang == "ms")
                 {
-                  var language = "Malay"
+                  var language = "Malay";
                 }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
@@ -4541,23 +4541,23 @@
                 }
                 else if (rawrank == "3")
                 {
-                  var rank = "Manager"
+                  var rank = "Manager";
                 }
                 else if (rawrank == "4")
                 {
-                  var rank = "Co-Host"
+                  var rank = "Co-Host";
                 }
                 else if (rawrank == "5")
                 {
-                  var rank = "Host"
+                  var rank = "Host";
                 }
                 else if (rawrank == "7")
                 {
-                  var rank = "Brand Ambassador"
+                  var rank = "Brand Ambassador";
                 }
                 else if (rawrank == "10")
                 {
-                  var rank = "Admin"
+                  var rank = "Admin";
                 }
                 var slug = API.getUser(id).slug;
                 if (typeof slug !== 'undefined')
