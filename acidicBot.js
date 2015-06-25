@@ -110,15 +110,13 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("acidicBotStorageInfo");
-    if (info === null) API.chatLog(acidicBot.chat.nodatafound);
-    else
+    if (info === null)
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
       var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(acidicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           acidicBot.settings[prop] = settings[prop];
@@ -132,7 +130,6 @@
         acidicBot.room.messages = room.messages;
         acidicBot.room.queue = room.queue;
         acidicBot.room.newBlacklisted = room.newBlacklisted;
-        API.chatLog(acidicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -269,11 +266,8 @@
       etaRestriction: false,
       welcome: true,
       opLink: null,
-      rulesLink: null,
       themeLink: null,
-      fbLink: null,
       youtubeLink: null,
-      website: null,
       intervalMessages: [],
       messageInterval: 5,
       songstats: true,
@@ -899,11 +893,7 @@
               })(bl);
             }
             catch (e)
-            {
-              API.chatLog('Error setting' + bl + 'blacklist.');
-              console.log('Error setting' + bl + 'blacklist.');
-              console.log(e);
-            }
+            {}
           }
         }
       },
@@ -1573,7 +1563,6 @@
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
-      console.log(acidicBot.room.name);
       var detect = function ()
       {
         if (acidicBot.room.name != window.location.pathname)
@@ -2604,24 +2593,6 @@
           }
         }
       },
-      fbCommand:
-      {
-        command: 'fb',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof acidicBot.settings.fbLink === "string") API.sendChat(subChat(acidicBot.chat.facebook,
-            {
-              link: acidicBot.settings.fbLink
-            }));
-          }
-        }
-      },
       filterCommand:
       {
         command: 'filter',
@@ -2942,7 +2913,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(acidicBot.chat.invalidtime,
@@ -3702,24 +3672,6 @@
           }
         }
       },
-      rulesCommand:
-      {
-        command: 'rules',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof acidicBot.settings.rulesLink === "string") return API.sendChat(subChat(acidicBot.chat.roomrules,
-            {
-              link: acidicBot.settings.rulesLink
-            }));
-          }
-        }
-      },
       sessionstatsCommand:
       {
         command: 'sessionstats',
@@ -4437,24 +4389,6 @@
                 'function': acidicBot.chat.welcomemsg
               }));
             }
-          }
-        }
-      },
-      websiteCommand:
-      {
-        command: 'website',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof acidicBot.settings.website === "string") API.sendChat(subChat(acidicBot.chat.website,
-            {
-              link: acidicBot.settings.website
-            }));
           }
         }
       },
