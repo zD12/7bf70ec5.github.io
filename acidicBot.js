@@ -1552,7 +1552,7 @@
       var u = API.getUser();
       if (acidicBot.userUtilities.getPermission(u) < 2)
       {
-        API.chatLog("You're not allowed to use acidicBot! Please contact @LaishaBear for information about acidicBot.");
+        API.chatLog("You're not allowed to use acidicBot! Please contact @LaishaBear for intelligence about acidicBot.");
         return;
       }
       if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
