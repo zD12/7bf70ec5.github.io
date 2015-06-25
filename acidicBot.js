@@ -54,7 +54,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -209,17 +209,13 @@
     temp = null;
     return str;
   };
-  var botCreator = "Matthew (Yemasthui)";
-  var botMaintainer = "Benzi (Quoona)"
-  var botCreatorIDs = ["3851534", "4105209"];
   var acidicBot = {
     version: "2.8.9",
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "https://rawgit.com/Yemasthui/acidicBot/master/acidicBot.js",
-    cmdLink: "http://git.io/245Ppg",
-    chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
+    scriptLink: "",
+    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -228,8 +224,8 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/acidicBot/master/lang/en.json",
-      roomLock: false,
+      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      roomLock: true,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -240,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -2297,25 +2293,6 @@
             return API.sendChat(subChat(acidicBot.chat.chatcleared,
             {
               name: chat.un
-            }));
-          }
-        }
-      },
-      commandsCommand:
-      {
-        command: 'commands',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(subChat(acidicBot.chat.commandslink,
-            {
-              botname: acidicBot.settings.botName,
-              link: acidicBot.cmdLink
             }));
           }
         }
