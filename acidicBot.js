@@ -1556,7 +1556,7 @@
       if (acidicBot.userUtilities.getPermission(u) < 2)
       {
         API.chatLog("You're not allowed to use acidicBot!");
-        break;
+        return;
       };
       if (acidicBot.userUtilities.getPermission(u) === 2) acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
