@@ -110,15 +110,13 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("acidicBotStorageInfo");
-    if (info === null) API.chatLog(acidicBot.chat.nodatafound);
-    else
+    if (info === null)
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
       var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(acidicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           acidicBot.settings[prop] = settings[prop];
@@ -132,7 +130,6 @@
         acidicBot.room.messages = room.messages;
         acidicBot.room.queue = room.queue;
         acidicBot.room.newBlacklisted = room.newBlacklisted;
-        API.chatLog(acidicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -1277,7 +1274,6 @@
         }, remaining + 5000);
       }
       storeToStorage();
-      sendToSocket();
     },
     eventWaitlistupdate: function (users)
     {
@@ -1671,7 +1667,6 @@
         {
           emojibuttonoff[0].click();
         }
-        API.chatLog(':smile: Emojis enabled.');
       }
       else
       {
@@ -1680,11 +1675,7 @@
         {
           emojibuttonon[0].click();
         }
-        API.chatLog('Emojis disabled.');
       }
-      API.chatLog('Avatars capped at ' + acidicBot.settings.startupCap);
-      API.chatLog('Volume set to ' + acidicBot.settings.startupVolume);
-      socket();
       loadChat(API.sendChat(subChat(acidicBot.chat.online,
       {
         botname: acidicBot.settings.botName,
@@ -1735,7 +1726,6 @@
           minPerm = 0;
           break;
         default:
-          API.chatLog('error assigning minimum permission');
         }
         return perm >= minPerm;
       },
@@ -2820,25 +2810,6 @@
           }
         }
       },
-      helpCommand:
-      {
-        command: 'help',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = "(Updated link coming soon)";
-            API.sendChat(subChat(acidicBot.chat.starterhelp,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       historyskipCommand:
       {
         command: 'historyskip',
@@ -2999,7 +2970,6 @@
           else
           {
             storeToStorage();
-            sendToSocket();
             API.sendChat(acidicBot.chat.kill);
             acidicBot.disconnectAPI();
             setTimeout(function ()
@@ -3610,7 +3580,6 @@
           if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            sendToSocket();
             storeToStorage();
             acidicBot.disconnectAPI();
             setTimeout(function ()
@@ -3632,7 +3601,6 @@
           else
           {
             API.sendChat(acidicBot.chat.reload);
-            sendToSocket();
             storeToStorage();
             acidicBot.disconnectAPI();
             kill();
@@ -3908,21 +3876,6 @@
                 'function': acidicBot.chat.songstats
               }));
             }
-          }
-        }
-      },
-      sourceCommand:
-      {
-        command: 'source',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
           }
         }
       },
