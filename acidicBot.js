@@ -110,13 +110,15 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("acidicBotStorageInfo");
-    if (info === null)
+    if (info === null) API.chatLog(acidicBot.chat.nodatafound);
+    else
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
       var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
+        API.chatLog(acidicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           acidicBot.settings[prop] = settings[prop];
@@ -130,6 +132,7 @@
         acidicBot.room.messages = room.messages;
         acidicBot.room.queue = room.queue;
         acidicBot.room.newBlacklisted = room.newBlacklisted;
+        API.chatLog(acidicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -261,7 +264,7 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
@@ -277,9 +280,9 @@
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/acidicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -801,7 +804,7 @@
           acidicBot.room.skippable = false;
           setTimeout(function ()
           {
-            acidicBot.room.skippable = true
+            acidicBot.room.skippable = true;
           }, 5 * 1000);
           setTimeout(function (id)
           {
@@ -892,7 +895,7 @@
                     }
                   }
                   acidicBot.room.blacklists[l] = list;
-                })
+                });
               })(bl);
             }
             catch (e)
@@ -909,10 +912,6 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(acidicBot.room.newBlacklisted);
-        }
-        else
-        {
-          console.log(acidicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1080,7 +1079,7 @@
       {
         $("#woot").click();
       }
-      var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
+      var user = acidicBot.userUtilities.lookupUser(obj.dj.id);
       for (var i = 0; i < acidicBot.room.users.length; i++)
       {
         if (acidicBot.room.users[i].id === user.id)
@@ -1109,7 +1108,7 @@
             woots: lastplay.score.positive,
             grabs: lastplay.score.grabs,
             mehs: lastplay.score.negative
-          }))
+          }));
         }
       }
       acidicBot.room.roomstats.totalWoots += lastplay.score.positive;
@@ -1465,7 +1464,7 @@
           var cmdCall = acidicBot.commands[comm].command;
           if (!Array.isArray(cmdCall))
           {
-            cmdCall = [cmdCall]
+            cmdCall = [cmdCall];
           }
           for (var i = 0; i < cmdCall.length; i++)
           {
@@ -1558,7 +1557,7 @@
     {
       Function.prototype.toString = function ()
       {
-        return 'Function.'
+        return '';
       };
       var u = API.getUser();
       if (acidicBot.userUtilities.getPermission(u) < 2) return API.chatLog(acidicBot.chat.greyuser);
@@ -1570,7 +1569,7 @@
         {
           url: "https://plug.dj/_/chat/" + cid,
           type: "DELETE"
-        })
+        });
       };
       acidicBot.room.name = window.location.pathname;
       var Check;
@@ -1579,7 +1578,6 @@
       {
         if (acidicBot.room.name != window.location.pathname)
         {
-          console.log("Killing bot after room change.");
           storeToStorage();
           acidicBot.disconnectAPI();
           setTimeout(function ()
@@ -1598,7 +1596,7 @@
       };
       Check = setInterval(function ()
       {
-        detect()
+        detect();
       }, 2000);
       retrieveSettings();
       retrieveFromStorage();
@@ -1642,7 +1640,7 @@
       }
       acidicBot.room.afkInterval = setInterval(function ()
       {
-        acidicBot.roomUtilities.afkCheck()
+        acidicBot.roomUtilities.afkCheck();
       }, 10 * 1000);
       acidicBot.room.autodisableInterval = setInterval(function ()
       {
@@ -2966,6 +2964,7 @@
           else
           {
             storeToStorage();
+            sendToSocket();
             API.sendChat(acidicBot.chat.kill);
             acidicBot.disconnectAPI();
             setTimeout(function ()
@@ -2992,7 +2991,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://rawgit.com/Yemasthui/acidicBot/master/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
@@ -3000,7 +2999,7 @@
               {
                 API.sendChat(subChat(acidicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
@@ -3295,7 +3294,7 @@
             }));
             setTimeout(function ()
             {
-              $(".logout").mousedown()
+              $(".logout").mousedown();
             }, 1000);
           }
         }
@@ -3952,7 +3951,7 @@
                   {
                     API.sendChat("/me " + split[index]);
                   }, 500 * index);
-                }
+                };
                 func(i);
               }
             }
@@ -4205,7 +4204,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
@@ -4504,31 +4502,31 @@
                 }
                 else if (rawlang == "fi")
                 {
-                  var language = "Finnish"
+                  var language = "Finnish";
                 }
                 else if (rawlang == "fr")
                 {
-                  var language = "French"
+                  var language = "French";
                 }
                 else if (rawlang == "pt")
                 {
-                  var language = "Portuguese"
+                  var language = "Portuguese";
                 }
                 else if (rawlang == "zh")
                 {
-                  var language = "Chinese"
+                  var language = "Chinese";
                 }
                 else if (rawlang == "sk")
                 {
-                  var language = "Slovak"
+                  var language = "Slovak";
                 }
                 else if (rawlang == "nl")
                 {
-                  var language = "Dutch"
+                  var language = "Dutch";
                 }
                 else if (rawlang == "ms")
                 {
-                  var language = "Malay"
+                  var language = "Malay";
                 }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
@@ -4545,23 +4543,23 @@
                 }
                 else if (rawrank == "3")
                 {
-                  var rank = "Manager"
+                  var rank = "Manager";
                 }
                 else if (rawrank == "4")
                 {
-                  var rank = "Co-Host"
+                  var rank = "Co-Host";
                 }
                 else if (rawrank == "5")
                 {
-                  var rank = "Host"
+                  var rank = "Host";
                 }
                 else if (rawrank == "7")
                 {
-                  var rank = "Brand Ambassador"
+                  var rank = "Brand Ambassador";
                 }
                 else if (rawrank == "10")
                 {
-                  var rank = "Admin"
+                  var rank = "Admin";
                 }
                 var slug = API.getUser(id).slug;
                 if (typeof slug !== 'undefined')
