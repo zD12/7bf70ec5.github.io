@@ -1553,7 +1553,7 @@
         return '';
       };
       var u = API.getUser();
-      if (acidicBot.userUtilities.getPermission(u) < 2) return 'You're not allowed to use acidicBot!';
+      if (acidicBot.userUtilities.getPermission(u) < 2) return 'You''re not allowed to use acidicBot!';
       if (acidicBot.userUtilities.getPermission(u) === 2) acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
       {
