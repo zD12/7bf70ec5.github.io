@@ -3,7 +3,7 @@
   window.onerror = function ()
   {
     var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
-    window.location = 'https://plug.dj' + room.name;
+    window.location = 'https://plug.dj' + acidicBot.room.name;
   };
   API.getWaitListPosition = function (id)
   {
