@@ -41,7 +41,7 @@
   {
     if (typeof chat === "undefined")
     {
-      return "https://conf.mcore.io/lang/langIndex.json";
+      return "https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -2891,7 +2891,7 @@
               language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
-            $.get("https://conf.mcore.io/lang/langIndex.json", function (json)
+            $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
             {
               var langIndex = json;
               var link = langIndex[argument.toLowerCase()];
