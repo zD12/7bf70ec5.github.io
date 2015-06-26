@@ -108,8 +108,7 @@
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
       var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
-      var elapsed = Date.now() - JSON.parse(info).time;
-      if ((elapsed < 1 * 60 * 60 * 1000))
+      if ((Date.now() < 1 * 60 * 60 * 1000))
       {
         for (var prop in settings)
         {
