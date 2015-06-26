@@ -109,7 +109,8 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("basicBotStorageInfo");
-    if (info === null)
+    if (info === null) API.chatLog(basicBot.chat.nodatafound);
+    else
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
@@ -130,6 +131,7 @@
         basicBot.room.messages = room.messages;
         basicBot.room.queue = room.queue;
         basicBot.room.newBlacklisted = room.newBlacklisted;
+        API.chatLog(basicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -879,6 +881,9 @@
             }
             catch (e)
             {
+              API.chatLog('Error setting' + bl + 'blacklist.');
+              console.log('Error setting' + bl + 'blacklist.');
+              console.log(e);
             }
           }
         }
@@ -888,6 +893,10 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(basicBot.room.newBlacklisted);
+        }
+        else
+        {
+          console.log(basicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1528,19 +1537,12 @@
     {
       Function.prototype.toString = function ()
       {
-        return ''
+        return 'Function.'
       };
       var u = API.getUser();
-      if (basicBot.userUtilities.getPermission(u) < 2)
-	  {
-        API.chatLog("You're not authorized to use basicBot! Please contact @LaishaBear for intelligence about basicBot.");
-        return;
-      }
-      if (basicBot.userUtilities.getPermission(u) === 2)
-	  {
-        API.chatLog('');
-        basicBot.connectAPI();
-      }
+      if (basicBot.userUtilities.getPermission(u) < 2) return API.chatLog(basicBot.chat.greyuser);
+      if (basicBot.userUtilities.getPermission(u) === 2) API.chatLog(basicBot.chat.bouncer);
+      basicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
       {
         $.ajax(
@@ -1551,10 +1553,12 @@
       };
       basicBot.room.name = window.location.pathname;
       var Check;
+      console.log(basicBot.room.name);
       var detect = function ()
       {
         if (basicBot.room.name != window.location.pathname)
         {
+          console.log("Killing bot after room change.");
           storeToStorage();
           basicBot.disconnectAPI();
           setTimeout(function ()
@@ -2889,6 +2893,7 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
+                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(basicBot.chat.invalidtime,
@@ -4080,6 +4085,7 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
+              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
