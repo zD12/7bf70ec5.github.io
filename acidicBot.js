@@ -210,7 +210,7 @@
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "",
+    scriptLink: "https://conf.mcore.io/acidicBot.js",
     chatLink: "",
     chat: null,
     loadChat: loadChat,
