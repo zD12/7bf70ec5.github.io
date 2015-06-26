@@ -109,12 +109,13 @@
   var retrieveFromStorage = function()
   {
     var info = localStorage.getItem("basicBotStorageInfo");
-    if(info === null)
+    if(info === null) API.chatLog(basicBot.chat.nodatafound);
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if((elapsed < 1 * 60 * 60 * 1000))
+      else
       {
         API.chatLog(basicBot.chat.retrievingdata);
         for(var prop in settings)
@@ -130,6 +131,7 @@
         basicBot.room.messages = room.messages;
         basicBot.room.queue = room.queue;
         basicBot.room.newBlacklisted = room.newBlacklisted;
+        API.chatLog(basicBot.chat.datarestored);
       }
     }
     var json_sett = null;
