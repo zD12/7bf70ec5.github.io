@@ -27,60 +27,6 @@
     clearInterval(basicBot.room.afkInterval);
     basicBot.status = false;
   };
-  var socket = function ()
-  {
-    function loadSocket()
-    {
-      SockJS.prototype.msg = function (a)
-      {
-        this.send(JSON.stringify(a))
-      };
-      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
-      sock.onopen = function ()
-      {
-        console.log('Connected to socket!');
-        sendToSocket();
-      };
-      sock.onclose = function ()
-      {
-        console.log('Disconnected from socket, reconnecting every minute ..');
-        var reconnect = setTimeout(function ()
-        {
-          loadSocket()
-        }, 60 * 1000);
-      };
-      sock.onmessage = function (broadcast)
-      {
-        var rawBroadcast = broadcast.data;
-        var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
-        API.chatLog(broadcastMessage);
-        console.log(broadcastMessage);
-      };
-    }
-    if (typeof SockJS == 'undefined')
-    {
-      $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
-    }
-    else loadSocket();
-  }
-  var sendToSocket = function ()
-  {
-    var basicBotSettings = basicBot.settings;
-    var basicBotRoom = basicBot.room;
-    var basicBotInfo = {
-      time: Date.now(),
-      version: basicBot.version
-    };
-    var data = {
-      users: API.getUsers(),
-      userinfo: API.getUser(),
-      room: location.pathname,
-      basicBotSettings: basicBotSettings,
-      basicBotRoom: basicBotRoom,
-      basicBotInfo: basicBotInfo
-    };
-    return sock.msg(data);
-  };
   var storeToStorage = function ()
   {
     localStorage.setItem("basicBotsettings", JSON.stringify(basicBot.settings));
@@ -96,9 +42,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -265,16 +209,12 @@
     temp = null;
     return str;
   };
-  var botCreator = "Matthew (Yemasthui)";
-  var botMaintainer = "Benzi (Quoona)"
-  var botCreatorIDs = ["3851534", "4105209"];
   var basicBot = {
     version: "2.8.9",
     status: false,
     name: "basicBot",
     loggedInID: null,
-    scriptLink: "https://rawgit.com/Yemasthui/basicBot/master/basicBot.js",
-    cmdLink: "http://git.io/245Ppg",
+    scriptLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -285,7 +225,7 @@
       botName: "basicBot",
       language: "english",
       chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
-      roomLock: false,
+      roomLock: true,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -296,7 +236,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -324,25 +264,22 @@
       afkRankCheck: "ambassador",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
       welcome: true,
       opLink: null,
-      rulesLink: null,
       themeLink: null,
-      fbLink: null,
       youtubeLink: null,
-      website: null,
       intervalMessages: [],
       messageInterval: 5,
       songstats: true,
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -4572,24 +4509,6 @@
           }
         }
       },
-      websiteCommand:
-      {
-        command: 'website',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.website === "string") API.sendChat(subChat(basicBot.chat.website,
-            {
-              link: basicBot.settings.website
-            }));
-          }
-        }
-      },
       whoisCommand:
       {
         command: 'whois',
@@ -4624,42 +4543,6 @@
                 {
                   var language = "English";
                 }
-                else if (rawlang == "bg")
-                {
-                  var language = "Bulgarian";
-                }
-                else if (rawlang == "cs")
-                {
-                  var language = "Czech";
-                }
-                else if (rawlang == "fi")
-                {
-                  var language = "Finnish"
-                }
-                else if (rawlang == "fr")
-                {
-                  var language = "French"
-                }
-                else if (rawlang == "pt")
-                {
-                  var language = "Portuguese"
-                }
-                else if (rawlang == "zh")
-                {
-                  var language = "Chinese"
-                }
-                else if (rawlang == "sk")
-                {
-                  var language = "Slovak"
-                }
-                else if (rawlang == "nl")
-                {
-                  var language = "Dutch"
-                }
-                else if (rawlang == "ms")
-                {
-                  var language = "Malay"
-                }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
                 {
@@ -4675,23 +4558,23 @@
                 }
                 else if (rawrank == "3")
                 {
-                  var rank = "Manager"
+                  var rank = "Manager";
                 }
                 else if (rawrank == "4")
                 {
-                  var rank = "Co-Host"
+                  var rank = "Co-Host";
                 }
                 else if (rawrank == "5")
                 {
-                  var rank = "Host"
+                  var rank = "Host";
                 }
                 else if (rawrank == "7")
                 {
-                  var rank = "Brand Ambassador"
+                  var rank = "Brand Ambassador";
                 }
                 else if (rawrank == "10")
                 {
-                  var rank = "Admin"
+                  var rank = "Admin";
                 }
                 var slug = API.getUser(id).slug;
                 if (typeof slug !== 'undefined')
