@@ -1544,12 +1544,19 @@
     {
       Function.prototype.toString = function ()
       {
-        return 'Function.'
+        return ''
       };
       var u = API.getUser();
-      if (acidicBot.userUtilities.getPermission(u) < 2) return API.chatLog(acidicBot.chat.greyuser);
-      if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
-      acidicBot.connectAPI();
+      if (acidicBot.userUtilities.getPermission(u) < 2)
+      {
+        API.chatLog("You're not authorized to use acidicBot! Please contact @LaishaBear for intelligence about acidicBot.");
+        return;
+      }
+      if (acidicBot.userUtilities.getPermission(u) === 2)
+      {
+        API.chatLog('');
+        acidicBot.connectAPI();
+      }
       API.moderateDeleteChat = function (cid)
       {
         $.ajax(
