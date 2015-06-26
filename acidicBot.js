@@ -54,7 +54,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
+    $.get("", function (json)
     {
       var link = basicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
@@ -215,7 +215,7 @@
     name: "basicBot",
     loggedInID: null,
     scriptLink: "",
-    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+    chatLink: "",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -224,7 +224,7 @@
     {
       botName: "basicBot",
       language: "english",
-      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      chatLink: "",
       roomLock: true,
       startupCap: 1,
       startupVolume: 0,
@@ -268,7 +268,6 @@
       filterChat: true,
       etaRestriction: false,
       welcome: true,
-      opLink: null,
       themeLink: null,
       youtubeLink: null,
       intervalMessages: [],
@@ -900,11 +899,7 @@
               })(bl);
             }
             catch (e)
-            {
-              API.chatLog('Error setting' + bl + 'blacklist.');
-              console.log('Error setting' + bl + 'blacklist.');
-              console.log(e);
-            }
+            {}
           }
         }
       },
@@ -913,10 +908,6 @@
         if (typeof console.table !== 'undefined')
         {
           console.table(basicBot.room.newBlacklisted);
-        }
-        else
-        {
-          console.log(basicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
@@ -1575,16 +1566,14 @@
         {
           url: "https://plug.dj/_/chat/" + cid,
           type: "DELETE"
-        })
+        });
       };
       basicBot.room.name = window.location.pathname;
       var Check;
-      console.log(basicBot.room.name);
       var detect = function ()
       {
         if (basicBot.room.name != window.location.pathname)
         {
-          console.log("Killing bot after room change.");
           storeToStorage();
           basicBot.disconnectAPI();
           setTimeout(function ()
@@ -2294,25 +2283,6 @@
           }
         }
       },
-      commandsCommand:
-      {
-        command: 'commands',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(subChat(basicBot.chat.commandslink,
-            {
-              botname: basicBot.settings.botName,
-              link: basicBot.cmdLink
-            }));
-          }
-        }
-      },
       cmddeletionCommand:
       {
         command: ['commanddeletion', 'cmddeletion', 'cmddel'],
@@ -2632,24 +2602,6 @@
               name: name,
               time: estimateString,
               position: realpos
-            }));
-          }
-        }
-      },
-      fbCommand:
-      {
-        command: 'fb',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.fbLink === "string") API.sendChat(subChat(basicBot.chat.facebook,
-            {
-              link: basicBot.settings.fbLink
             }));
           }
         }
@@ -2993,7 +2945,6 @@
               setTimeout(function (id, name)
               {
                 API.moderateUnbanUser(id);
-                console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
             else API.sendChat(subChat(basicBot.chat.invalidtime,
@@ -3582,24 +3533,6 @@
           }
         }
       },
-      opCommand:
-      {
-        command: 'op',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.opLink === "string") return API.sendChat(subChat(basicBot.chat.oplist,
-            {
-              link: basicBot.settings.opLink
-            }));
-          }
-        }
-      },
       pingCommand:
       {
         command: 'ping',
@@ -3755,24 +3688,6 @@
           }
         }
       },
-      rulesCommand:
-      {
-        command: 'rules',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.rulesLink === "string") return API.sendChat(subChat(basicBot.chat.roomrules,
-            {
-              link: basicBot.settings.rulesLink
-            }));
-          }
-        }
-      },
       sessionstatsCommand:
       {
         command: 'sessionstats',
@@ -3924,21 +3839,6 @@
                 'function': basicBot.chat.songstats
               }));
             }
-          }
-        }
-      },
-      sourceCommand:
-      {
-        command: 'source',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
           }
         }
       },
@@ -4272,7 +4172,6 @@
                 }));
               }
               API.moderateUnbanUser(bannedUser.id);
-              console.log("Unbanned " + name);
               setTimeout(function ()
               {
                 $(".icon-chat").click();
@@ -4542,6 +4441,42 @@
                 if (rawlang == "en")
                 {
                   var language = "English";
+                }
+                else if (rawlang == "bg")
+                {
+                  var language = "Bulgarian";
+                }
+                else if (rawlang == "cs")
+                {
+                  var language = "Czech";
+                }
+                else if (rawlang == "fi")
+                {
+                  var language = "Finnish";
+                }
+                else if (rawlang == "fr")
+                {
+                  var language = "French";
+                }
+                else if (rawlang == "pt")
+                {
+                  var language = "Portuguese";
+                }
+                else if (rawlang == "zh")
+                {
+                  var language = "Chinese";
+                }
+                else if (rawlang == "sk")
+                {
+                  var language = "Slovak";
+                }
+                else if (rawlang == "nl")
+                {
+                  var language = "Dutch";
+                }
+                else if (rawlang == "ms")
+                {
+                  var language = "Malay";
                 }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
