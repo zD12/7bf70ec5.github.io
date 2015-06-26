@@ -41,7 +41,7 @@
   {
     if (typeof chat === "undefined")
     {
-      return "https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -53,7 +53,7 @@
   var loadChat = function (cb)
   {
     if (!cb) cb = function () {};
-    $.get("", function (json)
+    $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
       var link = basicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
