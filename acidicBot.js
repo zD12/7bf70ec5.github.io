@@ -211,7 +211,7 @@
     name: "acidicBot",
     loggedInID: null,
     scriptLink: "https://conf.mcore.io/acidicBot.js",
-    chatLink: "https://conf.mcore.io/lang/en.json",
+    chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
     retrieveSettings: retrieveSettings,
@@ -220,7 +220,7 @@
     {
       botName: "acidicBot",
       language: "english",
-      chatLink: "https://conf.mcore.io/lang/en.json",
+      chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
       roomLock: true,
       startupCap: 1,
       startupVolume: 0,
