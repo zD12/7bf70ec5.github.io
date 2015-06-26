@@ -110,15 +110,13 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("basicBotStorageInfo");
-    if (info === null) API.chatLog(basicBot.chat.nodatafound);
-    else
+    if (info === null)
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(basicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           basicBot.settings[prop] = settings[prop];
@@ -132,7 +130,6 @@
         basicBot.room.messages = room.messages;
         basicBot.room.queue = room.queue;
         basicBot.room.newBlacklisted = room.newBlacklisted;
-        API.chatLog(basicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -1554,12 +1551,19 @@
     {
       Function.prototype.toString = function ()
       {
-        return 'Function.'
+        return '';
       };
       var u = API.getUser();
-      if (basicBot.userUtilities.getPermission(u) < 2) return API.chatLog(basicBot.chat.greyuser);
-      if (basicBot.userUtilities.getPermission(u) === 2) API.chatLog(basicBot.chat.bouncer);
-      basicBot.connectAPI();
+      if (basicBot.userUtilities.getPermission(u) < 2)
+      {
+        API.chatLog("You're not allowed to use acidicBot! Please contact @LaishaBear for intelligence about acidicBot.");
+        return;
+      }
+      if (basicBot.userUtilities.getPermission(u) === 2)
+      {
+        API.chatLog("");
+        basicBot.connectAPI();
+      }
       API.moderateDeleteChat = function (cid)
       {
         $.ajax(
@@ -2785,25 +2789,6 @@
                 }
               });
             }
-          }
-        }
-      },
-      helpCommand:
-      {
-        command: 'help',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = "(Updated link coming soon)";
-            API.sendChat(subChat(basicBot.chat.starterhelp,
-            {
-              link: link
-            }));
           }
         }
       },
