@@ -1,5 +1,10 @@
 (function ()
 {
+  window.onerror = function ()
+  {
+    var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
+    window.location = 'https://plug.dj' + room.name;
+  };
   API.getWaitListPosition = function (id)
   {
     if (typeof id === 'undefined' || id === null)
@@ -108,7 +113,8 @@
     {
       var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
       var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
-      if ((Date.now() < 1 * 60 * 60 * 1000))
+      var elapsed = Date.now() - JSON.parse(info).time;
+      if ((elapsed < 1 * 60 * 60 * 1000))
       {
         for (var prop in settings)
         {
@@ -215,6 +221,7 @@
       botName: "acidicBot",
       language: "english",
       chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
+      roomLock: true,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -267,6 +274,7 @@
     },
     room:
     {
+      name: null,
       users: [],
       afkList: [],
       mutedUsers: [],
@@ -1539,6 +1547,32 @@
           type: "DELETE"
         });
       };
+      acidicBot.room.name = window.location.pathname;
+      var Check;
+      var detect = function ()
+      {
+        if (acidicBot.room.name != window.location.pathname)
+        {
+          storeToStorage();
+          acidicBot.disconnectAPI();
+          setTimeout(function ()
+          {
+            kill();
+          }, 1000);
+          if (acidicBot.settings.roomLock)
+          {
+            window.location = 'https://plug.dj' + acidicBot.room.name;
+          }
+          else
+          {
+            clearInterval(Check);
+          }
+        }
+      };
+      Check = setInterval(function ()
+      {
+        detect();
+      }, 2000);
       retrieveSettings();
       retrieveFromStorage();
       window.bot = acidicBot;
