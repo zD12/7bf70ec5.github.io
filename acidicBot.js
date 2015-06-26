@@ -116,7 +116,6 @@
       var elapsed = Date.now() - JSON.parse(info).time;
       if((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(basicBot.chat.retrievingdata);
         for(var prop in settings)
         {
           basicBot.settings[prop] = settings[prop];
