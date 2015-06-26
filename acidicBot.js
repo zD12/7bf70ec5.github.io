@@ -206,11 +206,11 @@
     return str;
   };
   var acidicBot = {
-    version: "2.8.9",
+    version: "1.8.7",
     status: false,
     name: "acidicBot",
     loggedInID: null,
-    scriptLink: "https://conf.mcore.io/acidicBot.js",
+    scriptLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -254,7 +254,7 @@
         ["unavailable", "The song you played was not available for some users. "]
       ],
       afkpositionCheck: 15,
-      afkRankCheck: "ambassador",
+      afkRankCheck: "",
       motdEnabled: false,
       motdInterval: 5,
       motd: "",
