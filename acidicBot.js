@@ -110,12 +110,12 @@
   {
     var info = localStorage.getItem("basicBotStorageInfo");
     if(info === null) API.chatLog(basicBot.chat.nodatafound);
+    else
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if((elapsed < 1 * 60 * 60 * 1000))
-      else
       {
         API.chatLog(basicBot.chat.retrievingdata);
         for(var prop in settings)
