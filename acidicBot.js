@@ -109,15 +109,13 @@
   var retrieveFromStorage = function()
   {
     var info = localStorage.getItem("basicBotStorageInfo");
-    if(info === null) API.chatLog(basicBot.chat.nodatafound);
-    else
+    if(info === null)
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(basicBot.chat.retrievingdata);
         for(var prop in settings)
         {
           basicBot.settings[prop] = settings[prop];
@@ -131,7 +129,6 @@
         basicBot.room.messages = room.messages;
         basicBot.room.queue = room.queue;
         basicBot.room.newBlacklisted = room.newBlacklisted;
-        API.chatLog(basicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -1537,11 +1534,7 @@
         API.chatLog("You're not authorized to use basicBot! Please contact @LaishaBear for intelligence about basicBot.");
         return;
       }
-      if(basicBot.userUtilities.getPermission(u) === 2)
-      {
-        API.chatLog('');
-        basicBot.connectAPI();
-      }
+      if(basicBot.userUtilities.getPermission(u) === 2) basicBot.connectAPI();
       API.moderateDeleteChat = function(cid)
       {
         $.ajax(
