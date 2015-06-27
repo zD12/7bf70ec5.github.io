@@ -2,7 +2,7 @@
 {
   window.onerror = function ()
   {
-    var room = JSON.parse(localStorage.getItem("basicBotRoom"));
+    var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
     window.location = 'https://plug.dj' + room.name;
   };
   API.getWaitListPosition = function (id)
@@ -23,19 +23,19 @@
   };
   var kill = function ()
   {
-    clearInterval(basicBot.room.afkInterval);
-    basicBot.status = false;
+    clearInterval(acidicBot.room.afkInterval);
+    acidicBot.status = false;
   };
   var storeToStorage = function ()
   {
-    localStorage.setItem("basicBotsettings", JSON.stringify(basicBot.settings));
-    localStorage.setItem("basicBotRoom", JSON.stringify(basicBot.room));
-    var basicBotStorageInfo = {
+    localStorage.setItem("acidicBotsettings", JSON.stringify(acidicBot.settings));
+    localStorage.setItem("acidicBotRoom", JSON.stringify(acidicBot.room));
+    var acidicBotStorageInfo = {
       time: Date.now(),
       stored: true,
-      version: basicBot.version
+      version: acidicBot.version
     };
-    localStorage.setItem("basicBotStorageInfo", JSON.stringify(basicBotStorageInfo));
+    localStorage.setItem("acidicBotStorageInfo", JSON.stringify(acidicBotStorageInfo));
   };
   var subChat = function (chat, obj)
   {
@@ -55,20 +55,20 @@
     if (!cb) cb = function () {};
     $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
     {
-      var link = basicBot.chatLink;
+      var link = acidicBot.chatLink;
       if (json !== null && typeof json !== "undefined")
       {
         langIndex = json;
-        link = langIndex[basicBot.settings.language.toLowerCase()];
-        if (basicBot.settings.chatLink !== basicBot.chatLink)
+        link = langIndex[acidicBot.settings.language.toLowerCase()];
+        if (acidicBot.settings.chatLink !== acidicBot.chatLink)
         {
-          link = basicBot.settings.chatLink;
+          link = acidicBot.settings.chatLink;
         }
         else
         {
           if (typeof link === "undefined")
           {
-            link = basicBot.chatLink;
+            link = acidicBot.chatLink;
           }
         }
         $.get(link, function (json)
@@ -76,19 +76,19 @@
           if (json !== null && typeof json !== "undefined")
           {
             if (typeof json === "string") json = JSON.parse(json);
-            basicBot.chat = json;
+            acidicBot.chat = json;
             cb();
           }
         });
       }
       else
       {
-        $.get(basicBot.chatLink, function (json)
+        $.get(acidicBot.chatLink, function (json)
         {
           if (json !== null && typeof json !== "undefined")
           {
             if (typeof json === "string") json = JSON.parse(json);
-            basicBot.chat = json;
+            acidicBot.chat = json;
             cb();
           }
         });
@@ -97,44 +97,44 @@
   };
   var retrieveSettings = function ()
   {
-    var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
+    var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
     if (settings !== null)
     {
       for (var prop in settings)
       {
-        basicBot.settings[prop] = settings[prop];
+        acidicBot.settings[prop] = settings[prop];
       }
     }
   };
   var retrieveFromStorage = function ()
   {
-    var info = localStorage.getItem("basicBotStorageInfo");
+    var info = localStorage.getItem("acidicBotStorageInfo");
     if (info === null)
     {
-      var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
-      var room = JSON.parse(localStorage.getItem("basicBotRoom"));
+      var settings = JSON.parse(localStorage.getItem("acidicBotsettings"));
+      var room = JSON.parse(localStorage.getItem("acidicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
         for (var prop in settings)
         {
-          basicBot.settings[prop] = settings[prop];
+          acidicBot.settings[prop] = settings[prop];
         }
-        basicBot.room.users = room.users;
-        basicBot.room.afkList = room.afkList;
-        basicBot.room.historyList = room.historyList;
-        basicBot.room.mutedUsers = room.mutedUsers;
-        basicBot.room.autoskip = room.autoskip;
-        basicBot.room.roomstats = room.roomstats;
-        basicBot.room.messages = room.messages;
-        basicBot.room.queue = room.queue;
-        basicBot.room.newBlacklisted = room.newBlacklisted;
+        acidicBot.room.users = room.users;
+        acidicBot.room.afkList = room.afkList;
+        acidicBot.room.historyList = room.historyList;
+        acidicBot.room.mutedUsers = room.mutedUsers;
+        acidicBot.room.autoskip = room.autoskip;
+        acidicBot.room.roomstats = room.roomstats;
+        acidicBot.room.messages = room.messages;
+        acidicBot.room.queue = room.queue;
+        acidicBot.room.newBlacklisted = room.newBlacklisted;
       }
     }
     var json_sett = null;
     var roominfo = document.getElementById("room-settings");
     info = roominfo.textContent;
-    var ref_bot = "@basicBot=";
+    var ref_bot = "@acidicBot=";
     var ind_ref = info.indexOf(ref_bot);
     if (ind_ref > 0)
     {
@@ -150,7 +150,7 @@
           json_sett = JSON.parse(json);
           for (var prop in json_sett)
           {
-            basicBot.settings[prop] = json_sett[prop];
+            acidicBot.settings[prop] = json_sett[prop];
           }
         }
       });
@@ -205,10 +205,10 @@
     temp = null;
     return str;
   };
-  var basicBot = {
+  var acidicBot = {
     version: "1.8.7",
     status: false,
-    name: "basicBot",
+    name: "acidicBot",
     loggedInID: null,
     scriptLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
@@ -218,7 +218,7 @@
     retrieveFromStorage: retrieveFromStorage,
     settings:
     {
-      botName: "basicBot",
+      botName: "acidicBot",
       language: "english",
       chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
       roomLock: true,
@@ -322,30 +322,30 @@
         countdown: null,
         startRoulette: function ()
         {
-          basicBot.room.roulette.rouletteStatus = true;
-          basicBot.room.roulette.countdown = setTimeout(function ()
+          acidicBot.room.roulette.rouletteStatus = true;
+          acidicBot.room.roulette.countdown = setTimeout(function ()
           {
-            basicBot.room.roulette.endRoulette();
+            acidicBot.room.roulette.endRoulette();
           }, 60 * 1000);
-          API.sendChat(basicBot.chat.isopen);
+          API.sendChat(acidicBot.chat.isopen);
         },
         endRoulette: function ()
         {
-          basicBot.room.roulette.rouletteStatus = false;
-          var ind = Math.floor(Math.random() * basicBot.room.roulette.participants.length);
-          var winner = basicBot.room.roulette.participants[ind];
-          basicBot.room.roulette.participants = [];
+          acidicBot.room.roulette.rouletteStatus = false;
+          var ind = Math.floor(Math.random() * acidicBot.room.roulette.participants.length);
+          var winner = acidicBot.room.roulette.participants[ind];
+          acidicBot.room.roulette.participants = [];
           var pos = Math.floor((Math.random() * API.getWaitList().length) + 1);
-          var user = basicBot.userUtilities.lookupUser(winner);
+          var user = acidicBot.userUtilities.lookupUser(winner);
           var name = user.username;
-          API.sendChat(subChat(basicBot.chat.winnerpicked,
+          API.sendChat(subChat(acidicBot.chat.winnerpicked,
           {
             name: name,
             position: pos
           }));
           setTimeout(function (winner, pos)
           {
-            basicBot.userUtilities.moveUser(winner, pos, false);
+            acidicBot.userUtilities.moveUser(winner, pos, false);
           }, 1 * 1000, winner, pos);
         }
       }
@@ -391,7 +391,7 @@
       {
         user.lastDC.time = Date.now();
         user.lastDC.position = user.lastKnownPosition;
-        user.lastDC.songCount = basicBot.room.roomstats.songCount;
+        user.lastDC.songCount = acidicBot.room.roomstats.songCount;
       },
       setLastActivity: function (user)
       {
@@ -413,30 +413,30 @@
       },
       lookupUser: function (id)
       {
-        for (var i = 0; i < basicBot.room.users.length; i++)
+        for (var i = 0; i < acidicBot.room.users.length; i++)
         {
-          if (basicBot.room.users[i].id === id)
+          if (acidicBot.room.users[i].id === id)
           {
-            return basicBot.room.users[i];
+            return acidicBot.room.users[i];
           }
         }
         return false;
       },
       lookupUserName: function (name)
       {
-        for (var i = 0; i < basicBot.room.users.length; i++)
+        for (var i = 0; i < acidicBot.room.users.length; i++)
         {
-          var match = basicBot.room.users[i].username.trim() == name.trim();
+          var match = acidicBot.room.users[i].username.trim() == name.trim();
           if (match)
           {
-            return basicBot.room.users[i];
+            return acidicBot.room.users[i];
           }
         }
         return false;
       },
       voteRatio: function (id)
       {
-        var user = basicBot.userUtilities.lookupUser(id);
+        var user = acidicBot.userUtilities.lookupUser(id);
         var votes = user.votes;
         if (votes.meh === 0) votes.ratio = 1;
         else votes.ratio = (votes.woot / votes.meh).toFixed(2);
@@ -466,7 +466,7 @@
       },
       moveUser: function (id, pos, priority)
       {
-        var user = basicBot.userUtilities.lookupUser(id);
+        var user = acidicBot.userUtilities.lookupUser(id);
         var wlist = API.getWaitList();
         if (API.getWaitListPosition(id) === -1)
         {
@@ -481,34 +481,34 @@
           else
           {
             var alreadyQueued = -1;
-            for (var i = 0; i < basicBot.room.queue.id.length; i++)
+            for (var i = 0; i < acidicBot.room.queue.id.length; i++)
             {
-              if (basicBot.room.queue.id[i] === id) alreadyQueued = i;
+              if (acidicBot.room.queue.id[i] === id) alreadyQueued = i;
             }
             if (alreadyQueued !== -1)
             {
-              basicBot.room.queue.position[alreadyQueued] = pos;
-              return API.sendChat(subChat(basicBot.chat.alreadyadding,
+              acidicBot.room.queue.position[alreadyQueued] = pos;
+              return API.sendChat(subChat(acidicBot.chat.alreadyadding,
               {
-                position: basicBot.room.queue.position[alreadyQueued]
+                position: acidicBot.room.queue.position[alreadyQueued]
               }));
             }
-            basicBot.roomUtilities.booth.lockBooth();
+            acidicBot.roomUtilities.booth.lockBooth();
             if (priority)
             {
-              basicBot.room.queue.id.unshift(id);
-              basicBot.room.queue.position.unshift(pos);
+              acidicBot.room.queue.id.unshift(id);
+              acidicBot.room.queue.position.unshift(pos);
             }
             else
             {
-              basicBot.room.queue.id.push(id);
-              basicBot.room.queue.position.push(pos);
+              acidicBot.room.queue.id.push(id);
+              acidicBot.room.queue.position.push(pos);
             }
             var name = user.username;
-            return API.sendChat(subChat(basicBot.chat.adding,
+            return API.sendChat(subChat(acidicBot.chat.adding,
             {
               name: name,
-              position: basicBot.room.queue.position.length
+              position: acidicBot.room.queue.position.length
             }));
           }
         }
@@ -516,31 +516,31 @@
       },
       dclookup: function (id)
       {
-        var user = basicBot.userUtilities.lookupUser(id);
-        if (typeof user === 'boolean') return basicBot.chat.usernotfound;
+        var user = acidicBot.userUtilities.lookupUser(id);
+        if (typeof user === 'boolean') return acidicBot.chat.usernotfound;
         var name = user.username;
-        if (user.lastDC.time === null) return subChat(basicBot.chat.notdisconnected,
+        if (user.lastDC.time === null) return subChat(acidicBot.chat.notdisconnected,
         {
           name: name
         });
         var dc = user.lastDC.time;
         var pos = user.lastDC.position;
-        if (pos === null) return basicBot.chat.noposition;
+        if (pos === null) return acidicBot.chat.noposition;
         var timeDc = Date.now() - dc;
         var validDC = false;
-        if (basicBot.settings.maximumDc * 60 * 1000 > timeDc)
+        if (acidicBot.settings.maximumDc * 60 * 1000 > timeDc)
         {
           validDC = true;
         }
-        var time = basicBot.roomUtilities.msToStr(timeDc);
-        if (!validDC) return (subChat(basicBot.chat.toolongago,
+        var time = acidicBot.roomUtilities.msToStr(timeDc);
+        if (!validDC) return (subChat(acidicBot.chat.toolongago,
         {
-          name: basicBot.userUtilities.getUser(user).username,
+          name: acidicBot.userUtilities.getUser(user).username,
           time: time
         }));
-        var songsPassed = basicBot.room.roomstats.songCount - user.lastDC.songCount;
+        var songsPassed = acidicBot.room.roomstats.songCount - user.lastDC.songCount;
         var afksRemoved = 0;
-        var afkList = basicBot.room.afkList;
+        var afkList = acidicBot.room.afkList;
         for (var i = 0; i < afkList.length; i++)
         {
           var timeAfk = afkList[i][1];
@@ -552,13 +552,13 @@
         }
         var newPosition = user.lastDC.position - songsPassed - afksRemoved;
         if (newPosition <= 0) newPosition = 1;
-        var msg = subChat(basicBot.chat.valid,
+        var msg = subChat(acidicBot.chat.valid,
         {
-          name: basicBot.userUtilities.getUser(user).username,
+          name: acidicBot.userUtilities.getUser(user).username,
           time: time,
           position: newPosition
         });
-        basicBot.userUtilities.moveUser(user.id, newPosition, true);
+        acidicBot.userUtilities.moveUser(user.id, newPosition, true);
         return msg;
       }
     },
@@ -662,50 +662,50 @@
         locked: false,
         lockBooth: function ()
         {
-          API.moderateLockWaitList(!basicBot.roomUtilities.booth.locked);
-          basicBot.roomUtilities.booth.locked = false;
-          if (basicBot.settings.lockGuard)
+          API.moderateLockWaitList(!acidicBot.roomUtilities.booth.locked);
+          acidicBot.roomUtilities.booth.locked = false;
+          if (acidicBot.settings.lockGuard)
           {
-            basicBot.roomUtilities.booth.lockTimer = setTimeout(function ()
+            acidicBot.roomUtilities.booth.lockTimer = setTimeout(function ()
             {
-              API.moderateLockWaitList(basicBot.roomUtilities.booth.locked);
-            }, basicBot.settings.maximumLocktime * 60 * 1000);
+              API.moderateLockWaitList(acidicBot.roomUtilities.booth.locked);
+            }, acidicBot.settings.maximumLocktime * 60 * 1000);
           }
         },
         unlockBooth: function ()
         {
-          API.moderateLockWaitList(basicBot.roomUtilities.booth.locked);
-          clearTimeout(basicBot.roomUtilities.booth.lockTimer);
+          API.moderateLockWaitList(acidicBot.roomUtilities.booth.locked);
+          clearTimeout(acidicBot.roomUtilities.booth.lockTimer);
         }
       },
       afkCheck: function ()
       {
-        if (!basicBot.status || !basicBot.settings.afkRemoval) return void(0);
-        var rank = basicBot.roomUtilities.rankToNumber(basicBot.settings.afkRankCheck);
+        if (!acidicBot.status || !acidicBot.settings.afkRemoval) return void(0);
+        var rank = acidicBot.roomUtilities.rankToNumber(acidicBot.settings.afkRankCheck);
         var djlist = API.getWaitList();
-        var lastPos = Math.min(djlist.length, basicBot.settings.afkpositionCheck);
+        var lastPos = Math.min(djlist.length, acidicBot.settings.afkpositionCheck);
         if (lastPos - 1 > djlist.length) return void(0);
         for (var i = 0; i < lastPos; i++)
         {
           if (typeof djlist[i] !== 'undefined')
           {
             var id = djlist[i].id;
-            var user = basicBot.userUtilities.lookupUser(id);
+            var user = acidicBot.userUtilities.lookupUser(id);
             if (typeof user !== 'boolean')
             {
-              var plugUser = basicBot.userUtilities.getUser(user);
-              if (rank !== null && basicBot.userUtilities.getPermission(plugUser) <= rank)
+              var plugUser = acidicBot.userUtilities.getUser(user);
+              if (rank !== null && acidicBot.userUtilities.getPermission(plugUser) <= rank)
               {
                 var name = plugUser.username;
-                var lastActive = basicBot.userUtilities.getLastActivity(user);
+                var lastActive = acidicBot.userUtilities.getLastActivity(user);
                 var inactivity = Date.now() - lastActive;
-                var time = basicBot.roomUtilities.msToStr(inactivity);
+                var time = acidicBot.roomUtilities.msToStr(inactivity);
                 var warncount = user.afkWarningCount;
-                if (inactivity > basicBot.settings.maximumAfk * 60 * 1000)
+                if (inactivity > acidicBot.settings.maximumAfk * 60 * 1000)
                 {
                   if (warncount === 0)
                   {
-                    API.sendChat(subChat(basicBot.chat.warning1,
+                    API.sendChat(subChat(acidicBot.chat.warning1,
                     {
                       name: name,
                       time: time
@@ -718,7 +718,7 @@
                   }
                   else if (warncount === 1)
                   {
-                    API.sendChat(subChat(basicBot.chat.warning2,
+                    API.sendChat(subChat(acidicBot.chat.warning2,
                     {
                       name: name
                     }));
@@ -734,19 +734,19 @@
                     if (pos !== -1)
                     {
                       pos++;
-                      basicBot.room.afkList.push([id, Date.now(), pos]);
+                      acidicBot.room.afkList.push([id, Date.now(), pos]);
                       user.lastDC = {
                         time: null,
                         position: null,
                         songCount: 0
                       };
                       API.moderateRemoveDJ(id);
-                      API.sendChat(subChat(basicBot.chat.afkremove,
+                      API.sendChat(subChat(acidicBot.chat.afkremove,
                       {
                         name: name,
                         time: time,
                         position: pos,
-                        maximumafk: basicBot.settings.maximumAfk
+                        maximumafk: acidicBot.settings.maximumAfk
                       }));
                     }
                     user.afkWarningCount = 0;
@@ -763,10 +763,10 @@
         var id = dj.id;
         var waitlistlength = API.getWaitList().length;
         var locked = false;
-        basicBot.room.queueable = false;
+        acidicBot.room.queueable = false;
         if (waitlistlength == 50)
         {
-          basicBot.roomUtilities.booth.lockBooth();
+          acidicBot.roomUtilities.booth.lockBooth();
           locked = true;
         }
         setTimeout(function (id)
@@ -779,20 +779,20 @@
               API.sendChat(reason);
             }
           }, 500);
-          basicBot.room.skippable = false;
+          acidicBot.room.skippable = false;
           setTimeout(function ()
           {
-            basicBot.room.skippable = true
+            acidicBot.room.skippable = true
           }, 5 * 1000);
           setTimeout(function (id)
           {
-            basicBot.userUtilities.moveUser(id, basicBot.settings.skipPosition, false);
-            basicBot.room.queueable = true;
+            acidicBot.userUtilities.moveUser(id, acidicBot.settings.skipPosition, false);
+            acidicBot.room.queueable = true;
             if (locked)
             {
               setTimeout(function ()
               {
-                basicBot.roomUtilities.booth.unlockBooth();
+                acidicBot.roomUtilities.booth.unlockBooth();
               }, 1000);
             }
           }, 1500, id);
@@ -804,53 +804,53 @@
         if (toggle.hasClass("disabled"))
         {
           toggle.click();
-          if (basicBot.settings.cycleGuard)
+          if (acidicBot.settings.cycleGuard)
           {
-            basicBot.room.cycleTimer = setTimeout(function ()
+            acidicBot.room.cycleTimer = setTimeout(function ()
             {
               if (toggle.hasClass("enabled")) toggle.click();
-            }, basicBot.settings.cycleMaxTime * 60 * 1000);
+            }, acidicBot.settings.cycleMaxTime * 60 * 1000);
           }
         }
         else
         {
           toggle.click();
-          clearTimeout(basicBot.room.cycleTimer);
+          clearTimeout(acidicBot.room.cycleTimer);
         }
       },
       intervalMessage: function ()
       {
         var interval;
-        if (basicBot.settings.motdEnabled) interval = basicBot.settings.motdInterval;
-        else interval = basicBot.settings.messageInterval;
-        if ((basicBot.room.roomstats.songCount % interval) === 0 && basicBot.status)
+        if (acidicBot.settings.motdEnabled) interval = acidicBot.settings.motdInterval;
+        else interval = acidicBot.settings.messageInterval;
+        if ((acidicBot.room.roomstats.songCount % interval) === 0 && acidicBot.status)
         {
           var msg;
-          if (basicBot.settings.motdEnabled)
+          if (acidicBot.settings.motdEnabled)
           {
-            msg = basicBot.settings.motd;
+            msg = acidicBot.settings.motd;
           }
           else
           {
-            if (basicBot.settings.intervalMessages.length === 0) return void(0);
-            var messageNumber = basicBot.room.roomstats.songCount % basicBot.settings.intervalMessages.length;
-            msg = basicBot.settings.intervalMessages[messageNumber];
+            if (acidicBot.settings.intervalMessages.length === 0) return void(0);
+            var messageNumber = acidicBot.room.roomstats.songCount % acidicBot.settings.intervalMessages.length;
+            msg = acidicBot.settings.intervalMessages[messageNumber];
           }
           API.sendChat('/me ' + msg);
         }
       },
       updateBlacklists: function ()
       {
-        for (var bl in basicBot.settings.blacklists)
+        for (var bl in acidicBot.settings.blacklists)
         {
-          basicBot.room.blacklists[bl] = [];
-          if (typeof basicBot.settings.blacklists[bl] === 'function')
+          acidicBot.room.blacklists[bl] = [];
+          if (typeof acidicBot.settings.blacklists[bl] === 'function')
           {
-            basicBot.room.blacklists[bl] = basicBot.settings.blacklists();
+            acidicBot.room.blacklists[bl] = acidicBot.settings.blacklists();
           }
-          else if (typeof basicBot.settings.blacklists[bl] === 'string')
+          else if (typeof acidicBot.settings.blacklists[bl] === 'string')
           {
-            if (basicBot.settings.blacklists[bl] === '')
+            if (acidicBot.settings.blacklists[bl] === '')
             {
               continue;
             }
@@ -858,7 +858,7 @@
             {
               (function (l)
               {
-                $.get(basicBot.settings.blacklists[l], function (data)
+                $.get(acidicBot.settings.blacklists[l], function (data)
                 {
                   if (typeof data === 'string')
                   {
@@ -872,7 +872,7 @@
                       list.push(data[prop].mid);
                     }
                   }
-                  basicBot.room.blacklists[l] = list;
+                  acidicBot.room.blacklists[l] = list;
                 })
               })(bl);
             }
@@ -889,19 +889,19 @@
       {
         if (typeof console.table !== 'undefined')
         {
-          console.table(basicBot.room.newBlacklisted);
+          console.table(acidicBot.room.newBlacklisted);
         }
         else
         {
-          console.log(basicBot.room.newBlacklisted);
+          console.log(acidicBot.room.newBlacklisted);
         }
       },
       exportNewBlacklistedSongs: function ()
       {
         var list = {};
-        for (var i = 0; i < basicBot.room.newBlacklisted.length; i++)
+        for (var i = 0; i < acidicBot.room.newBlacklisted.length; i++)
         {
-          var track = basicBot.room.newBlacklisted[i];
+          var track = acidicBot.room.newBlacklisted[i];
           list[track.list] = [];
           list[track.list].push(
           {
@@ -918,27 +918,27 @@
       chat.message = linkFixer(chat.message);
       chat.message = decodeEntities(chat.message);
       chat.message = chat.message.trim();
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === chat.uid)
+        if (acidicBot.room.users[i].id === chat.uid)
         {
-          basicBot.userUtilities.setLastActivity(basicBot.room.users[i]);
-          if (basicBot.room.users[i].username !== chat.un)
+          acidicBot.userUtilities.setLastActivity(acidicBot.room.users[i]);
+          if (acidicBot.room.users[i].username !== chat.un)
           {
-            basicBot.room.users[i].username = chat.un;
+            acidicBot.room.users[i].username = chat.un;
           }
         }
       }
-      if (basicBot.chatUtilities.chatFilter(chat)) return void(0);
-      if (!basicBot.chatUtilities.commandCheck(chat)) basicBot.chatUtilities.action(chat);
+      if (acidicBot.chatUtilities.chatFilter(chat)) return void(0);
+      if (!acidicBot.chatUtilities.commandCheck(chat)) acidicBot.chatUtilities.action(chat);
     },
     eventUserjoin: function (user)
     {
       var known = false;
       var index = null;
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === user.id)
+        if (acidicBot.room.users[i].id === user.id)
         {
           known = true;
           index = i;
@@ -948,8 +948,8 @@
       var welcomeback = null;
       if (known)
       {
-        basicBot.room.users[index].inRoom = true;
-        var u = basicBot.userUtilities.lookupUser(user.id);
+        acidicBot.room.users[index].inRoom = true;
+        var u = acidicBot.userUtilities.lookupUser(user.id);
         var jt = u.jointime;
         var t = Date.now() - jt;
         if (t < 10 * 1000) greet = false;
@@ -957,28 +957,28 @@
       }
       else
       {
-        basicBot.room.users.push(new basicBot.User(user.id, user.username));
+        acidicBot.room.users.push(new acidicBot.User(user.id, user.username));
         welcomeback = false;
       }
-      for (var j = 0; j < basicBot.room.users.length; j++)
+      for (var j = 0; j < acidicBot.room.users.length; j++)
       {
-        if (basicBot.userUtilities.getUser(basicBot.room.users[j]).id === user.id)
+        if (acidicBot.userUtilities.getUser(acidicBot.room.users[j]).id === user.id)
         {
-          basicBot.userUtilities.setLastActivity(basicBot.room.users[j]);
-          basicBot.room.users[j].jointime = Date.now();
+          acidicBot.userUtilities.setLastActivity(acidicBot.room.users[j]);
+          acidicBot.room.users[j].jointime = Date.now();
         }
       }
-      if (basicBot.settings.welcome && greet)
+      if (acidicBot.settings.welcome && greet)
       {
         welcomeback ? setTimeout(function (user)
         {
-          API.sendChat(subChat(basicBot.chat.welcomeback,
+          API.sendChat(subChat(acidicBot.chat.welcomeback,
           {
             name: user.username
           }));
         }, 1 * 1000, user) : setTimeout(function (user)
         {
-          API.sendChat(subChat(basicBot.chat.welcome,
+          API.sendChat(subChat(acidicBot.chat.welcome,
           {
             name: user.username
           }));
@@ -988,16 +988,16 @@
     eventUserleave: function (user)
     {
       var lastDJ = API.getHistory()[0].user.id;
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === user.id)
+        if (acidicBot.room.users[i].id === user.id)
         {
-          basicBot.userUtilities.updateDC(basicBot.room.users[i]);
-          basicBot.room.users[i].inRoom = false;
+          acidicBot.userUtilities.updateDC(acidicBot.room.users[i]);
+          acidicBot.room.users[i].inRoom = false;
           if (lastDJ == user.id)
           {
-            var user = basicBot.userUtilities.lookupUser(basicBot.room.users[i].id);
-            basicBot.userUtilities.updatePosition(user, 0);
+            var user = acidicBot.userUtilities.lookupUser(acidicBot.room.users[i].id);
+            acidicBot.userUtilities.updatePosition(user, 0);
             user.lastDC.time = null;
             user.lastDC.position = user.lastKnownPosition;
           }
@@ -1006,17 +1006,17 @@
     },
     eventVoteupdate: function (obj)
     {
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === obj.user.id)
+        if (acidicBot.room.users[i].id === obj.user.id)
         {
           if (obj.vote === 1)
           {
-            basicBot.room.users[i].votes.woot++;
+            acidicBot.room.users[i].votes.woot++;
           }
           else
           {
-            basicBot.room.users[i].votes.meh++;
+            acidicBot.room.users[i].votes.meh++;
           }
         }
       }
@@ -1025,18 +1025,18 @@
       var dj = API.getDJ();
       var timeLeft = API.getTimeRemaining();
       var timeElapsed = API.getTimeElapsed();
-      if (basicBot.settings.voteSkip)
+      if (acidicBot.settings.voteSkip)
       {
-        if ((mehs - woots) >= (basicBot.settings.voteSkipLimit))
+        if ((mehs - woots) >= (acidicBot.settings.voteSkipLimit))
         {
-          API.sendChat(subChat(basicBot.chat.voteskipexceededlimit,
+          API.sendChat(subChat(acidicBot.chat.voteskipexceededlimit,
           {
             name: dj.username,
-            limit: basicBot.settings.voteSkipLimit
+            limit: acidicBot.settings.voteSkipLimit
           }));
-          if (basicBot.settings.smartSkip && timeLeft > timeElapsed)
+          if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
           {
-            basicBot.roomUtilities.smartSkip();
+            acidicBot.roomUtilities.smartSkip();
           }
           else
           {
@@ -1047,26 +1047,26 @@
     },
     eventCurateupdate: function (obj)
     {
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === obj.user.id)
+        if (acidicBot.room.users[i].id === obj.user.id)
         {
-          basicBot.room.users[i].votes.curate++;
+          acidicBot.room.users[i].votes.curate++;
         }
       }
     },
     eventDjadvance: function (obj)
     {
-      if (basicBot.settings.autowoot)
+      if (acidicBot.settings.autowoot)
       {
         $("#woot").click();
       }
-      var user = basicBot.userUtilities.lookupUser(obj.dj.id)
-      for (var i = 0; i < basicBot.room.users.length; i++)
+      var user = acidicBot.userUtilities.lookupUser(obj.dj.id)
+      for (var i = 0; i < acidicBot.room.users.length; i++)
       {
-        if (basicBot.room.users[i].id === user.id)
+        if (acidicBot.room.users[i].id === user.id)
         {
-          basicBot.room.users[i].lastDC = {
+          acidicBot.room.users[i].lastDC = {
             time: null,
             position: null,
             songCount: 0
@@ -1075,15 +1075,15 @@
       }
       var lastplay = obj.lastPlay;
       if (typeof lastplay === 'undefined') return;
-      if (basicBot.settings.songstats)
+      if (acidicBot.settings.songstats)
       {
-        if (typeof basicBot.chat.songstatistics === "undefined")
+        if (typeof acidicBot.chat.songstatistics === "undefined")
         {
           API.sendChat("/me " + lastplay.media.author + " - " + lastplay.media.title + ": " + lastplay.score.positive + "W/" + lastplay.score.grabs + "G/" + lastplay.score.negative + "M.")
         }
         else
         {
-          API.sendChat(subChat(basicBot.chat.songstatistics,
+          API.sendChat(subChat(acidicBot.chat.songstatistics,
           {
             artist: lastplay.media.author,
             title: lastplay.media.title,
@@ -1093,28 +1093,28 @@
           }))
         }
       }
-      basicBot.room.roomstats.totalWoots += lastplay.score.positive;
-      basicBot.room.roomstats.totalMehs += lastplay.score.negative;
-      basicBot.room.roomstats.totalCurates += lastplay.score.grabs;
-      basicBot.room.roomstats.songCount++;
-      basicBot.roomUtilities.intervalMessage();
-      basicBot.room.currentDJID = obj.dj.id;
+      acidicBot.room.roomstats.totalWoots += lastplay.score.positive;
+      acidicBot.room.roomstats.totalMehs += lastplay.score.negative;
+      acidicBot.room.roomstats.totalCurates += lastplay.score.grabs;
+      acidicBot.room.roomstats.songCount++;
+      acidicBot.roomUtilities.intervalMessage();
+      acidicBot.room.currentDJID = obj.dj.id;
       var blacklistSkip = setTimeout(function ()
       {
         var mid = obj.media.format + ':' + obj.media.cid;
-        for (var bl in basicBot.room.blacklists)
+        for (var bl in acidicBot.room.blacklists)
         {
-          if (basicBot.settings.blacklistEnabled)
+          if (acidicBot.settings.blacklistEnabled)
           {
-            if (basicBot.room.blacklists[bl].indexOf(mid) > -1)
+            if (acidicBot.room.blacklists[bl].indexOf(mid) > -1)
             {
-              API.sendChat(subChat(basicBot.chat.isblacklisted,
+              API.sendChat(subChat(acidicBot.chat.isblacklisted,
               {
                 blacklist: bl
               }));
-              if (basicBot.settings.smartSkip)
+              if (acidicBot.settings.smartSkip)
               {
-                return basicBot.roomUtilities.smartSkip();
+                return acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1127,17 +1127,17 @@
       var newMedia = obj.media;
       var timeLimitSkip = setTimeout(function ()
       {
-        if (basicBot.settings.timeGuard && newMedia.duration > basicBot.settings.maximumSongLength * 60 && !basicBot.room.roomevent)
+        if (acidicBot.settings.timeGuard && newMedia.duration > acidicBot.settings.maximumSongLength * 60 && !acidicBot.room.roomevent)
         {
           var name = obj.dj.username;
-          API.sendChat(subChat(basicBot.chat.timelimit,
+          API.sendChat(subChat(acidicBot.chat.timelimit,
           {
             name: name,
-            maxlength: basicBot.settings.maximumSongLength
+            maxlength: acidicBot.settings.maximumSongLength
           }));
-          if (basicBot.settings.smartSkip)
+          if (acidicBot.settings.smartSkip)
           {
-            return basicBot.roomUtilities.smartSkip();
+            return acidicBot.roomUtilities.smartSkip();
           }
           else
           {
@@ -1156,13 +1156,13 @@
             if (typeof (track.items[0]) === 'undefined')
             {
               var name = obj.dj.username;
-              API.sendChat(subChat(basicBot.chat.notavailable,
+              API.sendChat(subChat(acidicBot.chat.notavailable,
               {
                 name: name
               }));
-              if (basicBot.settings.smartSkip)
+              if (acidicBot.settings.smartSkip)
               {
-                return basicBot.roomUtilities.smartSkip();
+                return acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1178,13 +1178,13 @@
             if (typeof track.title === 'undefined')
             {
               var name = obj.dj.username;
-              API.sendChat(subChat(basicBot.chat.notavailable,
+              API.sendChat(subChat(acidicBot.chat.notavailable,
               {
                 name: name
               }));
-              if (basicBot.settings.smartSkip)
+              if (acidicBot.settings.smartSkip)
               {
-                return basicBot.roomUtilities.smartSkip();
+                return acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1195,7 +1195,7 @@
         }
       }, 2000);
       clearTimeout(historySkip);
-      if (basicBot.settings.historySkip)
+      if (acidicBot.settings.historySkip)
       {
         var alreadyPlayed = false;
         var apihistory = API.getHistory();
@@ -1206,15 +1206,15 @@
           {
             if (apihistory[i].media.cid === obj.media.cid)
             {
-              basicBot.room.historyList[i].push(+new Date());
+              acidicBot.room.historyList[i].push(+new Date());
               alreadyPlayed = true;
-              API.sendChat(subChat(basicBot.chat.songknown,
+              API.sendChat(subChat(acidicBot.chat.songknown,
               {
                 name: name
               }));
-              if (basicBot.settings.smartSkip)
+              if (acidicBot.settings.smartSkip)
               {
-                return basicBot.roomUtilities.smartSkip();
+                return acidicBot.roomUtilities.smartSkip();
               }
               else
               {
@@ -1224,24 +1224,24 @@
           }
           if (!alreadyPlayed)
           {
-            basicBot.room.historyList.push([obj.media.cid, +new Date()]);
+            acidicBot.room.historyList.push([obj.media.cid, +new Date()]);
           }
         }, 2000);
       }
       if (user.ownSong)
       {
-        API.sendChat(subChat(basicBot.chat.permissionownsong,
+        API.sendChat(subChat(acidicBot.chat.permissionownsong,
         {
           name: user.username
         }));
         user.ownSong = false;
       }
-      clearTimeout(basicBot.room.autoskipTimer);
-      if (basicBot.room.autoskip)
+      clearTimeout(acidicBot.room.autoskipTimer);
+      if (acidicBot.room.autoskip)
       {
         var remaining = obj.media.duration * 1000;
         var startcid = API.getMedia().cid;
-        basicBot.room.autoskipTimer = setTimeout(function ()
+        acidicBot.room.autoskipTimer = setTimeout(function ()
         {
           var endcid = API.getMedia().cid;
           if (startcid === endcid)
@@ -1256,42 +1256,42 @@
     {
       if (users.length < 50)
       {
-        if (basicBot.room.queue.id.length > 0 && basicBot.room.queueable)
+        if (acidicBot.room.queue.id.length > 0 && acidicBot.room.queueable)
         {
-          basicBot.room.queueable = false;
+          acidicBot.room.queueable = false;
           setTimeout(function ()
           {
-            basicBot.room.queueable = true;
+            acidicBot.room.queueable = true;
           }, 500);
-          basicBot.room.queueing++;
+          acidicBot.room.queueing++;
           var id, pos;
           setTimeout(function ()
           {
-            id = basicBot.room.queue.id.splice(0, 1)[0];
-            pos = basicBot.room.queue.position.splice(0, 1)[0];
+            id = acidicBot.room.queue.id.splice(0, 1)[0];
+            pos = acidicBot.room.queue.position.splice(0, 1)[0];
             API.moderateAddDJ(id, pos);
             setTimeout(function (id, pos)
             {
               API.moderateMoveDJ(id, pos);
-              basicBot.room.queueing--;
-              if (basicBot.room.queue.id.length === 0) setTimeout(function ()
+              acidicBot.room.queueing--;
+              if (acidicBot.room.queue.id.length === 0) setTimeout(function ()
               {
-                basicBot.roomUtilities.booth.unlockBooth();
+                acidicBot.roomUtilities.booth.unlockBooth();
               }, 1000);
             }, 1000, id, pos);
-          }, 1000 + basicBot.room.queueing * 2500);
+          }, 1000 + acidicBot.room.queueing * 2500);
         }
       }
       for (var i = 0; i < users.length; i++)
       {
-        var user = basicBot.userUtilities.lookupUser(users[i].id);
-        basicBot.userUtilities.updatePosition(user, API.getWaitListPosition(users[i].id) + 1);
+        var user = acidicBot.userUtilities.lookupUser(users[i].id);
+        acidicBot.userUtilities.updatePosition(user, API.getWaitListPosition(users[i].id) + 1);
       }
     },
     chatcleaner: function (chat)
     {
-      if (!basicBot.settings.filterChat) return false;
-      if (basicBot.userUtilities.getPermission(chat.uid) > 1) return false;
+      if (!acidicBot.settings.filterChat) return false;
+      if (acidicBot.userUtilities.getPermission(chat.uid) > 1) return false;
       var msg = chat.message;
       var containsLetters = false;
       for (var i = 0; i < msg.length; i++)
@@ -1314,7 +1314,7 @@
       }
       if (capitals >= 40)
       {
-        API.sendChat(subChat(basicBot.chat.caps,
+        API.sendChat(subChat(acidicBot.chat.caps,
         {
           name: chat.un
         }));
@@ -1323,17 +1323,17 @@
       msg = msg.toLowerCase();
       if (msg === 'skip')
       {
-        API.sendChat(subChat(basicBot.chat.askskip,
+        API.sendChat(subChat(acidicBot.chat.askskip,
         {
           name: chat.un
         }));
         return true;
       }
-      for (var j = 0; j < basicBot.chatUtilities.spam.length; j++)
+      for (var j = 0; j < acidicBot.chatUtilities.spam.length; j++)
       {
-        if (msg === basicBot.chatUtilities.spam[j])
+        if (msg === acidicBot.chatUtilities.spam[j])
         {
-          API.sendChat(subChat(basicBot.chat.spam,
+          API.sendChat(subChat(acidicBot.chat.spam,
           {
             name: chat.un
           }));
@@ -1347,19 +1347,19 @@
       chatFilter: function (chat)
       {
         var msg = chat.message;
-        var perm = basicBot.userUtilities.getPermission(chat.uid);
-        var user = basicBot.userUtilities.lookupUser(chat.uid);
+        var perm = acidicBot.userUtilities.getPermission(chat.uid);
+        var user = acidicBot.userUtilities.lookupUser(chat.uid);
         var isMuted = false;
-        for (var i = 0; i < basicBot.room.mutedUsers.length; i++)
+        for (var i = 0; i < acidicBot.room.mutedUsers.length; i++)
         {
-          if (basicBot.room.mutedUsers[i] === chat.uid) isMuted = true;
+          if (acidicBot.room.mutedUsers[i] === chat.uid) isMuted = true;
         }
         if (isMuted)
         {
           API.moderateDeleteChat(chat.cid);
           return true;
         }
-        if (basicBot.settings.lockdownEnabled)
+        if (acidicBot.settings.lockdownEnabled)
         {
           if (perm === 0)
           {
@@ -1367,19 +1367,19 @@
             return true;
           }
         }
-        if (basicBot.chatcleaner(chat))
+        if (acidicBot.chatcleaner(chat))
         {
           API.moderateDeleteChat(chat.cid);
           return true;
         }
-        if (basicBot.settings.cmdDeletion && msg.startsWith(basicBot.settings.commandLiteral))
+        if (acidicBot.settings.cmdDeletion && msg.startsWith(acidicBot.settings.commandLiteral))
         {
           API.moderateDeleteChat(chat.cid);
         }
         if (msg.indexOf('http://adf.ly/') > -1)
         {
           API.moderateDeleteChat(chat.cid);
-          API.sendChat(subChat(basicBot.chat.adfly,
+          API.sendChat(subChat(acidicBot.chat.adfly,
           {
             name: chat.un
           }));
@@ -1390,15 +1390,15 @@
           API.moderateDeleteChat(chat.cid);
           return true;
         }
-        var rlJoinChat = basicBot.chat.roulettejoin;
-        var rlLeaveChat = basicBot.chat.rouletteleave;
+        var rlJoinChat = acidicBot.chat.roulettejoin;
+        var rlLeaveChat = acidicBot.chat.rouletteleave;
         var joinedroulette = rlJoinChat.split('%%NAME%%');
         if (joinedroulette[1].length > joinedroulette[0].length) joinedroulette = joinedroulette[1];
         else joinedroulette = joinedroulette[0];
         var leftroulette = rlLeaveChat.split('%%NAME%%');
         if (leftroulette[1].length > leftroulette[0].length) leftroulette = leftroulette[1];
         else leftroulette = leftroulette[0];
-        if ((msg.indexOf(joinedroulette) > -1 || msg.indexOf(leftroulette) > -1) && chat.uid === basicBot.loggedInID)
+        if ((msg.indexOf(joinedroulette) > -1 || msg.indexOf(leftroulette) > -1) && chat.uid === acidicBot.loggedInID)
         {
           setTimeout(function (id)
           {
@@ -1411,7 +1411,7 @@
       commandCheck: function (chat)
       {
         var cmd;
-        if (chat.message.charAt(0) === basicBot.settings.commandLiteral)
+        if (chat.message.charAt(0) === acidicBot.settings.commandLiteral)
         {
           var space = chat.message.indexOf(' ');
           if (space === -1)
@@ -1421,17 +1421,17 @@
           else cmd = chat.message.substring(0, space);
         }
         else return false;
-        var userPerm = basicBot.userUtilities.getPermission(chat.uid);
-        if (chat.message !== basicBot.settings.commandLiteral + 'join' && chat.message !== basicBot.settings.commandLiteral + "leave")
+        var userPerm = acidicBot.userUtilities.getPermission(chat.uid);
+        if (chat.message !== acidicBot.settings.commandLiteral + 'join' && chat.message !== acidicBot.settings.commandLiteral + "leave")
         {
-          if (userPerm === 0 && !basicBot.room.usercommand) return void(0);
-          if (!basicBot.room.allcommand) return void(0);
+          if (userPerm === 0 && !acidicBot.room.usercommand) return void(0);
+          if (!acidicBot.room.allcommand) return void(0);
         }
-        if (chat.message === basicBot.settings.commandLiteral + 'eta' && basicBot.settings.etaRestriction)
+        if (chat.message === acidicBot.settings.commandLiteral + 'eta' && acidicBot.settings.etaRestriction)
         {
           if (userPerm < 2)
           {
-            var u = basicBot.userUtilities.lookupUser(chat.uid);
+            var u = acidicBot.userUtilities.lookupUser(chat.uid);
             if (u.lastEta !== null && (Date.now() - u.lastEta) < 1 * 60 * 60 * 1000)
             {
               API.moderateDeleteChat(chat.cid);
@@ -1441,18 +1441,18 @@
           }
         }
         var executed = false;
-        for (var comm in basicBot.commands)
+        for (var comm in acidicBot.commands)
         {
-          var cmdCall = basicBot.commands[comm].command;
+          var cmdCall = acidicBot.commands[comm].command;
           if (!Array.isArray(cmdCall))
           {
             cmdCall = [cmdCall]
           }
           for (var i = 0; i < cmdCall.length; i++)
           {
-            if (basicBot.settings.commandLiteral + cmdCall[i] === cmd)
+            if (acidicBot.settings.commandLiteral + cmdCall[i] === cmd)
             {
-              basicBot.commands[comm].functionality(chat, basicBot.settings.commandLiteral + cmdCall[i]);
+              acidicBot.commands[comm].functionality(chat, acidicBot.settings.commandLiteral + cmdCall[i]);
               executed = true;
               break;
             }
@@ -1460,32 +1460,32 @@
         }
         if (executed && userPerm === 0)
         {
-          basicBot.room.usercommand = false;
+          acidicBot.room.usercommand = false;
           setTimeout(function ()
           {
-            basicBot.room.usercommand = true;
-          }, basicBot.settings.commandCooldown * 1000);
+            acidicBot.room.usercommand = true;
+          }, acidicBot.settings.commandCooldown * 1000);
         }
         if (executed)
         {
-          basicBot.room.allcommand = true;
+          acidicBot.room.allcommand = true;
         }
         return executed;
       },
       action: function (chat)
       {
-        var user = basicBot.userUtilities.lookupUser(chat.uid);
+        var user = acidicBot.userUtilities.lookupUser(chat.uid);
         if (chat.type === 'message')
         {
-          for (var j = 0; j < basicBot.room.users.length; j++)
+          for (var j = 0; j < acidicBot.room.users.length; j++)
           {
-            if (basicBot.userUtilities.getUser(basicBot.room.users[j]).id === chat.uid)
+            if (acidicBot.userUtilities.getUser(acidicBot.room.users[j]).id === chat.uid)
             {
-              basicBot.userUtilities.setLastActivity(basicBot.room.users[j]);
+              acidicBot.userUtilities.setLastActivity(acidicBot.room.users[j]);
             }
           }
         }
-        basicBot.room.roomstats.chatmessages++;
+        acidicBot.room.roomstats.chatmessages++;
       },
       spam: ['hueh', 'hu3', 'brbr', 'heu', 'brbr', 'kkkk', 'spoder', 'mafia', 'zuera', 'zueira', 'zueria', 'aehoo', 'aheu', 'alguem', 'algum', 'brazil', 'zoeira', 'fuckadmins', 'affff', 'vaisefoder', 'huenaarea', 'hitler', 'ashua', 'ahsu', 'ashau', 'lulz', 'huehue', 'hue', 'huehuehue', 'merda', 'pqp', 'puta', 'mulher', 'pula', 'retarda', 'caralho', 'filha', 'ppk', 'gringo', 'fuder', 'foder', 'hua', 'ahue', 'modafuka', 'modafoka', 'mudafuka', 'mudafoka', 'ooooooooooooooo', 'foda'],
       curses: ['nigger', 'faggot', 'nigga', 'niqqa', 'motherfucker', 'modafocka']
@@ -1542,9 +1542,9 @@
         return 'Function.'
       };
       var u = API.getUser();
-      if (basicBot.userUtilities.getPermission(u) < 2) return API.chatLog(basicBot.chat.greyuser);
-      if (basicBot.userUtilities.getPermission(u) === 2) API.chatLog(basicBot.chat.bouncer);
-      basicBot.connectAPI();
+      if (acidicBot.userUtilities.getPermission(u) < 2) return API.chatLog(acidicBot.chat.greyuser);
+      if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
+      acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
       {
         $.ajax(
@@ -1553,23 +1553,23 @@
           type: "DELETE"
         })
       };
-      basicBot.room.name = window.location.pathname;
+      acidicBot.room.name = window.location.pathname;
       var Check;
-      console.log(basicBot.room.name);
+      console.log(acidicBot.room.name);
       var detect = function ()
       {
-        if (basicBot.room.name != window.location.pathname)
+        if (acidicBot.room.name != window.location.pathname)
         {
           console.log("Killing bot after room change.");
           storeToStorage();
-          basicBot.disconnectAPI();
+          acidicBot.disconnectAPI();
           setTimeout(function ()
           {
             kill();
           }, 1000);
-          if (basicBot.settings.roomLock)
+          if (acidicBot.settings.roomLock)
           {
-            window.location = 'https://plug.dj' + basicBot.room.name;
+            window.location = 'https://plug.dj' + acidicBot.room.name;
           }
           else
           {
@@ -1583,27 +1583,27 @@
       }, 2000);
       retrieveSettings();
       retrieveFromStorage();
-      window.bot = basicBot;
-      basicBot.roomUtilities.updateBlacklists();
-      setInterval(basicBot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
-      basicBot.getNewBlacklistedSongs = basicBot.roomUtilities.exportNewBlacklistedSongs;
-      basicBot.logNewBlacklistedSongs = basicBot.roomUtilities.logNewBlacklistedSongs;
-      if (basicBot.room.roomstats.launchTime === null)
+      window.bot = acidicBot;
+      acidicBot.roomUtilities.updateBlacklists();
+      setInterval(acidicBot.roomUtilities.updateBlacklists, 60 * 60 * 1000);
+      acidicBot.getNewBlacklistedSongs = acidicBot.roomUtilities.exportNewBlacklistedSongs;
+      acidicBot.logNewBlacklistedSongs = acidicBot.roomUtilities.logNewBlacklistedSongs;
+      if (acidicBot.room.roomstats.launchTime === null)
       {
-        basicBot.room.roomstats.launchTime = Date.now();
+        acidicBot.room.roomstats.launchTime = Date.now();
       }
-      for (var j = 0; j < basicBot.room.users.length; j++)
+      for (var j = 0; j < acidicBot.room.users.length; j++)
       {
-        basicBot.room.users[j].inRoom = false;
+        acidicBot.room.users[j].inRoom = false;
       }
       var userlist = API.getUsers();
       for (var i = 0; i < userlist.length; i++)
       {
         var known = false;
         var ind = null;
-        for (var j = 0; j < basicBot.room.users.length; j++)
+        for (var j = 0; j < acidicBot.room.users.length; j++)
         {
-          if (basicBot.room.users[j].id === userlist[i].id)
+          if (acidicBot.room.users[j].id === userlist[i].id)
           {
             known = true;
             ind = j;
@@ -1611,29 +1611,29 @@
         }
         if (known)
         {
-          basicBot.room.users[ind].inRoom = true;
+          acidicBot.room.users[ind].inRoom = true;
         }
         else
         {
-          basicBot.room.users.push(new basicBot.User(userlist[i].id, userlist[i].username));
-          ind = basicBot.room.users.length - 1;
+          acidicBot.room.users.push(new acidicBot.User(userlist[i].id, userlist[i].username));
+          ind = acidicBot.room.users.length - 1;
         }
-        var wlIndex = API.getWaitListPosition(basicBot.room.users[ind].id) + 1;
-        basicBot.userUtilities.updatePosition(basicBot.room.users[ind], wlIndex);
+        var wlIndex = API.getWaitListPosition(acidicBot.room.users[ind].id) + 1;
+        acidicBot.userUtilities.updatePosition(acidicBot.room.users[ind], wlIndex);
       }
-      basicBot.room.afkInterval = setInterval(function ()
+      acidicBot.room.afkInterval = setInterval(function ()
       {
-        basicBot.roomUtilities.afkCheck();
+        acidicBot.roomUtilities.afkCheck();
       }, 10 * 1000);
-      basicBot.loggedInID = API.getUser().id;
-      basicBot.status = true;
-      API.sendChat('/cap ' + basicBot.settings.startupCap);
-      API.setVolume(basicBot.settings.startupVolume);
-      if (basicBot.settings.autowoot)
+      acidicBot.loggedInID = API.getUser().id;
+      acidicBot.status = true;
+      API.sendChat('/cap ' + acidicBot.settings.startupCap);
+      API.setVolume(acidicBot.settings.startupVolume);
+      if (acidicBot.settings.autowoot)
       {
         $("#woot").click();
       }
-      if (basicBot.settings.startupEmoji)
+      if (acidicBot.settings.startupEmoji)
       {
         var emojibuttonoff = $(".icon-emoji-off");
         if (emojibuttonoff.length > 0)
@@ -1649,10 +1649,10 @@
           emojibuttonon[0].click();
         }
       }
-      loadChat(API.sendChat(subChat(basicBot.chat.online,
+      loadChat(API.sendChat(subChat(acidicBot.chat.online,
       {
-        botname: basicBot.settings.botName,
-        version: basicBot.version
+        botname: acidicBot.settings.botName,
+        version: acidicBot.version
       })));
     },
     commands:
@@ -1660,7 +1660,7 @@
       executable: function (minRank, chat)
       {
         var id = chat.uid;
-        var perm = basicBot.userUtilities.getPermission(id);
+        var perm = acidicBot.userUtilities.getPermission(id);
         var minPerm;
         switch (minRank)
         {
@@ -1680,7 +1680,7 @@
           minPerm = 3;
           break;
         case 'mod':
-          if (basicBot.settings.bouncerPlus)
+          if (acidicBot.settings.bouncerPlus)
           {
             minPerm = 2;
           }
@@ -1711,34 +1711,34 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var now = Date.now();
             var chatters = 0;
             var time;
-            var launchT = basicBot.room.roomstats.launchTime;
+            var launchT = acidicBot.room.roomstats.launchTime;
             var durationOnline = Date.now() - launchT;
             var since = durationOnline / 1000;
             if (msg.length === cmd.length) time = since;
             else
             {
               time = msg.substring(cmd.length + 1);
-              if (isNaN(time)) return API.sendChat(subChat(basicBot.chat.invalidtime,
+              if (isNaN(time)) return API.sendChat(subChat(acidicBot.chat.invalidtime,
               {
                 name: chat.un
               }));
             }
-            for (var i = 0; i < basicBot.room.users.length; i++)
+            for (var i = 0; i < acidicBot.room.users.length; i++)
             {
-              userTime = basicBot.userUtilities.getLastActivity(basicBot.room.users[i]);
+              userTime = acidicBot.userUtilities.getLastActivity(acidicBot.room.users[i]);
               if ((now - userTime) <= (time * 60 * 1000))
               {
                 chatters++;
               }
             }
-            API.sendChat(subChat(basicBot.chat.activeusersintime,
+            API.sendChat(subChat(acidicBot.chat.activeusersintime,
             {
               name: chat.un,
               amount: chatters,
@@ -1755,27 +1755,27 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substr(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
+            var user = acidicBot.userUtilities.lookupUserName(name);
             if (msg.length > cmd.length + 2)
             {
               if (typeof user !== 'undefined')
               {
-                if (basicBot.room.roomevent)
+                if (acidicBot.room.roomevent)
                 {
-                  basicBot.room.eventArtists.push(user.id);
+                  acidicBot.room.eventArtists.push(user.id);
                 }
                 API.moderateAddDJ(user.id);
               }
-              else API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+              else API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
               {
                 name: chat.un
               }));
@@ -1791,25 +1791,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nolimitspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nolimitspecified,
             {
               name: chat.un
             }));
             var limit = msg.substring(cmd.length + 1);
             if (!isNaN(limit))
             {
-              basicBot.settings.maximumAfk = parseInt(limit, 10);
-              API.sendChat(subChat(basicBot.chat.maximumafktimeset,
+              acidicBot.settings.maximumAfk = parseInt(limit, 10);
+              API.sendChat(subChat(acidicBot.chat.maximumafktimeset,
               {
                 name: chat.un,
-                time: basicBot.settings.maximumAfk
+                time: acidicBot.settings.maximumAfk
               }));
             }
-            else API.sendChat(subChat(basicBot.chat.invalidlimitspecified,
+            else API.sendChat(subChat(acidicBot.chat.invalidlimitspecified,
             {
               name: chat.un
             }));
@@ -1824,30 +1824,30 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.afkRemoval)
+            if (acidicBot.settings.afkRemoval)
             {
-              basicBot.settings.afkRemoval = !basicBot.settings.afkRemoval;
-              clearInterval(basicBot.room.afkInterval);
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.afkRemoval = !acidicBot.settings.afkRemoval;
+              clearInterval(acidicBot.room.afkInterval);
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.afkremoval
+                'function': acidicBot.chat.afkremoval
               }));
             }
             else
             {
-              basicBot.settings.afkRemoval = !basicBot.settings.afkRemoval;
-              basicBot.room.afkInterval = setInterval(function ()
+              acidicBot.settings.afkRemoval = !acidicBot.settings.afkRemoval;
+              acidicBot.room.afkInterval = setInterval(function ()
               {
-                basicBot.roomUtilities.afkCheck()
+                acidicBot.roomUtilities.afkCheck()
               }, 2 * 1000);
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.afkremoval
+                'function': acidicBot.chat.afkremoval
               }));
             }
           }
@@ -1861,22 +1861,22 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            basicBot.userUtilities.setLastActivity(user);
-            API.sendChat(subChat(basicBot.chat.afkstatusreset,
+            acidicBot.userUtilities.setLastActivity(user);
+            API.sendChat(subChat(acidicBot.chat.afkstatusreset,
             {
               name: chat.un,
               username: name
@@ -1892,37 +1892,37 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            var lastActive = basicBot.userUtilities.getLastActivity(user);
+            var lastActive = acidicBot.userUtilities.getLastActivity(user);
             var inactivity = Date.now() - lastActive;
-            var time = basicBot.roomUtilities.msToStr(inactivity);
-            var launchT = basicBot.room.roomstats.launchTime;
+            var time = acidicBot.roomUtilities.msToStr(inactivity);
+            var launchT = acidicBot.room.roomstats.launchTime;
             var durationOnline = Date.now() - launchT;
             if (inactivity == durationOnline)
             {
-              API.sendChat(subChat(basicBot.chat.inactivelonger,
+              API.sendChat(subChat(acidicBot.chat.inactivelonger,
               {
-                botname: basicBot.settings.botName,
+                botname: acidicBot.settings.botName,
                 name: chat.un,
                 username: name
               }));
             }
             else
             {
-              API.sendChat(subChat(basicBot.chat.inactivefor,
+              API.sendChat(subChat(acidicBot.chat.inactivefor,
               {
                 name: chat.un,
                 username: name,
@@ -1940,26 +1940,26 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.room.autoskip)
+            if (acidicBot.room.autoskip)
             {
-              basicBot.room.autoskip = !basicBot.room.autoskip;
-              clearTimeout(basicBot.room.autoskipTimer);
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.room.autoskip = !acidicBot.room.autoskip;
+              clearTimeout(acidicBot.room.autoskipTimer);
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.autoskip
+                'function': acidicBot.chat.autoskip
               }));
             }
             else
             {
-              basicBot.room.autoskip = !basicBot.room.autoskip;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.room.autoskip = !acidicBot.room.autoskip;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.autoskip
+                'function': acidicBot.chat.autoskip
               }));
             }
           }
@@ -1973,10 +1973,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(basicBot.chat.autowoot);
+            API.sendChat(acidicBot.chat.autowoot);
           }
         }
       },
@@ -1988,10 +1988,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(basicBot.chat.brandambassador);
+            API.sendChat(acidicBot.chat.brandambassador);
           }
         }
       },
@@ -2003,21 +2003,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var crowd = API.getUsers();
             var msg = chat.message;
             var argument = msg.substring(cmd.length + 1);
             var randomUser = Math.floor(Math.random() * crowd.length);
-            var randomBall = Math.floor(Math.random() * basicBot.chat.balls.length);
+            var randomBall = Math.floor(Math.random() * acidicBot.chat.balls.length);
             var randomSentence = Math.floor(Math.random() * 1);
-            API.sendChat(subChat(basicBot.chat.ball,
+            API.sendChat(subChat(acidicBot.chat.ball,
             {
               name: chat.un,
-              botname: basicBot.settings.botName,
+              botname: acidicBot.settings.botName,
               question: argument,
-              response: basicBot.chat.balls[randomBall]
+              response: acidicBot.chat.balls[randomBall]
             }));
           }
         }
@@ -2030,17 +2030,17 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substr(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
@@ -2056,16 +2056,16 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nolistspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nolistspecified,
             {
               name: chat.un
             }));
             var list = msg.substr(cmd.length + 1);
-            if (typeof basicBot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(basicBot.chat.invalidlistspecified,
+            if (typeof acidicBot.room.blacklists[list] === 'undefined') return API.sendChat(subChat(acidicBot.chat.invalidlistspecified,
             {
               name: chat.un
             }));
@@ -2080,9 +2080,9 @@
                 title: media.title,
                 mid: media.format + ':' + media.cid
               };
-              basicBot.room.newBlacklisted.push(track);
-              basicBot.room.blacklists[list].push(media.format + ':' + media.cid);
-              API.sendChat(subChat(basicBot.chat.newblacklisted,
+              acidicBot.room.newBlacklisted.push(track);
+              acidicBot.room.blacklists[list].push(media.format + ':' + media.cid);
+              API.sendChat(subChat(acidicBot.chat.newblacklisted,
               {
                 name: chat.un,
                 blacklist: list,
@@ -2090,17 +2090,17 @@
                 title: media.title,
                 mid: media.format + ':' + media.cid
               }));
-              if (basicBot.settings.smartSkip && timeLeft > timeElapsed)
+              if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
               {
-                basicBot.roomUtilities.smartSkip();
+                acidicBot.roomUtilities.smartSkip();
               }
               else
               {
                 API.moderateForceSkip();
               }
-              if (typeof basicBot.room.newBlacklistedSongFunction === 'function')
+              if (typeof acidicBot.room.newBlacklistedSongFunction === 'function')
               {
-                basicBot.room.newBlacklistedSongFunction(track);
+                acidicBot.room.newBlacklistedSongFunction(track);
               }
             }
           }
@@ -2114,7 +2114,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var author = API.getMedia().author;
@@ -2123,7 +2123,7 @@
             var format = API.getMedia().format;
             var cid = API.getMedia().cid;
             var songid = format + ":" + cid;
-            API.sendChat(subChat(basicBot.chat.blinfo,
+            API.sendChat(subChat(acidicBot.chat.blinfo,
             {
               name: name,
               author: author,
@@ -2141,14 +2141,14 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (basicBot.settings.bouncerPlus)
+            if (acidicBot.settings.bouncerPlus)
             {
-              basicBot.settings.bouncerPlus = false;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.bouncerPlus = false;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
                 'function': 'Bouncer+'
@@ -2156,21 +2156,21 @@
             }
             else
             {
-              if (!basicBot.settings.bouncerPlus)
+              if (!acidicBot.settings.bouncerPlus)
               {
                 var id = chat.uid;
-                var perm = basicBot.userUtilities.getPermission(id);
+                var perm = acidicBot.userUtilities.getPermission(id);
                 if (perm > 2)
                 {
-                  basicBot.settings.bouncerPlus = true;
-                  return API.sendChat(subChat(basicBot.chat.toggleon,
+                  acidicBot.settings.bouncerPlus = true;
+                  return API.sendChat(subChat(acidicBot.chat.toggleon,
                   {
                     name: chat.un,
                     'function': 'Bouncer+'
                   }));
                 }
               }
-              else return API.sendChat(subChat(basicBot.chat.bouncerplusrank,
+              else return API.sendChat(subChat(acidicBot.chat.bouncerplusrank,
               {
                 name: chat.un
               }));
@@ -2186,21 +2186,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.currentbotname,
+            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.currentbotname,
             {
-              botname: basicBot.settings.botName
+              botname: acidicBot.settings.botName
             }));
             var argument = msg.substring(cmd.length + 1);
             if (argument)
             {
-              basicBot.settings.botName = argument;
-              API.sendChat(subChat(basicBot.chat.botnameset,
+              acidicBot.settings.botName = argument;
+              API.sendChat(subChat(acidicBot.chat.botnameset,
               {
-                botName: basicBot.settings.botName
+                botName: acidicBot.settings.botName
               }));
             }
           }
@@ -2214,7 +2214,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var currentchat = $('#chat-messages').children();
@@ -2222,7 +2222,7 @@
             {
               API.moderateDeleteChat(currentchat[i].getAttribute("data-cid"));
             }
-            return API.sendChat(subChat(basicBot.chat.chatcleared,
+            return API.sendChat(subChat(acidicBot.chat.chatcleared,
             {
               name: chat.un
             }));
@@ -2237,25 +2237,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.cmdDeletion)
+            if (acidicBot.settings.cmdDeletion)
             {
-              basicBot.settings.cmdDeletion = !basicBot.settings.cmdDeletion;
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.cmdDeletion = !acidicBot.settings.cmdDeletion;
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.cmddeletion
+                'function': acidicBot.chat.cmddeletion
               }));
             }
             else
             {
-              basicBot.settings.cmdDeletion = !basicBot.settings.cmdDeletion;
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.cmdDeletion = !acidicBot.settings.cmdDeletion;
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.cmddeletion
+                'function': acidicBot.chat.cmddeletion
               }));
             }
           }
@@ -2268,43 +2268,43 @@
         type: 'startsWith',
         getCookie: function (chat)
         {
-          var c = Math.floor(Math.random() * basicBot.chat.cookies.length);
-          return basicBot.chat.cookies[c];
+          var c = Math.floor(Math.random() * acidicBot.chat.cookies.length);
+          return acidicBot.chat.cookies[c];
         },
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var space = msg.indexOf(' ');
             if (space === -1)
             {
-              API.sendChat(basicBot.chat.eatcookie);
+              API.sendChat(acidicBot.chat.eatcookie);
               return false;
             }
             else
             {
               var name = msg.substring(space + 2);
-              var user = basicBot.userUtilities.lookupUserName(name);
+              var user = acidicBot.userUtilities.lookupUserName(name);
               if (user === false || !user.inRoom)
               {
-                return API.sendChat(subChat(basicBot.chat.nousercookie,
+                return API.sendChat(subChat(acidicBot.chat.nousercookie,
                 {
                   name: name
                 }));
               }
               else if (user.username === chat.un)
               {
-                return API.sendChat(subChat(basicBot.chat.selfcookie,
+                return API.sendChat(subChat(acidicBot.chat.selfcookie,
                 {
                   name: name
                 }));
               }
               else
               {
-                return API.sendChat(subChat(basicBot.chat.cookie,
+                return API.sendChat(subChat(acidicBot.chat.cookie,
                 {
                   nameto: user.username,
                   namefrom: chat.un,
@@ -2323,10 +2323,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            basicBot.roomUtilities.changeDJCycle();
+            acidicBot.roomUtilities.changeDJCycle();
           }
         }
       },
@@ -2338,25 +2338,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.cycleGuard)
+            if (acidicBot.settings.cycleGuard)
             {
-              basicBot.settings.cycleGuard = !basicBot.settings.cycleGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.cycleGuard = !acidicBot.settings.cycleGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.cycleguard
+                'function': acidicBot.chat.cycleguard
               }));
             }
             else
             {
-              basicBot.settings.cycleGuard = !basicBot.settings.cycleGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.cycleGuard = !acidicBot.settings.cycleGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.cycleguard
+                'function': acidicBot.chat.cycleguard
               }));
             }
           }
@@ -2370,21 +2370,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var cycleTime = msg.substring(cmd.length + 1);
             if (!isNaN(cycleTime) && cycleTime !== "")
             {
-              basicBot.settings.maximumCycletime = cycleTime;
-              return API.sendChat(subChat(basicBot.chat.cycleguardtime,
+              acidicBot.settings.maximumCycletime = cycleTime;
+              return API.sendChat(subChat(acidicBot.chat.cycleguardtime,
               {
                 name: chat.un,
-                time: basicBot.settings.maximumCycletime
+                time: acidicBot.settings.maximumCycletime
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidtime,
+            else return API.sendChat(subChat(acidicBot.chat.invalidtime,
             {
               name: chat.un
             }));
@@ -2399,7 +2399,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
@@ -2408,18 +2408,18 @@
             else
             {
               name = msg.substring(cmd.length + 2);
-              var perm = basicBot.userUtilities.getPermission(chat.uid);
-              if (perm < 2) return API.sendChat(subChat(basicBot.chat.dclookuprank,
+              var perm = acidicBot.userUtilities.getPermission(chat.uid);
+              if (perm < 2) return API.sendChat(subChat(acidicBot.chat.dclookuprank,
               {
                 name: chat.un
               }));
             }
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            var toChat = basicBot.userUtilities.dclookup(user.id);
+            var toChat = acidicBot.userUtilities.dclookup(user.id);
             API.sendChat(toChat);
           }
         }
@@ -2432,14 +2432,14 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             if (chat.message.length === cmd.length) return API.sendChat('/me No user specified.');
             var name = chat.message.substring(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
+            var user = acidicBot.userUtilities.lookupUserName(name);
             if (typeof user === 'boolean') return API.sendChat('/me Invalid user specified.');
-            var lang = basicBot.userUtilities.getUser(user).language;
+            var lang = acidicBot.userUtilities.getUser(user).language;
             var ch = '/me @' + name + ' ';
             switch (lang)
             {
@@ -2489,10 +2489,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            var perm = basicBot.userUtilities.getPermission(chat.uid);
+            var perm = acidicBot.userUtilities.getPermission(chat.uid);
             var msg = chat.message;
             var dj = API.getDJ().username;
             var name;
@@ -2502,29 +2502,29 @@
               name = msg.substring(cmd.length + 2);
             }
             else name = chat.un;
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
             var pos = API.getWaitListPosition(user.id);
             var realpos = pos + 1;
-            if (name == dj) return API.sendChat(subChat(basicBot.chat.youaredj,
+            if (name == dj) return API.sendChat(subChat(acidicBot.chat.youaredj,
             {
               name: name
             }));
-            if (pos < 0) return API.sendChat(subChat(basicBot.chat.notinwaitlist,
+            if (pos < 0) return API.sendChat(subChat(acidicBot.chat.notinwaitlist,
             {
               name: name
             }));
-            if (pos == 0) return API.sendChat(subChat(basicBot.chat.youarenext,
+            if (pos == 0) return API.sendChat(subChat(acidicBot.chat.youarenext,
             {
               name: name
             }));
             var timeRemaining = API.getTimeRemaining();
             var estimateMS = ((pos + 1) * 4 * 60 + timeRemaining) * 1000;
-            var estimateString = basicBot.roomUtilities.msToStr(estimateMS);
-            API.sendChat(subChat(basicBot.chat.eta,
+            var estimateString = acidicBot.roomUtilities.msToStr(estimateMS);
+            API.sendChat(subChat(acidicBot.chat.eta,
             {
               name: name,
               time: estimateString,
@@ -2541,25 +2541,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.filterChat)
+            if (acidicBot.settings.filterChat)
             {
-              basicBot.settings.filterChat = !basicBot.settings.filterChat;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.filterChat = !acidicBot.settings.filterChat;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.chatfilter
+                'function': acidicBot.chat.chatfilter
               }));
             }
             else
             {
-              basicBot.settings.filterChat = !basicBot.settings.filterChat;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.filterChat = !acidicBot.settings.filterChat;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.chatfilter
+                'function': acidicBot.chat.chatfilter
               }));
             }
           }
@@ -2573,18 +2573,18 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(subChat(basicBot.chat.forceskip,
+            API.sendChat(subChat(acidicBot.chat.forceskip,
             {
               name: chat.un
             }));
             API.moderateForceSkip();
-            basicBot.room.skippable = false;
+            acidicBot.room.skippable = false;
             setTimeout(function ()
             {
-              basicBot.room.skippable = true
+              acidicBot.room.skippable = true
             }, 5 * 1000);
           }
         }
@@ -2597,7 +2597,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
@@ -2607,16 +2607,16 @@
             {
               name = msg.substr(cmd.length + 2);
             }
-            var user = basicBot.userUtilities.lookupUserName(name);
+            var user = acidicBot.userUtilities.lookupUserName(name);
             if (user === false || !user.inRoom)
             {
-              return API.sendChat(subChat(basicBot.chat.ghosting,
+              return API.sendChat(subChat(acidicBot.chat.ghosting,
               {
                 name1: chat.un,
                 name2: name
               }));
             }
-            else API.sendChat(subChat(basicBot.chat.notghosting,
+            else API.sendChat(subChat(acidicBot.chat.notghosting,
             {
               name1: chat.un,
               name2: name
@@ -2632,7 +2632,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
@@ -2660,7 +2660,7 @@
               {
                 if (typeof id !== 'undefined')
                 {
-                  API.sendChat(subChat(basicBot.chat.validgiftags,
+                  API.sendChat(subChat(acidicBot.chat.validgiftags,
                   {
                     name: chat.un,
                     id: id,
@@ -2669,7 +2669,7 @@
                 }
                 else
                 {
-                  API.sendChat(subChat(basicBot.chat.invalidgiftags,
+                  API.sendChat(subChat(acidicBot.chat.invalidgiftags,
                   {
                     name: chat.un,
                     tags: commatag
@@ -2697,7 +2697,7 @@
               {
                 if (typeof id !== 'undefined')
                 {
-                  API.sendChat(subChat(basicBot.chat.validgifrandom,
+                  API.sendChat(subChat(acidicBot.chat.validgifrandom,
                   {
                     name: chat.un,
                     id: id
@@ -2705,7 +2705,7 @@
                 }
                 else
                 {
-                  API.sendChat(subChat(basicBot.chat.invalidgifrandom,
+                  API.sendChat(subChat(acidicBot.chat.invalidgifrandom,
                   {
                     name: chat.un
                   }));
@@ -2723,25 +2723,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.historySkip)
+            if (acidicBot.settings.historySkip)
             {
-              basicBot.settings.historySkip = !basicBot.settings.historySkip;
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.historySkip = !acidicBot.settings.historySkip;
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.historyskip
+                'function': acidicBot.chat.historyskip
               }));
             }
             else
             {
-              basicBot.settings.historySkip = !basicBot.settings.historySkip;
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.historySkip = !acidicBot.settings.historySkip;
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.historyskip
+                'function': acidicBot.chat.historyskip
               }));
             }
           }
@@ -2755,13 +2755,13 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.room.roulette.rouletteStatus && basicBot.room.roulette.participants.indexOf(chat.uid) < 0)
+            if (acidicBot.room.roulette.rouletteStatus && acidicBot.room.roulette.participants.indexOf(chat.uid) < 0)
             {
-              basicBot.room.roulette.participants.push(chat.uid);
-              API.sendChat(subChat(basicBot.chat.roulettejoin,
+              acidicBot.room.roulette.participants.push(chat.uid);
+              API.sendChat(subChat(acidicBot.chat.roulettejoin,
               {
                 name: chat.un
               }));
@@ -2777,24 +2777,24 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            var join = basicBot.userUtilities.getJointime(user);
+            var join = acidicBot.userUtilities.getJointime(user);
             var time = Date.now() - join;
-            var timeString = basicBot.roomUtilities.msToStr(time);
-            API.sendChat(subChat(basicBot.chat.jointime,
+            var timeString = acidicBot.roomUtilities.msToStr(time);
+            API.sendChat(subChat(acidicBot.chat.jointime,
             {
               namefrom: chat.un,
               username: name,
@@ -2811,7 +2811,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
@@ -2828,21 +2828,21 @@
               time = msg.substring(lastSpace + 1);
               name = msg.substring(cmd.length + 2, lastSpace);
             }
-            var user = basicBot.userUtilities.lookupUserName(name);
+            var user = acidicBot.userUtilities.lookupUserName(name);
             var from = chat.un;
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
-            var permFrom = basicBot.userUtilities.getPermission(chat.uid);
-            var permTokick = basicBot.userUtilities.getPermission(user.id);
-            if (permFrom <= permTokick) return API.sendChat(subChat(basicBot.chat.kickrank,
+            var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
+            var permTokick = acidicBot.userUtilities.getPermission(user.id);
+            if (permFrom <= permTokick) return API.sendChat(subChat(acidicBot.chat.kickrank,
             {
               name: chat.un
             }));
             if (!isNaN(time))
             {
-              API.sendChat(subChat(basicBot.chat.kick,
+              API.sendChat(subChat(acidicBot.chat.kick,
               {
                 name: chat.un,
                 username: name,
@@ -2856,7 +2856,7 @@
                 console.log('Unbanned @' + name + '. (' + id + ')');
               }, time * 60 * 1000, user.id, name);
             }
-            else API.sendChat(subChat(basicBot.chat.invalidtime,
+            else API.sendChat(subChat(acidicBot.chat.invalidtime,
             {
               name: chat.un
             }));
@@ -2871,12 +2871,12 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             storeToStorage();
-            API.sendChat(basicBot.chat.kill);
-            basicBot.disconnectAPI();
+            API.sendChat(acidicBot.chat.kill);
+            acidicBot.disconnectAPI();
             setTimeout(function ()
             {
               kill();
@@ -2892,13 +2892,13 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.currentlang,
+            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.currentlang,
             {
-              language: basicBot.settings.language
+              language: acidicBot.settings.language
             }));
             var argument = msg.substring(cmd.length + 1);
             $.get("https://rawgit.com/Yemasthui/basicBot/master/lang/langIndex.json", function (json)
@@ -2907,18 +2907,18 @@
               var link = langIndex[argument.toLowerCase()];
               if (typeof link === "undefined")
               {
-                API.sendChat(subChat(basicBot.chat.langerror,
+                API.sendChat(subChat(acidicBot.chat.langerror,
                 {
                   link: ""
                 }));
               }
               else
               {
-                basicBot.settings.language = argument;
+                acidicBot.settings.language = argument;
                 loadChat();
-                API.sendChat(subChat(basicBot.chat.langset,
+                API.sendChat(subChat(acidicBot.chat.langset,
                 {
-                  language: basicBot.settings.language
+                  language: acidicBot.settings.language
                 }));
               }
             });
@@ -2933,14 +2933,14 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            var ind = basicBot.room.roulette.participants.indexOf(chat.uid);
+            var ind = acidicBot.room.roulette.participants.indexOf(chat.uid);
             if (ind > -1)
             {
-              basicBot.room.roulette.participants.splice(ind, 1);
-              API.sendChat(subChat(basicBot.chat.rouletteleave,
+              acidicBot.room.roulette.participants.splice(ind, 1);
+              API.sendChat(subChat(acidicBot.chat.rouletteleave,
               {
                 name: chat.un
               }));
@@ -2956,13 +2956,13 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var media = API.getMedia();
             var from = chat.un;
-            var user = basicBot.userUtilities.lookupUser(chat.uid);
-            var perm = basicBot.userUtilities.getPermission(chat.uid);
+            var user = acidicBot.userUtilities.lookupUser(chat.uid);
+            var perm = acidicBot.userUtilities.getPermission(chat.uid);
             var dj = API.getDJ().id;
             var isDj = false;
             if (dj === chat.uid) isDj = true;
@@ -2971,7 +2971,7 @@
               if (media.format === 1)
               {
                 var linkToSong = "http://youtu.be/" + media.cid;
-                API.sendChat(subChat(basicBot.chat.songlink,
+                API.sendChat(subChat(acidicBot.chat.songlink,
                 {
                   name: from,
                   link: linkToSong
@@ -2981,7 +2981,7 @@
               {
                 SC.get('/tracks/' + media.cid, function (sound)
                 {
-                  API.sendChat(subChat(basicBot.chat.songlink,
+                  API.sendChat(subChat(acidicBot.chat.songlink,
                   {
                     name: from,
                     link: sound.permalink_url
@@ -3000,10 +3000,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            basicBot.roomUtilities.booth.lockBooth();
+            acidicBot.roomUtilities.booth.lockBooth();
           }
         }
       },
@@ -3015,23 +3015,23 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            var temp = basicBot.settings.lockdownEnabled;
-            basicBot.settings.lockdownEnabled = !temp;
-            if (basicBot.settings.lockdownEnabled)
+            var temp = acidicBot.settings.lockdownEnabled;
+            acidicBot.settings.lockdownEnabled = !temp;
+            if (acidicBot.settings.lockdownEnabled)
             {
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.lockdown
+                'function': acidicBot.chat.lockdown
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.toggleoff,
+            else return API.sendChat(subChat(acidicBot.chat.toggleoff,
             {
               name: chat.un,
-              'function': basicBot.chat.lockdown
+              'function': acidicBot.chat.lockdown
             }));
           }
         }
@@ -3044,25 +3044,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.lockGuard)
+            if (acidicBot.settings.lockGuard)
             {
-              basicBot.settings.lockGuard = !basicBot.settings.lockGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.lockGuard = !acidicBot.settings.lockGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.lockguard
+                'function': acidicBot.chat.lockguard
               }));
             }
             else
             {
-              basicBot.settings.lockGuard = !basicBot.settings.lockGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.lockGuard = !acidicBot.settings.lockGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.lockguard
+                'function': acidicBot.chat.lockguard
               }));
             }
           }
@@ -3076,38 +3076,38 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.room.skippable)
+            if (acidicBot.room.skippable)
             {
               var dj = API.getDJ();
               var id = dj.id;
               var name = dj.username;
               var msgSend = '@' + name + ': ';
-              basicBot.room.queueable = false;
+              acidicBot.room.queueable = false;
               if (chat.message.length === cmd.length)
               {
-                API.sendChat(subChat(basicBot.chat.usedlockskip,
+                API.sendChat(subChat(acidicBot.chat.usedlockskip,
                 {
                   name: chat.un
                 }));
-                basicBot.roomUtilities.booth.lockBooth();
+                acidicBot.roomUtilities.booth.lockBooth();
                 setTimeout(function (id)
                 {
                   API.moderateForceSkip();
-                  basicBot.room.skippable = false;
+                  acidicBot.room.skippable = false;
                   setTimeout(function ()
                   {
-                    basicBot.room.skippable = true
+                    acidicBot.room.skippable = true
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
-                    basicBot.userUtilities.moveUser(id, basicBot.settings.lockskipPosition, false);
-                    basicBot.room.queueable = true;
+                    acidicBot.userUtilities.moveUser(id, acidicBot.settings.lockskipPosition, false);
+                    acidicBot.room.queueable = true;
                     setTimeout(function ()
                     {
-                      basicBot.roomUtilities.booth.unlockBooth();
+                      acidicBot.roomUtilities.booth.unlockBooth();
                     }, 1000);
                   }, 1500, id);
                 }, 1000, id);
@@ -3116,38 +3116,38 @@
               var validReason = false;
               var msg = chat.message;
               var reason = msg.substring(cmd.length + 1);
-              for (var i = 0; i < basicBot.settings.lockskipReasons.length; i++)
+              for (var i = 0; i < acidicBot.settings.lockskipReasons.length; i++)
               {
-                var r = basicBot.settings.lockskipReasons[i][0];
+                var r = acidicBot.settings.lockskipReasons[i][0];
                 if (reason.indexOf(r) !== -1)
                 {
                   validReason = true;
-                  msgSend += basicBot.settings.lockskipReasons[i][1];
+                  msgSend += acidicBot.settings.lockskipReasons[i][1];
                 }
               }
               if (validReason)
               {
-                API.sendChat(subChat(basicBot.chat.usedlockskip,
+                API.sendChat(subChat(acidicBot.chat.usedlockskip,
                 {
                   name: chat.un
                 }));
-                basicBot.roomUtilities.booth.lockBooth();
+                acidicBot.roomUtilities.booth.lockBooth();
                 setTimeout(function (id)
                 {
                   API.moderateForceSkip();
-                  basicBot.room.skippable = false;
+                  acidicBot.room.skippable = false;
                   API.sendChat(msgSend);
                   setTimeout(function ()
                   {
-                    basicBot.room.skippable = true
+                    acidicBot.room.skippable = true
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
-                    basicBot.userUtilities.moveUser(id, basicBot.settings.lockskipPosition, false);
-                    basicBot.room.queueable = true;
+                    acidicBot.userUtilities.moveUser(id, acidicBot.settings.lockskipPosition, false);
+                    acidicBot.room.queueable = true;
                     setTimeout(function ()
                     {
-                      basicBot.roomUtilities.booth.unlockBooth();
+                      acidicBot.roomUtilities.booth.unlockBooth();
                     }, 1000);
                   }, 1500, id);
                 }, 1000, id);
@@ -3165,21 +3165,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var lockTime = msg.substring(cmd.length + 1);
             if (!isNaN(lockTime) && lockTime !== "")
             {
-              basicBot.settings.maximumLocktime = lockTime;
-              return API.sendChat(subChat(basicBot.chat.lockguardtime,
+              acidicBot.settings.maximumLocktime = lockTime;
+              return API.sendChat(subChat(acidicBot.chat.lockguardtime,
               {
                 name: chat.un,
-                time: basicBot.settings.maximumLocktime
+                time: acidicBot.settings.maximumLocktime
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidtime,
+            else return API.sendChat(subChat(acidicBot.chat.invalidtime,
             {
               name: chat.un
             }));
@@ -3194,13 +3194,13 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(subChat(basicBot.chat.logout,
+            API.sendChat(subChat(acidicBot.chat.logout,
             {
               name: chat.un,
-              botname: basicBot.settings.botName
+              botname: acidicBot.settings.botName
             }));
             setTimeout(function ()
             {
@@ -3217,21 +3217,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var maxTime = msg.substring(cmd.length + 1);
             if (!isNaN(maxTime))
             {
-              basicBot.settings.maximumSongLength = maxTime;
-              return API.sendChat(subChat(basicBot.chat.maxlengthtime,
+              acidicBot.settings.maximumSongLength = maxTime;
+              return API.sendChat(subChat(acidicBot.chat.maxlengthtime,
               {
                 name: chat.un,
-                time: basicBot.settings.maximumSongLength
+                time: acidicBot.settings.maximumSongLength
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidtime,
+            else return API.sendChat(subChat(acidicBot.chat.invalidtime,
             {
               name: chat.un
             }));
@@ -3246,27 +3246,27 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + basicBot.settings.motd);
+            if (msg.length <= cmd.length + 1) return API.sendChat('/me MotD: ' + acidicBot.settings.motd);
             var argument = msg.substring(cmd.length + 1);
-            if (!basicBot.settings.motdEnabled) basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
+            if (!acidicBot.settings.motdEnabled) acidicBot.settings.motdEnabled = !acidicBot.settings.motdEnabled;
             if (isNaN(argument))
             {
-              basicBot.settings.motd = argument;
-              API.sendChat(subChat(basicBot.chat.motdset,
+              acidicBot.settings.motd = argument;
+              API.sendChat(subChat(acidicBot.chat.motdset,
               {
-                msg: basicBot.settings.motd
+                msg: acidicBot.settings.motd
               }));
             }
             else
             {
-              basicBot.settings.motdInterval = argument;
-              API.sendChat(subChat(basicBot.chat.motdintervalset,
+              acidicBot.settings.motdInterval = argument;
+              API.sendChat(subChat(acidicBot.chat.motdintervalset,
               {
-                interval: basicBot.settings.motdInterval
+                interval: acidicBot.settings.motdInterval
               }));
             }
           }
@@ -3280,11 +3280,11 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3302,24 +3302,24 @@
               pos = parseInt(msg.substring(lastSpace + 1));
               name = msg.substring(cmd.length + 2, lastSpace);
             }
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            if (user.id === basicBot.loggedInID) return API.sendChat(subChat(basicBot.chat.addbotwaitlist,
+            if (user.id === acidicBot.loggedInID) return API.sendChat(subChat(acidicBot.chat.addbotwaitlist,
             {
               name: chat.un
             }));
             if (!isNaN(pos))
             {
-              API.sendChat(subChat(basicBot.chat.move,
+              API.sendChat(subChat(acidicBot.chat.move,
               {
                 name: chat.un
               }));
-              basicBot.userUtilities.moveUser(user.id, pos, false);
+              acidicBot.userUtilities.moveUser(user.id, pos, false);
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidpositionspecified,
+            else return API.sendChat(subChat(acidicBot.chat.invalidpositionspecified,
             {
               name: chat.un
             }));
@@ -3334,11 +3334,11 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3355,7 +3355,7 @@
               time = msg.substring(lastSpace + 1);
               if (isNaN(time) || time == "" || time == null || typeof time == "undefined")
               {
-                return API.sendChat(subChat(basicBot.chat.invalidtime,
+                return API.sendChat(subChat(acidicBot.chat.invalidtime,
                 {
                   name: chat.un
                 }));
@@ -3363,18 +3363,18 @@
               name = msg.substring(cmd.length + 2, lastSpace);
             }
             var from = chat.un;
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            var permFrom = basicBot.userUtilities.getPermission(chat.uid);
-            var permUser = basicBot.userUtilities.getPermission(user.id);
+            var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
+            var permUser = acidicBot.userUtilities.getPermission(user.id);
             if (permFrom > permUser)
             {
               if (time > 45)
               {
-                API.sendChat(subChat(basicBot.chat.mutedmaxtime,
+                API.sendChat(subChat(acidicBot.chat.mutedmaxtime,
                 {
                   name: chat.un,
                   time: "45"
@@ -3384,7 +3384,7 @@
               else if (time === 45)
               {
                 API.moderateMuteUser(user.id, 1, API.MUTE.LONG);
-                API.sendChat(subChat(basicBot.chat.mutedtime,
+                API.sendChat(subChat(acidicBot.chat.mutedtime,
                 {
                   name: chat.un,
                   username: name,
@@ -3394,7 +3394,7 @@
               else if (time > 30)
               {
                 API.moderateMuteUser(user.id, 1, API.MUTE.LONG);
-                API.sendChat(subChat(basicBot.chat.mutedtime,
+                API.sendChat(subChat(acidicBot.chat.mutedtime,
                 {
                   name: chat.un,
                   username: name,
@@ -3408,7 +3408,7 @@
               else if (time > 15)
               {
                 API.moderateMuteUser(user.id, 1, API.MUTE.MEDIUM);
-                API.sendChat(subChat(basicBot.chat.mutedtime,
+                API.sendChat(subChat(acidicBot.chat.mutedtime,
                 {
                   name: chat.un,
                   username: name,
@@ -3422,7 +3422,7 @@
               else
               {
                 API.moderateMuteUser(user.id, 1, API.MUTE.SHORT);
-                API.sendChat(subChat(basicBot.chat.mutedtime,
+                API.sendChat(subChat(acidicBot.chat.mutedtime,
                 {
                   name: chat.un,
                   username: name,
@@ -3434,7 +3434,7 @@
                 }, time * 60 * 1000, user.id);
               }
             }
-            else API.sendChat(subChat(basicBot.chat.muterank,
+            else API.sendChat(subChat(acidicBot.chat.muterank,
             {
               name: chat.un
             }));
@@ -3449,11 +3449,11 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             storeToStorage();
-            basicBot.disconnectAPI();
+            acidicBot.disconnectAPI();
             setTimeout(function ()
             {
               window.location.reload(false);
@@ -3469,16 +3469,16 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            API.sendChat(basicBot.chat.reload);
+            API.sendChat(acidicBot.chat.reload);
             storeToStorage();
-            basicBot.disconnectAPI();
+            acidicBot.disconnectAPI();
             kill();
             setTimeout(function ()
             {
-              $.getScript(basicBot.scriptLink);
+              $.getScript(acidicBot.scriptLink);
             }, 2000);
           }
         }
@@ -3491,14 +3491,14 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             if (msg.length > cmd.length + 2)
             {
               var name = msg.substr(cmd.length + 2);
-              var user = basicBot.userUtilities.lookupUserName(name);
+              var user = acidicBot.userUtilities.lookupUserName(name);
               if (typeof user !== 'boolean')
               {
                 user.lastDC = {
@@ -3516,13 +3516,13 @@
                 }
                 else API.moderateRemoveDJ(user.id);
               }
-              else API.sendChat(subChat(basicBot.chat.removenotinwl,
+              else API.sendChat(subChat(acidicBot.chat.removenotinwl,
               {
                 name: chat.un,
                 username: name
               }));
             }
-            else API.sendChat(subChat(basicBot.chat.nouserspecified,
+            else API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3537,25 +3537,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.etaRestriction)
+            if (acidicBot.settings.etaRestriction)
             {
-              basicBot.settings.etaRestriction = !basicBot.settings.etaRestriction;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.etaRestriction = !acidicBot.settings.etaRestriction;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.etarestriction
+                'function': acidicBot.chat.etarestriction
               }));
             }
             else
             {
-              basicBot.settings.etaRestriction = !basicBot.settings.etaRestriction;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.etaRestriction = !acidicBot.settings.etaRestriction;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.etarestriction
+                'function': acidicBot.chat.etarestriction
               }));
             }
           }
@@ -3569,12 +3569,12 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (!basicBot.room.roulette.rouletteStatus)
+            if (!acidicBot.room.roulette.rouletteStatus)
             {
-              basicBot.room.roulette.startRoulette();
+              acidicBot.room.roulette.startRoulette();
             }
           }
         }
@@ -3587,14 +3587,14 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var from = chat.un;
-            var woots = basicBot.room.roomstats.totalWoots;
-            var mehs = basicBot.room.roomstats.totalMehs;
-            var grabs = basicBot.room.roomstats.totalCurates;
-            API.sendChat(subChat(basicBot.chat.sessionstats,
+            var woots = acidicBot.room.roomstats.totalWoots;
+            var mehs = acidicBot.room.roomstats.totalMehs;
+            var grabs = acidicBot.room.roomstats.totalCurates;
+            API.sendChat(subChat(acidicBot.chat.sessionstats,
             {
               name: from,
               woots: woots,
@@ -3612,10 +3612,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.room.skippable)
+            if (acidicBot.room.skippable)
             {
               var timeLeft = API.getTimeRemaining();
               var timeElapsed = API.getTimeElapsed();
@@ -3624,13 +3624,13 @@
               var msgSend = '@' + name + ', ';
               if (chat.message.length === cmd.length)
               {
-                API.sendChat(subChat(basicBot.chat.usedskip,
+                API.sendChat(subChat(acidicBot.chat.usedskip,
                 {
                   name: chat.un
                 }));
-                if (basicBot.settings.smartSkip && timeLeft > timeElapsed)
+                if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
                 {
-                  basicBot.roomUtilities.smartSkip();
+                  acidicBot.roomUtilities.smartSkip();
                 }
                 else
                 {
@@ -3640,24 +3640,24 @@
               var validReason = false;
               var msg = chat.message;
               var reason = msg.substring(cmd.length + 1);
-              for (var i = 0; i < basicBot.settings.skipReasons.length; i++)
+              for (var i = 0; i < acidicBot.settings.skipReasons.length; i++)
               {
-                var r = basicBot.settings.skipReasons[i][0];
+                var r = acidicBot.settings.skipReasons[i][0];
                 if (reason.indexOf(r) !== -1)
                 {
                   validReason = true;
-                  msgSend += basicBot.settings.skipReasons[i][1];
+                  msgSend += acidicBot.settings.skipReasons[i][1];
                 }
               }
               if (validReason)
               {
-                API.sendChat(subChat(basicBot.chat.usedskip,
+                API.sendChat(subChat(acidicBot.chat.usedskip,
                 {
                   name: chat.un
                 }));
-                if (basicBot.settings.smartSkip && timeLeft > timeElapsed)
+                if (acidicBot.settings.smartSkip && timeLeft > timeElapsed)
                 {
-                  basicBot.roomUtilities.smartSkip(msgSend);
+                  acidicBot.roomUtilities.smartSkip(msgSend);
                 }
                 else
                 {
@@ -3680,21 +3680,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var pos = msg.substring(cmd.length + 1);
             if (!isNaN(pos))
             {
-              basicBot.settings.skipPosition = pos;
-              return API.sendChat(subChat(basicBot.chat.skippos,
+              acidicBot.settings.skipPosition = pos;
+              return API.sendChat(subChat(acidicBot.chat.skippos,
               {
                 name: chat.un,
-                position: basicBot.settings.skipPosition
+                position: acidicBot.settings.skipPosition
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidpositionspecified,
+            else return API.sendChat(subChat(acidicBot.chat.invalidpositionspecified,
             {
               name: chat.un
             }));
@@ -3709,25 +3709,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.songstats)
+            if (acidicBot.settings.songstats)
             {
-              basicBot.settings.songstats = !basicBot.settings.songstats;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.songstats = !acidicBot.settings.songstats;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.songstats
+                'function': acidicBot.chat.songstats
               }));
             }
             else
             {
-              basicBot.settings.songstats = !basicBot.settings.songstats;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.songstats = !acidicBot.settings.songstats;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.songstats
+                'function': acidicBot.chat.songstats
               }));
             }
           }
@@ -3741,7 +3741,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
@@ -3756,61 +3756,61 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var from = chat.un;
             var msg = '[@' + from + '] ';
-            msg += basicBot.chat.afkremoval + ': ';
-            if (basicBot.settings.afkRemoval) msg += 'ON';
+            msg += acidicBot.chat.afkremoval + ': ';
+            if (acidicBot.settings.afkRemoval) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.afksremoved + ": " + basicBot.room.afkList.length + '. ';
-            msg += basicBot.chat.afklimit + ': ' + basicBot.settings.maximumAfk + '. ';
+            msg += acidicBot.chat.afksremoved + ": " + acidicBot.room.afkList.length + '. ';
+            msg += acidicBot.chat.afklimit + ': ' + acidicBot.settings.maximumAfk + '. ';
             msg += 'Bouncer+: ';
-            if (basicBot.settings.bouncerPlus) msg += 'ON';
+            if (acidicBot.settings.bouncerPlus) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.blacklist + ': ';
-            if (basicBot.settings.blacklistEnabled) msg += 'ON';
+            msg += acidicBot.chat.blacklist + ': ';
+            if (acidicBot.settings.blacklistEnabled) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.lockguard + ': ';
-            if (basicBot.settings.lockGuard) msg += 'ON';
+            msg += acidicBot.chat.lockguard + ': ';
+            if (acidicBot.settings.lockGuard) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.cycleguard + ': ';
-            if (basicBot.settings.cycleGuard) msg += 'ON';
+            msg += acidicBot.chat.cycleguard + ': ';
+            if (acidicBot.settings.cycleGuard) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.timeguard + ': ';
-            if (basicBot.settings.timeGuard) msg += 'ON';
+            msg += acidicBot.chat.timeguard + ': ';
+            if (acidicBot.settings.timeGuard) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.chatfilter + ': ';
-            if (basicBot.settings.filterChat) msg += 'ON';
+            msg += acidicBot.chat.chatfilter + ': ';
+            if (acidicBot.settings.filterChat) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.historyskip + ': ';
-            if (basicBot.settings.historySkip) msg += 'ON';
+            msg += acidicBot.chat.historyskip + ': ';
+            if (acidicBot.settings.historySkip) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.voteskip + ': ';
-            if (basicBot.settings.voteSkip) msg += 'ON';
+            msg += acidicBot.chat.voteskip + ': ';
+            if (acidicBot.settings.voteSkip) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.cmddeletion + ': ';
-            if (basicBot.settings.cmdDeletion) msg += 'ON';
+            msg += acidicBot.chat.cmddeletion + ': ';
+            if (acidicBot.settings.cmdDeletion) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            msg += basicBot.chat.autoskip + ': ';
-            if (basicBot.room.autoskip) msg += 'ON';
+            msg += acidicBot.chat.autoskip + ': ';
+            if (acidicBot.room.autoskip) msg += 'ON';
             else msg += 'OFF';
             msg += '. ';
-            var launchT = basicBot.room.roomstats.launchTime;
+            var launchT = acidicBot.room.roomstats.launchTime;
             var durationOnline = Date.now() - launchT;
-            var since = basicBot.roomUtilities.msToStr(durationOnline);
-            msg += subChat(basicBot.chat.activefor,
+            var since = acidicBot.roomUtilities.msToStr(durationOnline);
+            msg += subChat(acidicBot.chat.activefor,
             {
               time: since
             });
@@ -3844,11 +3844,11 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
@@ -3856,41 +3856,41 @@
             var lastSpace = msg.lastIndexOf(' ');
             var name1 = msg.substring(cmd.length + 2, lastSpace);
             var name2 = msg.substring(lastSpace + 2);
-            var user1 = basicBot.userUtilities.lookupUserName(name1);
-            var user2 = basicBot.userUtilities.lookupUserName(name2);
-            if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return API.sendChat(subChat(basicBot.chat.swapinvalid,
+            var user1 = acidicBot.userUtilities.lookupUserName(name1);
+            var user2 = acidicBot.userUtilities.lookupUserName(name2);
+            if (typeof user1 === 'boolean' || typeof user2 === 'boolean') return API.sendChat(subChat(acidicBot.chat.swapinvalid,
             {
               name: chat.un
             }));
-            if (user1.id === basicBot.loggedInID || user2.id === basicBot.loggedInID) return API.sendChat(subChat(basicBot.chat.addbottowaitlist,
+            if (user1.id === acidicBot.loggedInID || user2.id === acidicBot.loggedInID) return API.sendChat(subChat(acidicBot.chat.addbottowaitlist,
             {
               name: chat.un
             }));
             var p1 = API.getWaitListPosition(user1.id) + 1;
             var p2 = API.getWaitListPosition(user2.id) + 1;
-            if (p1 < 0 || p2 < 0) return API.sendChat(subChat(basicBot.chat.swapwlonly,
+            if (p1 < 0 || p2 < 0) return API.sendChat(subChat(acidicBot.chat.swapwlonly,
             {
               name: chat.un
             }));
-            API.sendChat(subChat(basicBot.chat.swapping,
+            API.sendChat(subChat(acidicBot.chat.swapping,
             {
               'name1': name1,
               'name2': name2
             }));
             if (p1 < p2)
             {
-              basicBot.userUtilities.moveUser(user2.id, p1, false);
+              acidicBot.userUtilities.moveUser(user2.id, p1, false);
               setTimeout(function (user1, p2)
               {
-                basicBot.userUtilities.moveUser(user1.id, p2, false);
+                acidicBot.userUtilities.moveUser(user1.id, p2, false);
               }, 2000, user1, p2);
             }
             else
             {
-              basicBot.userUtilities.moveUser(user1.id, p2, false);
+              acidicBot.userUtilities.moveUser(user1.id, p2, false);
               setTimeout(function (user2, p1)
               {
-                basicBot.userUtilities.moveUser(user2.id, p1, false);
+                acidicBot.userUtilities.moveUser(user2.id, p1, false);
               }, 2000, user2, p1);
             }
           }
@@ -3904,12 +3904,12 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (typeof basicBot.settings.themeLink === "string") API.sendChat(subChat(basicBot.chat.genres,
+            if (typeof acidicBot.settings.themeLink === "string") API.sendChat(subChat(acidicBot.chat.genres,
             {
-              link: basicBot.settings.themeLink
+              link: acidicBot.settings.themeLink
             }));
           }
         }
@@ -3922,25 +3922,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.timeGuard)
+            if (acidicBot.settings.timeGuard)
             {
-              basicBot.settings.timeGuard = !basicBot.settings.timeGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.timeGuard = !acidicBot.settings.timeGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.timeguard
+                'function': acidicBot.chat.timeguard
               }));
             }
             else
             {
-              basicBot.settings.timeGuard = !basicBot.settings.timeGuard;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.timeGuard = !acidicBot.settings.timeGuard;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.timeguard
+                'function': acidicBot.chat.timeguard
               }));
             }
           }
@@ -3954,23 +3954,23 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            var temp = basicBot.settings.blacklistEnabled;
-            basicBot.settings.blacklistEnabled = !temp;
-            if (basicBot.settings.blacklistEnabled)
+            var temp = acidicBot.settings.blacklistEnabled;
+            acidicBot.settings.blacklistEnabled = !temp;
+            if (acidicBot.settings.blacklistEnabled)
             {
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.blacklist
+                'function': acidicBot.chat.blacklist
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.toggleoff,
+            else return API.sendChat(subChat(acidicBot.chat.toggleoff,
             {
               name: chat.un,
-              'function': basicBot.chat.blacklist
+              'function': acidicBot.chat.blacklist
             }));
           }
         }
@@ -3983,25 +3983,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.motdEnabled)
+            if (acidicBot.settings.motdEnabled)
             {
-              basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.motdEnabled = !acidicBot.settings.motdEnabled;
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.motd
+                'function': acidicBot.chat.motd
               }));
             }
             else
             {
-              basicBot.settings.motdEnabled = !basicBot.settings.motdEnabled;
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.motdEnabled = !acidicBot.settings.motdEnabled;
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.motd
+                'function': acidicBot.chat.motd
               }));
             }
           }
@@ -4015,25 +4015,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.voteSkip)
+            if (acidicBot.settings.voteSkip)
             {
-              basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.voteSkip = !acidicBot.settings.voteSkip;
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.voteskip
+                'function': acidicBot.chat.voteskip
               }));
             }
             else
             {
-              basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.voteSkip = !acidicBot.settings.voteSkip;
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.voteskip
+                'function': acidicBot.chat.voteskip
               }));
             }
           }
@@ -4047,7 +4047,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             $(".icon-population").click();
@@ -4072,7 +4072,7 @@
               if (!found)
               {
                 $(".icon-chat").click();
-                return API.sendChat(subChat(basicBot.chat.notbanned,
+                return API.sendChat(subChat(acidicBot.chat.notbanned,
                 {
                   name: chat.un
                 }));
@@ -4095,10 +4095,10 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            basicBot.roomUtilities.booth.unlockBooth();
+            acidicBot.roomUtilities.booth.unlockBooth();
           }
         }
       },
@@ -4110,25 +4110,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            var permFrom = basicBot.userUtilities.getPermission(chat.uid);
+            var permFrom = acidicBot.userUtilities.getPermission(chat.uid);
             var from = chat.un;
             var name = msg.substr(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (typeof user === 'boolean') return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
-            var permUser = basicBot.userUtilities.getPermission(user.id);
+            var permUser = acidicBot.userUtilities.getPermission(user.id);
             if (permFrom > permUser)
             {
               try
               {
                 API.moderateUnmuteUser(user.id);
-                API.sendChat(subChat(basicBot.chat.unmuted,
+                API.sendChat(subChat(acidicBot.chat.unmuted,
                 {
                   name: chat.un,
                   username: name
@@ -4136,13 +4136,13 @@
               }
               catch (e)
               {
-                API.sendChat(subChat(basicBot.chat.notmuted,
+                API.sendChat(subChat(acidicBot.chat.notmuted,
                 {
                   name: chat.un
                 }));
               }
             }
-            else API.sendChat(subChat(basicBot.chat.unmuterank,
+            else API.sendChat(subChat(acidicBot.chat.unmuterank,
             {
               name: chat.un
             }));
@@ -4157,21 +4157,21 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
             var cd = msg.substring(cmd.length + 1);
             if (!isNaN(cd))
             {
-              basicBot.settings.commandCooldown = cd;
-              return API.sendChat(subChat(basicBot.chat.commandscd,
+              acidicBot.settings.commandCooldown = cd;
+              return API.sendChat(subChat(acidicBot.chat.commandscd,
               {
                 name: chat.un,
-                time: basicBot.settings.commandCooldown
+                time: acidicBot.settings.commandCooldown
               }));
             }
-            else return API.sendChat(subChat(basicBot.chat.invalidtime,
+            else return API.sendChat(subChat(acidicBot.chat.invalidtime,
             {
               name: chat.un
             }));
@@ -4186,26 +4186,26 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.usercommandsEnabled)
+            if (acidicBot.settings.usercommandsEnabled)
             {
-              API.sendChat(subChat(basicBot.chat.toggleoff,
+              API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.usercommands
+                'function': acidicBot.chat.usercommands
               }));
-              basicBot.settings.usercommandsEnabled = !basicBot.settings.usercommandsEnabled;
+              acidicBot.settings.usercommandsEnabled = !acidicBot.settings.usercommandsEnabled;
             }
             else
             {
-              API.sendChat(subChat(basicBot.chat.toggleon,
+              API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.usercommands
+                'function': acidicBot.chat.usercommands
               }));
-              basicBot.settings.usercommandsEnabled = !basicBot.settings.usercommandsEnabled;
+              acidicBot.settings.usercommandsEnabled = !acidicBot.settings.usercommandsEnabled;
             }
           }
         }
@@ -4218,23 +4218,23 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified,
+            if (msg.length === cmd.length) return API.sendChat(subChat(acidicBot.chat.nouserspecified,
             {
               name: chat.un
             }));
             var name = msg.substring(cmd.length + 2);
-            var user = basicBot.userUtilities.lookupUserName(name);
-            if (user === false) return API.sendChat(subChat(basicBot.chat.invaliduserspecified,
+            var user = acidicBot.userUtilities.lookupUserName(name);
+            if (user === false) return API.sendChat(subChat(acidicBot.chat.invaliduserspecified,
             {
               name: chat.un
             }));
             var vratio = user.votes;
             var ratio = vratio.woot / vratio.meh;
-            API.sendChat(subChat(basicBot.chat.voteratio,
+            API.sendChat(subChat(acidicBot.chat.voteratio,
             {
               name: chat.un,
               username: name,
@@ -4253,31 +4253,31 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
-            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(basicBot.chat.voteskiplimit,
+            if (msg.length <= cmd.length + 1) return API.sendChat(subChat(acidicBot.chat.voteskiplimit,
             {
               name: chat.un,
-              limit: basicBot.settings.voteSkipLimit
+              limit: acidicBot.settings.voteSkipLimit
             }));
             var argument = msg.substring(cmd.length + 1);
-            if (!basicBot.settings.voteSkip) basicBot.settings.voteSkip = !basicBot.settings.voteSkip;
+            if (!acidicBot.settings.voteSkip) acidicBot.settings.voteSkip = !acidicBot.settings.voteSkip;
             if (isNaN(argument))
             {
-              API.sendChat(subChat(basicBot.chat.voteskipinvalidlimit,
+              API.sendChat(subChat(acidicBot.chat.voteskipinvalidlimit,
               {
                 name: chat.un
               }));
             }
             else
             {
-              basicBot.settings.voteSkipLimit = argument;
-              API.sendChat(subChat(basicBot.chat.voteskipsetlimit,
+              acidicBot.settings.voteSkipLimit = argument;
+              API.sendChat(subChat(acidicBot.chat.voteskipsetlimit,
               {
                 name: chat.un,
-                limit: basicBot.settings.voteSkipLimit
+                limit: acidicBot.settings.voteSkipLimit
               }));
             }
           }
@@ -4291,25 +4291,25 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (basicBot.settings.welcome)
+            if (acidicBot.settings.welcome)
             {
-              basicBot.settings.welcome = !basicBot.settings.welcome;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
+              acidicBot.settings.welcome = !acidicBot.settings.welcome;
+              return API.sendChat(subChat(acidicBot.chat.toggleoff,
               {
                 name: chat.un,
-                'function': basicBot.chat.welcomemsg
+                'function': acidicBot.chat.welcomemsg
               }));
             }
             else
             {
-              basicBot.settings.welcome = !basicBot.settings.welcome;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
+              acidicBot.settings.welcome = !acidicBot.settings.welcome;
+              return API.sendChat(subChat(acidicBot.chat.toggleon,
               {
                 name: chat.un,
-                'function': basicBot.chat.welcomemsg
+                'function': acidicBot.chat.welcomemsg
               }));
             }
           }
@@ -4323,12 +4323,12 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            if (typeof basicBot.settings.website === "string") API.sendChat(subChat(basicBot.chat.website,
+            if (typeof acidicBot.settings.website === "string") API.sendChat(subChat(acidicBot.chat.website,
             {
-              link: basicBot.settings.website
+              link: acidicBot.settings.website
             }));
           }
         }
@@ -4341,7 +4341,7 @@
         functionality: function (chat, cmd)
         {
           if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
             var msg = chat.message;
@@ -4445,7 +4445,7 @@
                 {
                   var profile = "~";
                 }
-                API.sendChat(subChat(basicBot.chat.whois,
+                API.sendChat(subChat(acidicBot.chat.whois,
                 {
                   name1: chat.un,
                   name2: name,
@@ -4464,5 +4464,5 @@
       }
     }
   };
-  loadChat(basicBot.startup);
+  loadChat(acidicBot.startup);
 }).call(this);
