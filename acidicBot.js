@@ -23,7 +23,6 @@
   };
   var kill = function ()
   {
-    clearInterval(acidicBot.room.autodisableInterval);
     clearInterval(acidicBot.room.afkInterval);
     acidicBot.status = false;
   };
@@ -207,7 +206,7 @@
     return str;
   };
   var acidicBot = {
-    version: "2.8.9",
+    version: "1.8.7",
     status: false,
     name: "acidicBot",
     loggedInID: null,
@@ -244,13 +243,10 @@
       historySkip: false,
       timeGuard: true,
       maximumSongLength: 10,
-      autodisable: true,
       commandCooldown: 30,
       usercommandsEnabled: true,
       skipPosition: 3,
       skipReasons: [
-        ["theme", "This song does not fit the room theme. "],
-        ["op", "This song is on the OP list. "],
         ["history", "This song is in the history. "],
         ["mix", "You played a mix, which is against the rules. "],
         ["sound", "The song you played had bad sound quality or no sound. "],
@@ -258,18 +254,16 @@
         ["unavailable", "The song you played was not available for some users. "]
       ],
       afkpositionCheck: 15,
-      afkRankCheck: "ambassador",
+      afkRankCheck: "",
       motdEnabled: false,
       motdInterval: 5,
       motd: "",
       filterChat: true,
       etaRestriction: false,
-      welcome: true,
-      themeLink: null,
-      youtubeLink: null,
+      welcome: false,
       intervalMessages: [],
       messageInterval: 5,
-      songstats: true,
+      songstats: false,
       commandLiteral: "!",
       blacklists:
       {
@@ -291,15 +285,6 @@
       afkInterval: null,
       autoskip: false,
       autoskipTimer: null,
-      autodisableInterval: null,
-      autodisableFunc: function ()
-      {
-        if (acidicBot.status && acidicBot.settings.autodisable)
-        {
-          API.sendChat('!afkdisable');
-          API.sendChat('!joindisable');
-        }
-      },
       queueing: 0,
       queueable: true,
       currentDJID: null,
@@ -1392,11 +1377,6 @@
           }));
           return true;
         }
-        if (msg.indexOf('autojoin was not enabled') > 0 || msg.indexOf('AFK message was not enabled') > 0 || msg.indexOf('!afkdisable') > 0 || msg.indexOf('!joindisable') > 0 || msg.indexOf('autojoin disabled') > 0 || msg.indexOf('AFK message disabled') > 0)
-        {
-          API.moderateDeleteChat(chat.cid);
-          return true;
-        }
         var rlJoinChat = acidicBot.chat.roulettejoin;
         var rlLeaveChat = acidicBot.chat.rouletteleave;
         var joinedroulette = rlJoinChat.split('%%NAME%%');
@@ -1453,7 +1433,7 @@
           var cmdCall = acidicBot.commands[comm].command;
           if (!Array.isArray(cmdCall))
           {
-            cmdCall = [cmdCall]
+            cmdCall = [cmdCall];
           }
           for (var i = 0; i < cmdCall.length; i++)
           {
@@ -1551,14 +1531,11 @@
       var u = API.getUser();
       if (acidicBot.userUtilities.getPermission(u) < 2)
       {
-        API.chatLog("You're not allowed to use acidicBot! Please contact @LaishaBear for intelligence about acidicBot.");
+        API.chatLog("You're not authorized to use acidicBot! Please contact @LaishaBear for intelligence about acidicBot.");
         return;
       }
-      if (acidicBot.userUtilities.getPermission(u) === 2)
-      {
-        API.chatLog("");
-        acidicBot.connectAPI();
-      }
+      if (acidicBot.userUtilities.getPermission(u) === 2) API.chatLog(acidicBot.chat.bouncer);
+      acidicBot.connectAPI();
       API.moderateDeleteChat = function (cid)
       {
         $.ajax(
@@ -1591,7 +1568,7 @@
       };
       Check = setInterval(function ()
       {
-        detect()
+        detect();
       }, 2000);
       retrieveSettings();
       retrieveFromStorage();
@@ -1635,12 +1612,8 @@
       }
       acidicBot.room.afkInterval = setInterval(function ()
       {
-        acidicBot.roomUtilities.afkCheck()
+        acidicBot.roomUtilities.afkCheck();
       }, 10 * 1000);
-      acidicBot.room.autodisableInterval = setInterval(function ()
-      {
-        acidicBot.room.autodisableFunc();
-      }, 60 * 60 * 1000);
       acidicBot.loggedInID = API.getUser().id;
       acidicBot.status = true;
       API.sendChat('/cap ' + acidicBot.settings.startupCap);
@@ -1857,7 +1830,7 @@
               acidicBot.settings.afkRemoval = !acidicBot.settings.afkRemoval;
               acidicBot.room.afkInterval = setInterval(function ()
               {
-                acidicBot.roomUtilities.afkCheck()
+                acidicBot.roomUtilities.afkCheck();
               }, 2 * 1000);
               API.sendChat(subChat(acidicBot.chat.toggleon,
               {
@@ -1942,38 +1915,6 @@
                 name: chat.un,
                 username: name,
                 time: time
-              }));
-            }
-          }
-        }
-      },
-      autodisableCommand:
-      {
-        command: 'autodisable',
-        rank: 'bouncer',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (acidicBot.settings.autodisable)
-            {
-              acidicBot.settings.autodisable = !acidicBot.settings.autodisable;
-              return API.sendChat(subChat(acidicBot.chat.toggleoff,
-              {
-                name: chat.un,
-                'function': acidicBot.chat.autodisable
-              }));
-            }
-            else
-            {
-              acidicBot.settings.autodisable = !acidicBot.settings.autodisable;
-              return API.sendChat(subChat(acidicBot.chat.toggleon,
-              {
-                name: chat.un,
-                'function': acidicBot.chat.autodisable
               }));
             }
           }
@@ -2471,25 +2412,6 @@
           }
         }
       },
-      emojiCommand:
-      {
-        command: 'emoji',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = 'http://www.emoji-cheat-sheet.com/';
-            API.sendChat(subChat(acidicBot.chat.emojilist,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       englishCommand:
       {
         command: 'english',
@@ -2650,7 +2572,7 @@
             acidicBot.room.skippable = false;
             setTimeout(function ()
             {
-              acidicBot.room.skippable = true
+              acidicBot.room.skippable = true;
             }, 5 * 1000);
           }
         }
@@ -2715,7 +2637,7 @@
                 }, function (response)
                 {
                   func(response.data.id);
-                })
+                });
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
@@ -2755,7 +2677,7 @@
                 }, function (response)
                 {
                   func(response.data.id);
-                })
+                });
               }
               var api_key = "dc6zaTOxFJmzC";
               var rating = "pg-13";
@@ -3164,7 +3086,7 @@
                   acidicBot.room.skippable = false;
                   setTimeout(function ()
                   {
-                    acidicBot.room.skippable = true
+                    acidicBot.room.skippable = true;
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
@@ -3204,7 +3126,7 @@
                   API.sendChat(msgSend);
                   setTimeout(function ()
                   {
-                    acidicBot.room.skippable = true
+                    acidicBot.room.skippable = true;
                   }, 5 * 1000);
                   setTimeout(function (id)
                   {
@@ -3269,7 +3191,7 @@
             }));
             setTimeout(function ()
             {
-              $(".logout").mousedown()
+              $(".logout").mousedown();
             }, 1000);
           }
         }
@@ -3503,21 +3425,6 @@
             {
               name: chat.un
             }));
-          }
-        }
-      },
-      pingCommand:
-      {
-        command: 'ping',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(acidicBot.chat.pong)
           }
         }
       },
@@ -3890,7 +3797,7 @@
                   {
                     API.sendChat("/me " + split[index]);
                   }, 500 * index);
-                }
+                };
                 func(i);
               }
             }
@@ -4379,6 +4286,24 @@
           }
         }
       },
+      websiteCommand:
+      {
+        command: 'website',
+        rank: 'user',
+        type: 'exact',
+        functionality: function (chat, cmd)
+        {
+          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
+          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
+          else
+          {
+            if (typeof acidicBot.settings.website === "string") API.sendChat(subChat(acidicBot.chat.website,
+            {
+              link: acidicBot.settings.website
+            }));
+          }
+        }
+      },
       whoisCommand:
       {
         command: 'whois',
@@ -4412,42 +4337,6 @@
                 if (rawlang == "en")
                 {
                   var language = "English";
-                }
-                else if (rawlang == "bg")
-                {
-                  var language = "Bulgarian";
-                }
-                else if (rawlang == "cs")
-                {
-                  var language = "Czech";
-                }
-                else if (rawlang == "fi")
-                {
-                  var language = "Finnish";
-                }
-                else if (rawlang == "fr")
-                {
-                  var language = "French";
-                }
-                else if (rawlang == "pt")
-                {
-                  var language = "Portuguese";
-                }
-                else if (rawlang == "zh")
-                {
-                  var language = "Chinese";
-                }
-                else if (rawlang == "sk")
-                {
-                  var language = "Slovak";
-                }
-                else if (rawlang == "nl")
-                {
-                  var language = "Dutch";
-                }
-                else if (rawlang == "ms")
-                {
-                  var language = "Malay";
                 }
                 var rawrank = API.getUser(id).role;
                 if (rawrank == "0")
@@ -4505,25 +4394,6 @@
                 }));
               }
             }
-          }
-        }
-      },
-      youtubeCommand:
-      {
-        command: 'youtube',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof acidicBot.settings.youtubeLink === "string") API.sendChat(subChat(acidicBot.chat.youtube,
-            {
-              name: chat.un,
-              link: acidicBot.settings.youtubeLink
-            }));
           }
         }
       }
