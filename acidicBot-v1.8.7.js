@@ -1385,11 +1385,6 @@
           }));
           return true;
         }
-        if (msg.indexOf('autojoin was not enabled') > 0 || msg.indexOf('AFK message was not enabled') > 0 || msg.indexOf('!afkdisable') > 0 || msg.indexOf('!joindisable') > 0 || msg.indexOf('autojoin disabled') > 0 || msg.indexOf('AFK message disabled') > 0)
-        {
-          API.moderateDeleteChat(chat.cid);
-          return true;
-        }
         var rlJoinChat = acidicBot.chat.roulettejoin;
         var rlLeaveChat = acidicBot.chat.rouletteleave;
         var joinedroulette = rlJoinChat.split('%%NAME%%');
