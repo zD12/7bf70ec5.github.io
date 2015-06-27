@@ -4286,24 +4286,6 @@
           }
         }
       },
-      websiteCommand:
-      {
-        command: 'website',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!acidicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof acidicBot.settings.website === "string") API.sendChat(subChat(acidicBot.chat.website,
-            {
-              link: acidicBot.settings.website
-            }));
-          }
-        }
-      },
       whoisCommand:
       {
         command: 'whois',
