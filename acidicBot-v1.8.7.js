@@ -26,60 +26,6 @@
     clearInterval(basicBot.room.afkInterval);
     basicBot.status = false;
   };
-  var socket = function()
-  {
-    function loadSocket()
-    {
-      SockJS.prototype.msg = function(a)
-      {
-        this.send(JSON.stringify(a))
-      };
-      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
-      sock.onopen = function()
-      {
-        console.log('Connected to socket!');
-        sendToSocket();
-      };
-      sock.onclose = function()
-      {
-        console.log('Disconnected from socket, reconnecting every minute ..');
-        var reconnect = setTimeout(function()
-        {
-          loadSocket()
-        }, 60 * 1000);
-      };
-      sock.onmessage = function(broadcast)
-      {
-        var rawBroadcast = broadcast.data;
-        var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
-        API.chatLog(broadcastMessage);
-        console.log(broadcastMessage);
-      };
-    }
-    if(typeof SockJS == 'undefined')
-    {
-      $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
-    }
-    else loadSocket();
-  }
-  var sendToSocket = function()
-  {
-    var basicBotSettings = basicBot.settings;
-    var basicBotRoom = basicBot.room;
-    var basicBotInfo = {
-      time: Date.now(),
-      version: basicBot.version
-    };
-    var data = {
-      users: API.getUsers(),
-      userinfo: API.getUser(),
-      room: location.pathname,
-      basicBotSettings: basicBotSettings,
-      basicBotRoom: basicBotRoom,
-      basicBotInfo: basicBotInfo
-    };
-    return sock.msg(data);
-  };
   var storeToStorage = function()
   {
     localStorage.setItem("basicBotsettings", JSON.stringify(basicBot.settings));
@@ -95,9 +41,7 @@
   {
     if(typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for(var prop in obj)
@@ -1314,7 +1258,6 @@
         }, remaining + 5000);
       }
       storeToStorage();
-      sendToSocket();
     },
     eventWaitlistupdate: function(users)
     {
@@ -1689,10 +1632,6 @@
       {
         basicBot.roomUtilities.afkCheck()
       }, 10 * 1000);
-      basicBot.room.autodisableInterval = setInterval(function()
-      {
-        basicBot.room.autodisableFunc();
-      }, 60 * 60 * 1000);
       basicBot.loggedInID = API.getUser().id;
       basicBot.status = true;
       API.sendChat('/cap ' + basicBot.settings.startupCap);
@@ -1708,7 +1647,6 @@
         {
           emojibuttonoff[0].click();
         }
-        API.chatLog(':smile: Emojis enabled.');
       }
       else
       {
@@ -1717,11 +1655,7 @@
         {
           emojibuttonon[0].click();
         }
-        API.chatLog('Emojis disabled.');
       }
-      API.chatLog('Avatars capped at ' + basicBot.settings.startupCap);
-      API.chatLog('Volume set to ' + basicBot.settings.startupVolume);
-      socket();
       loadChat(API.sendChat(subChat(basicBot.chat.online,
       {
         botname: basicBot.settings.botName,
@@ -2986,7 +2920,6 @@
           else
           {
             storeToStorage();
-            sendToSocket();
             API.sendChat(basicBot.chat.kill);
             basicBot.disconnectAPI();
             setTimeout(function()
@@ -3564,7 +3497,6 @@
           if(!basicBot.commands.executable(this.rank, chat)) return void(0);
           else
           {
-            sendToSocket();
             storeToStorage();
             basicBot.disconnectAPI();
             setTimeout(function()
@@ -3586,7 +3518,6 @@
           else
           {
             API.sendChat(basicBot.chat.reload);
-            sendToSocket();
             storeToStorage();
             basicBot.disconnectAPI();
             kill();
@@ -3690,24 +3621,6 @@
             {
               basicBot.room.roulette.startRoulette();
             }
-          }
-        }
-      },
-      rulesCommand:
-      {
-        command: 'rules',
-        rank: 'user',
-        type: 'exact',
-        functionality: function(chat, cmd)
-        {
-          if(this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if(!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if(typeof basicBot.settings.rulesLink === "string") return API.sendChat(subChat(basicBot.chat.roomrules,
-            {
-              link: basicBot.settings.rulesLink
-            }));
           }
         }
       },
@@ -4540,25 +4453,6 @@
                 }));
               }
             }
-          }
-        }
-      },
-      youtubeCommand:
-      {
-        command: 'youtube',
-        rank: 'user',
-        type: 'exact',
-        functionality: function(chat, cmd)
-        {
-          if(this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if(!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if(typeof basicBot.settings.youtubeLink === "string") API.sendChat(subChat(basicBot.chat.youtube,
-            {
-              name: chat.un,
-              link: basicBot.settings.youtubeLink
-            }));
           }
         }
       }
