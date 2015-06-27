@@ -2424,25 +2424,6 @@
           }
         }
       },
-      emojiCommand:
-      {
-        command: 'emoji',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = 'http://www.emoji-cheat-sheet.com/';
-            API.sendChat(subChat(basicBot.chat.emojilist,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       englishCommand:
       {
         command: 'english',
