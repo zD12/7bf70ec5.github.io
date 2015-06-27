@@ -2909,7 +2909,7 @@
               {
                 API.sendChat(subChat(basicBot.chat.langerror,
                 {
-                  link: "http://git.io/vJ9nI"
+                  link: ""
                 }));
               }
               else
