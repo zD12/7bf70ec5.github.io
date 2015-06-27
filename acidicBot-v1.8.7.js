@@ -23,7 +23,6 @@
   };
   var kill = function ()
   {
-    clearInterval(basicBot.room.autodisableInterval);
     clearInterval(basicBot.room.afkInterval);
     basicBot.status = false;
   };
@@ -307,13 +306,10 @@
       historySkip: false,
       timeGuard: true,
       maximumSongLength: 10,
-      autodisable: true,
       commandCooldown: 30,
       usercommandsEnabled: true,
       skipPosition: 3,
       skipReasons: [
-        ["theme", "This song does not fit the room theme. "],
-        ["op", "This song is on the OP list. "],
         ["history", "This song is in the history. "],
         ["mix", "You played a mix, which is against the rules. "],
         ["sound", "The song you played had bad sound quality or no sound. "],
@@ -321,28 +317,22 @@
         ["unavailable", "The song you played was not available for some users. "]
       ],
       afkpositionCheck: 15,
-      afkRankCheck: "ambassador",
+      afkRankCheck: "",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
-      welcome: true,
-      opLink: null,
-      rulesLink: null,
-      themeLink: null,
-      fbLink: null,
-      youtubeLink: null,
-      website: null,
+      welcome: false,
       intervalMessages: [],
       messageInterval: 5,
       songstats: true,
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -358,15 +348,6 @@
       afkInterval: null,
       autoskip: false,
       autoskipTimer: null,
-      autodisableInterval: null,
-      autodisableFunc: function ()
-      {
-        if (basicBot.status && basicBot.settings.autodisable)
-        {
-          API.sendChat('!afkdisable');
-          API.sendChat('!joindisable');
-        }
-      },
       queueing: 0,
       queueable: true,
       currentDJID: null,
@@ -529,10 +510,6 @@
         var u;
         if (typeof obj === "object") u = obj;
         else u = API.getUser(obj);
-        for (var i = 0; i < botCreatorIDs.length; i++)
-        {
-          if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
-        }
         if (u.gRole < 2) return u.role;
         else
         {
@@ -2028,38 +2005,6 @@
           }
         }
       },
-      autodisableCommand:
-      {
-        command: 'autodisable',
-        rank: 'bouncer',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (basicBot.settings.autodisable)
-            {
-              basicBot.settings.autodisable = !basicBot.settings.autodisable;
-              return API.sendChat(subChat(basicBot.chat.toggleoff,
-              {
-                name: chat.un,
-                'function': basicBot.chat.autodisable
-              }));
-            }
-            else
-            {
-              basicBot.settings.autodisable = !basicBot.settings.autodisable;
-              return API.sendChat(subChat(basicBot.chat.toggleon,
-              {
-                name: chat.un,
-                'function': basicBot.chat.autodisable
-              }));
-            }
-          }
-        }
-      },
       autoskipCommand:
       {
         command: 'autoskip',
@@ -2571,25 +2516,6 @@
           }
         }
       },
-      emojiCommand:
-      {
-        command: 'emoji',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            var link = 'http://www.emoji-cheat-sheet.com/';
-            API.sendChat(subChat(basicBot.chat.emojilist,
-            {
-              link: link
-            }));
-          }
-        }
-      },
       englishCommand:
       {
         command: 'english',
@@ -2695,24 +2621,6 @@
               name: name,
               time: estimateString,
               position: realpos
-            }));
-          }
-        }
-      },
-      fbCommand:
-      {
-        command: 'fb',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.fbLink === "string") API.sendChat(subChat(basicBot.chat.facebook,
-            {
-              link: basicBot.settings.fbLink
             }));
           }
         }
@@ -3645,39 +3553,6 @@
           }
         }
       },
-      opCommand:
-      {
-        command: 'op',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.opLink === "string") return API.sendChat(subChat(basicBot.chat.oplist,
-            {
-              link: basicBot.settings.opLink
-            }));
-          }
-        }
-      },
-      pingCommand:
-      {
-        command: 'ping',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat(basicBot.chat.pong)
-          }
-        }
-      },
       refreshCommand:
       {
         command: 'refresh',
@@ -3990,21 +3865,6 @@
           }
         }
       },
-      sourceCommand:
-      {
-        command: 'source',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            API.sendChat('/me This bot was created by ' + botCreator + ', but is now maintained by ' + botMaintainer + ".");
-          }
-        }
-      },
       statusCommand:
       {
         command: 'status',
@@ -4150,24 +4010,6 @@
                 basicBot.userUtilities.moveUser(user2.id, p1, false);
               }, 2000, user2, p1);
             }
-          }
-        }
-      },
-      themeCommand:
-      {
-        command: 'theme',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.themeLink === "string") API.sendChat(subChat(basicBot.chat.genres,
-            {
-              link: basicBot.settings.themeLink
-            }));
           }
         }
       },
@@ -4569,24 +4411,6 @@
                 'function': basicBot.chat.welcomemsg
               }));
             }
-          }
-        }
-      },
-      websiteCommand:
-      {
-        command: 'website',
-        rank: 'user',
-        type: 'exact',
-        functionality: function (chat, cmd)
-        {
-          if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-          if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-          else
-          {
-            if (typeof basicBot.settings.website === "string") API.sendChat(subChat(basicBot.chat.website,
-            {
-              link: basicBot.settings.website
-            }));
           }
         }
       },
