@@ -23,63 +23,8 @@
   };
   var kill = function ()
   {
-    clearInterval(basicBot.room.autodisableInterval);
     clearInterval(basicBot.room.afkInterval);
     basicBot.status = false;
-  };
-  var socket = function ()
-  {
-    function loadSocket()
-    {
-      SockJS.prototype.msg = function (a)
-      {
-        this.send(JSON.stringify(a))
-      };
-      sock = new SockJS('https://socket-bnzi.c9.io/basicbot');
-      sock.onopen = function ()
-      {
-        console.log('Connected to socket!');
-        sendToSocket();
-      };
-      sock.onclose = function ()
-      {
-        console.log('Disconnected from socket, reconnecting every minute ..');
-        var reconnect = setTimeout(function ()
-        {
-          loadSocket()
-        }, 60 * 1000);
-      };
-      sock.onmessage = function (broadcast)
-      {
-        var rawBroadcast = broadcast.data;
-        var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
-        API.chatLog(broadcastMessage);
-        console.log(broadcastMessage);
-      };
-    }
-    if (typeof SockJS == 'undefined')
-    {
-      $.getScript('https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js', loadSocket);
-    }
-    else loadSocket();
-  }
-  var sendToSocket = function ()
-  {
-    var basicBotSettings = basicBot.settings;
-    var basicBotRoom = basicBot.room;
-    var basicBotInfo = {
-      time: Date.now(),
-      version: basicBot.version
-    };
-    var data = {
-      users: API.getUsers(),
-      userinfo: API.getUser(),
-      room: location.pathname,
-      basicBotSettings: basicBotSettings,
-      basicBotRoom: basicBotRoom,
-      basicBotInfo: basicBotInfo
-    };
-    return sock.msg(data);
   };
   var storeToStorage = function ()
   {
@@ -96,9 +41,7 @@
   {
     if (typeof chat === "undefined")
     {
-      API.chatLog("There is a chat text missing.");
-      console.log("There is a chat text missing.");
-      return "[Error] No text message found.";
+      return "";
     }
     var lit = '%%';
     for (var prop in obj)
@@ -166,15 +109,13 @@
   var retrieveFromStorage = function ()
   {
     var info = localStorage.getItem("basicBotStorageInfo");
-    if (info === null) API.chatLog(basicBot.chat.nodatafound);
-    else
+    if (info === null)
     {
       var settings = JSON.parse(localStorage.getItem("basicBotsettings"));
       var room = JSON.parse(localStorage.getItem("basicBotRoom"));
       var elapsed = Date.now() - JSON.parse(info).time;
       if ((elapsed < 1 * 60 * 60 * 1000))
       {
-        API.chatLog(basicBot.chat.retrievingdata);
         for (var prop in settings)
         {
           basicBot.settings[prop] = settings[prop];
@@ -188,7 +129,6 @@
         basicBot.room.messages = room.messages;
         basicBot.room.queue = room.queue;
         basicBot.room.newBlacklisted = room.newBlacklisted;
-        API.chatLog(basicBot.chat.datarestored);
       }
     }
     var json_sett = null;
@@ -265,16 +205,12 @@
     temp = null;
     return str;
   };
-  var botCreator = "Matthew (Yemasthui)";
-  var botMaintainer = "Benzi (Quoona)"
-  var botCreatorIDs = ["3851534", "4105209"];
   var basicBot = {
-    version: "2.8.9",
+    version: "1.8.7",
     status: false,
     name: "basicBot",
     loggedInID: null,
-    scriptLink: "https://rawgit.com/Yemasthui/basicBot/master/basicBot.js",
-    cmdLink: "http://git.io/245Ppg",
+    scriptLink: "",
     chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
     chat: null,
     loadChat: loadChat,
@@ -285,7 +221,7 @@
       botName: "basicBot",
       language: "english",
       chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
-      roomLock: false,
+      roomLock: true,
       startupCap: 1,
       startupVolume: 0,
       startupEmoji: false,
@@ -296,7 +232,7 @@
       afkRemoval: true,
       maximumDc: 60,
       bouncerPlus: true,
-      blacklistEnabled: true,
+      blacklistEnabled: false,
       lockdownEnabled: false,
       lockGuard: false,
       maximumLocktime: 10,
@@ -307,13 +243,10 @@
       historySkip: false,
       timeGuard: true,
       maximumSongLength: 10,
-      autodisable: true,
       commandCooldown: 30,
       usercommandsEnabled: true,
       skipPosition: 3,
       skipReasons: [
-        ["theme", "This song does not fit the room theme. "],
-        ["op", "This song is on the OP list. "],
         ["history", "This song is in the history. "],
         ["mix", "You played a mix, which is against the rules. "],
         ["sound", "The song you played had bad sound quality or no sound. "],
@@ -321,28 +254,22 @@
         ["unavailable", "The song you played was not available for some users. "]
       ],
       afkpositionCheck: 15,
-      afkRankCheck: "ambassador",
+      afkRankCheck: "",
       motdEnabled: false,
       motdInterval: 5,
-      motd: "Temporary Message of the Day",
+      motd: "",
       filterChat: true,
       etaRestriction: false,
-      welcome: true,
-      opLink: null,
-      rulesLink: null,
-      themeLink: null,
-      fbLink: null,
-      youtubeLink: null,
-      website: null,
+      welcome: false,
       intervalMessages: [],
       messageInterval: 5,
-      songstats: true,
+      songstats: false,
       commandLiteral: "!",
       blacklists:
       {
-        NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/NSFWlist.json",
-        OP: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/OPlist.json",
-        BANNED: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/BANNEDlist.json"
+        NSFW: "",
+        OP: "",
+        BANNED: ""
       }
     },
     room:
@@ -358,15 +285,6 @@
       afkInterval: null,
       autoskip: false,
       autoskipTimer: null,
-      autodisableInterval: null,
-      autodisableFunc: function ()
-      {
-        if (basicBot.status && basicBot.settings.autodisable)
-        {
-          API.sendChat('!afkdisable');
-          API.sendChat('!joindisable');
-        }
-      },
       queueing: 0,
       queueable: true,
       currentDJID: null,
@@ -529,10 +447,6 @@
         var u;
         if (typeof obj === "object") u = obj;
         else u = API.getUser(obj);
-        for (var i = 0; i < botCreatorIDs.length; i++)
-        {
-          if (botCreatorIDs[i].indexOf(u.id) > -1) return 10;
-        }
         if (u.gRole < 2) return u.role;
         else
         {
